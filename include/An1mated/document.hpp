@@ -17,7 +17,7 @@ public:
     Document(DocumentType type,
              const QString& fileName = QString(),
              QObject* parent = nullptr);
-    ~Document() = default;
+    virtual ~Document() = default;
 
     DocumentType getType() const;
     const QString& getFileName() const;

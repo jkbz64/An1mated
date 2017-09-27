@@ -51,12 +51,13 @@ set(AN1MATED_SRCS_DIR "src/An1mated/")
 set(AN1MATED_HDRS
 	${AN1MATED_INCLUDE_DIR}/mainwindow.hpp
 	${AN1MATED_INCLUDE_DIR}/document.hpp
-
+	${AN1MATED_INCLUDE_DIR}/animationdocument.hpp
 	)
 set(AN1MATED_SRCS
 	${AN1MATED_SRCS_DIR}/main.cpp
 	${AN1MATED_SRCS_DIR}/mainwindow.cpp
 	${AN1MATED_SRCS_DIR}/document.cpp
+	${AN1MATED_SRCS_DIR}/animationdocument.cpp
 )
 set(AN1MATED_UI
 	${AN1MATED_SRCS_DIR}/mainwindow.ui
