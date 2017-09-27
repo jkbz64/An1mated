@@ -1,6 +1,12 @@
 #include <iostream>
 
-int main()
+#include <QApplication>
+#include <mainwindow.hpp>
+
+int main(int argc, char *argv[])
 {
-    return 0;
+    QApplication a(argc, argv);
+    MainWindow mainWindow;
+    mainWindow.show();
+    return a.exec();
 }
