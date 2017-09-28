@@ -88,17 +88,20 @@ target_link_libraries(An1mated
 
 #Unit testing
 if(TESTS)
-	enable_testing()
 	find_package(Qt5Test REQUIRED)
-	add_executable(Test_AnimationReading tests/test_animationreading.cpp)
-	target_include_directories(Test_AnimationReading PUBLIC
-		${LIB_AN1MATED_INCLUDE_DIR}
-		${QT5Core_INCLUDE_DIRS}
-		${QT5Test_INCLUDE_DIRS}
-		)
-	target_link_libraries(Test_AnimationReading Qt5::Test Qt5::Core libAn1mated)
-
-	add_test(AnimationReading Test_AnimationReading)
+	#Take all test files	
+	file(GLOB TEST_SRC tests/test*.cpp)
+	source_group(tests FILES ${TEST_SRC})
+	foreach(test_source_file ${TEST_SRC})
+		get_filename_component(test_name ${test_source_file} NAME_WE)
+		add_executable(${test_name} ${test_source_file})
+		target_include_directories(${test_name} PUBLIC
+			${LIB_AN1MATED_INCLUDE_DIR}
+			${QT5Core_INCLUDE_DIRS}
+			${QT5Test_INCLUDE_DIRS}
+			)
+		target_link_libraries(${test_name} Qt5::Test Qt5::Core libAn1mated)
+	endforeach()
 endif()
 
 
