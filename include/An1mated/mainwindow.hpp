@@ -8,6 +8,8 @@ namespace Ui
     class MainWindow;
 }
 
+class DocumentManager;
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -22,8 +24,7 @@ private slots:
 
 private:
     Ui::MainWindow* m_ui = nullptr;
-
-
+    DocumentManager* m_documentManager = nullptr;
 };
 
 
