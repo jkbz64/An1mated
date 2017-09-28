@@ -21,6 +21,8 @@ DocumentManager::DocumentManager(QObject* parent)
     connect(m_documentTabBar, &QTabBar::currentChanged, this, &DocumentManager::updateCurrentDocument);
     connect(m_documentTabBar, &QTabBar::tabCloseRequested, this, &DocumentManager::closeDocumentAt);
     connect(m_documentTabBar, &QTabBar::tabMoved, this, &DocumentManager::moveDocument);
+
+
 }
 
 DocumentManager::~DocumentManager()

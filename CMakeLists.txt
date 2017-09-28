@@ -84,10 +84,20 @@ target_link_libraries(An1mated
 	Qt5::Core 
 	Qt5::Widgets)
 
-#tests here
 
+#Unit testing
 if(TESTS)
+	enable_testing()
+	find_package(Qt5Test REQUIRED)
+	add_executable(Test_AnimationReading tests/test_animationreading.cpp)
+	target_include_directories(Test_AnimationReading PUBLIC
+		${LIB_AN1MATED_INCLUDE_DIR}
+		${QT5Core_INCLUDE_DIRS}
+		${QT5Test_INCLUDE_DIRS}
+		)
+	target_link_libraries(Test_AnimationReading Qt5::Test Qt5::Core libAn1mated)
 
+	add_test(AnimationReading Test_AnimationReading)
 endif()
 
 

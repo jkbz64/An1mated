@@ -3,7 +3,6 @@
 
 #include <QObject>
 
-
 class Document : public QObject
 {
     Q_OBJECT
