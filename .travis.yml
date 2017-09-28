@@ -3,12 +3,12 @@ sudo: required
 dist: trusty
 
 before_install:
-	- sudo apt-get install qtbase5-dev
+ - sudo apt-get install qtbase5-dev
 
 compiler:
-	- gcc
+ - gcc
 
 script:
-	- mkdir build
-	- cd build
-	- cmake .. && make
+ - mkdir build
+ - cd build
+ - cmake .. && make
