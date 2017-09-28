@@ -43,23 +43,26 @@ void DocumentManager::deleteInstance()
 
 void DocumentManager::updateCurrentDocument(int index)
 {
-
+    if(index != -1)
+        emit currentDocumentChanged(*(m_documents.begin() + index));
+    else
+        emit currentDocumentChanged(std::weak_ptr<Document>());
 }
 
 void DocumentManager::closeDocumentAt(int index)
 {
-    auto it = m_documents.begin();
-    std::advance(it, index);
-    m_documents.erase(it);
+    m_documents.erase(m_documents.begin() + index);
+    m_documentTabBar->removeTab(index);
 }
 
 void DocumentManager::moveDocument(int from, int to)
 {
-    auto itFrom = m_documents.begin();
-    std::advance(itFrom, from);
-    auto itTo = m_documents.begin();
-    std::advance(itTo, to);
-
-    std::swap(itTo, itFrom);
+    std::swap(*(m_documents.begin() + from),*(m_documents.begin() + to));
 }
 
+void DocumentManager::addDocument(std::shared_ptr<Document> doc)
+{
+    m_documents.emplace_back(doc);
+    m_documentTabBar->addTab(doc->getFileName());
+    m_documentTabBar->setCurrentIndex(m_documents.size() - 1);
+}

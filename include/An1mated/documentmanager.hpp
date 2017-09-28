@@ -17,8 +17,9 @@ public:
 
     QTabBar* getDocumentBar() const;
     int getDocumentCount() const;
+    void addDocument(std::shared_ptr<Document>);
 signals:
-    void currentDocumentChanged(Document* document);
+    void currentDocumentChanged(std::weak_ptr<Document> document);
 private slots:
     void updateCurrentDocument(int);
     void closeDocumentAt(int);
@@ -28,7 +29,7 @@ private:
     ~DocumentManager();
 
     //Documents
-    std::list<std::unique_ptr<Document>> m_documents;
+    std::vector<std::shared_ptr<Document>> m_documents;
     //Document tab bar
     QTabBar* m_documentTabBar;
     static DocumentManager* m_instance;
