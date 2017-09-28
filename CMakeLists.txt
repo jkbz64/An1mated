@@ -7,6 +7,7 @@ set(LIB_AN1MATED_BUILD_TYPE Shared CACHE STRING "Choose the type of libAn1mated 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake_modules/")
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 option(TESTS "Enable build of tests" ON)
 
@@ -43,7 +44,7 @@ target_include_directories(libAn1mated PUBLIC
 #Setup An1mated
 option(CMAKE_AUTOMOC "Enable automoc" ON)
 option(CMAKE_AUTOUIC "Enable autouic" ON)
-option(CMAKE_AUTORCC "Enable autouic" ON)
+option(CMAKE_AUTORCC "Enable autorcc" ON)
 
 set(AN1MATED_INCLUDE_DIR "include/An1mated/")
 set(AN1MATED_SRCS_DIR "src/An1mated/")
