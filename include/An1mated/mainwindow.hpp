@@ -9,6 +9,7 @@ namespace Ui
 }
 
 class DocumentManager;
+class QStackedLayout;
 
 class MainWindow : public QMainWindow
 {
@@ -19,12 +20,13 @@ public:
 
 
 private slots:
-    void newDocument();
+    void newAnimationDocument();
     void openFile();
 
 private:
-    Ui::MainWindow* m_ui = nullptr;
-    DocumentManager* m_documentManager = nullptr;
+    Ui::MainWindow* m_ui;
+    DocumentManager* m_documentManager;
+    QStackedLayout* m_editorStack;
 };
 
 

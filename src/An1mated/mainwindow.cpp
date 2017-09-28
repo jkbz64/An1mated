@@ -1,6 +1,8 @@
 #include <mainwindow.hpp>
 #include "ui_mainwindow.h"
 #include <documentmanager.hpp>
+#include <QStackedLayout>
+#include <QVBoxLayout>
 
 MainWindow::MainWindow(QWidget *parent, Qt::WindowFlags flags)
     :
@@ -12,19 +14,27 @@ MainWindow::MainWindow(QWidget *parent, Qt::WindowFlags flags)
 
     //File bar
     //New
-    connect(m_ui->actionNew, &QAction::triggered, this, &MainWindow::newDocument);
+    connect(m_ui->actionNewAnimation, &QAction::triggered, this, &MainWindow::newAnimationDocument);
     //Open
     connect(m_ui->actionOpen, &QAction::triggered, this, &MainWindow::openFile);
 
-    setCentralWidget(m_documentManager->widget());
+    QVBoxLayout* layout = new QVBoxLayout(centralWidget());
+    layout->addWidget(m_documentManager->getDocumentBar());
+    m_editorStack = new QStackedLayout;
+    QWidget* spacerWidget = new QWidget(this);
+    spacerWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    m_editorStack->addWidget(spacerWidget);
+    layout->addLayout(m_editorStack);
 }
 
 MainWindow::~MainWindow()
 {
+    DocumentManager::deleteInstance();
+    delete m_editorStack;
     delete m_ui;
 }
 
-void MainWindow::newDocument()
+void MainWindow::newAnimationDocument()
 {
 
 }

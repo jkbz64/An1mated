@@ -15,13 +15,10 @@ public:
     static DocumentManager *instance();
     static void deleteInstance();
 
-    QWidget* widget() const;
-
+    QTabBar* getDocumentBar() const;
     int getDocumentCount() const;
 signals:
     void currentDocumentChanged(Document* document);
-    void documentCloseRequested(int index);
-
 private slots:
     void updateCurrentDocument(int);
     void closeDocumentAt(int);
@@ -32,19 +29,15 @@ private:
 
     //Documents
     std::list<std::unique_ptr<Document>> m_documents;
-
-    //Widget
-    QWidget* m_widget = nullptr;
     //Document tab bar
     QTabBar* m_documentTabBar;
-
     static DocumentManager* m_instance;
 };
 
 
-inline QWidget* DocumentManager::widget() const
+inline QTabBar* DocumentManager::getDocumentBar() const
 {
-    return m_widget;
+    return m_documentTabBar;
 }
 
 inline int DocumentManager::getDocumentCount() const

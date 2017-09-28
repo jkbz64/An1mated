@@ -1,14 +1,16 @@
 #include <documentmanager.hpp>
 #include <QTabBar>
 #include <QVBoxLayout>
+#include <QStackedLayout>
+#include <QSpacerItem>
+
 
 DocumentManager* DocumentManager::m_instance = nullptr;
 
 DocumentManager::DocumentManager(QObject* parent)
     :
       QObject(parent),
-      m_widget(new QWidget),
-      m_documentTabBar(new QTabBar(m_widget))
+      m_documentTabBar(new QTabBar(nullptr))
 {
     //Setup tab bar
     m_documentTabBar->setExpanding(true);
@@ -19,17 +21,11 @@ DocumentManager::DocumentManager(QObject* parent)
     connect(m_documentTabBar, &QTabBar::currentChanged, this, &DocumentManager::updateCurrentDocument);
     connect(m_documentTabBar, &QTabBar::tabCloseRequested, this, &DocumentManager::closeDocumentAt);
     connect(m_documentTabBar, &QTabBar::tabMoved, this, &DocumentManager::moveDocument);
-
-    //Setup layout
-    QVBoxLayout *layout = new QVBoxLayout(m_widget);
-    layout->addWidget(m_documentTabBar);
-
-    m_widget->setLayout(layout);
 }
 
 DocumentManager::~DocumentManager()
 {
-    delete m_widget;
+    delete m_documentTabBar;
 }
 
 DocumentManager* DocumentManager::instance()
