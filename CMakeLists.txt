@@ -86,7 +86,6 @@ target_link_libraries(An1mated
 
 ### Unit testing
 if(TESTS)
-	enable_testing()
 	# Take all test files
 	file(GLOB TEST_SRC tests/test*.cpp)
 	# Organise them in a group and iterate them individually
@@ -103,7 +102,6 @@ if(TESTS)
 			${QT5Test_INCLUDE_DIRS}
 		)
 		target_link_libraries(${test_name} libAn1mated Qt5::Test Qt5::Core Qt5::Widgets)
-		add_test(NAME ${test_name} COMMAND ${test_name})
 	endforeach()
 endif()
 
