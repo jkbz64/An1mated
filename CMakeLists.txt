@@ -22,7 +22,7 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 option(TESTS "Enable build of tests" ON)
 
 # Detect Qt5 package with Core and Widgets components
-find_package(Qt5 COMPONENTS Core Widgets REQUIRED)
+find_package(Qt5 COMPONENTS Core Widgets Test REQUIRED)
 
 ## Setup libAn1mated library
 # Get include dir and headers
@@ -87,7 +87,6 @@ target_link_libraries(An1mated
 ### Unit testing
 if(TESTS)
 	enable_testing()
-	find_package(Qt5Test REQUIRED)
 	# Take all test files
 	file(GLOB TEST_SRC tests/test*.cpp)
 	# Organise them in a group and iterate them individually
@@ -100,9 +99,10 @@ if(TESTS)
 		target_include_directories(${test_name} PUBLIC
 			${LIB_AN1MATED_INCLUDE_DIR}
 			${QT5Core_INCLUDE_DIRS}
+			${QT5Widgets_INCLUDE_DIRS}
 			${QT5Test_INCLUDE_DIRS}
-			)
-		target_link_libraries(${test_name} Qt5::Test libAn1mated Qt5::Core Qt5::Widgets)
+		)
+		target_link_libraries(${test_name} libAn1mated Qt5::Test Qt5::Core Qt5::Widgets)
 		add_test(NAME ${test_name} COMMAND ${test_name})
 	endforeach()
 endif()
