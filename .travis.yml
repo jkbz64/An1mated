@@ -14,4 +14,4 @@ script:
  - mkdir build
  - cd build
  - cmake .. && make
- - ./test_animationreading
+ - make test
