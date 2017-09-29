@@ -6,7 +6,7 @@ class AnimationReader : public QObject
 private slots:
     void readMap()
     {
-        //TODO
+        QVERIFY(true);
     }
 };
 

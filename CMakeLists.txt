@@ -102,8 +102,8 @@ if(TESTS)
 			${QT5Core_INCLUDE_DIRS}
 			${QT5Test_INCLUDE_DIRS}
 			)
-		target_link_libraries(${test_name} libAn1mated Qt5::Test Qt5::Core Qt5::Widgets)
-		add_test(${test_name} ${test_name})
+		target_link_libraries(${test_name} Qt5::Test libAn1mated Qt5::Core Qt5::Widgets)
+		add_test(NAME ${test_name} COMMAND ${test_name})
 	endforeach()
 endif()
 
