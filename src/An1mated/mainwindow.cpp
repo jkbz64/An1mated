@@ -6,6 +6,8 @@
 #include <animationdocument.hpp>
 #include <QLabel>
 
+#include <animation.hpp>
+
 MainWindow::MainWindow(QWidget *parent, Qt::WindowFlags flags)
     :
       QMainWindow(parent, flags),
@@ -43,7 +45,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::newAnimationDocument()
 {
-
+    m_documentManager->addDocument(std::make_shared<AnimationDocument>(Animation("lul")));
 }
 
 void MainWindow::openFile()

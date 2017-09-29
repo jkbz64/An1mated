@@ -10,6 +10,11 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake_modules/")
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+# Enable automoc / autoic / autorcc
+option(CMAKE_AUTOMOC "Enable automoc" ON)
+option(CMAKE_AUTOUIC "Enable autouic" ON)
+option(CMAKE_AUTORCC "Enable autorcc" ON)
+
 # Including moc'ed files is sometimes retarded
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
@@ -48,12 +53,6 @@ target_include_directories(libAn1mated PUBLIC
 
 target_link_libraries(libAn1mated Qt5::Core Qt5::Widgets)
 
-# Enable qt automoc/ autoui/ autorcc, we do this here to avoid
-# auto(moc/ui/rcc) for libAn1mated
-option(CMAKE_AUTOMOC "Enable automoc" ON)
-option(CMAKE_AUTOUIC "Enable autouic" ON)
-option(CMAKE_AUTORCC "Enable autorcc" ON)
-
 # Get include dir and headers
 set(AN1MATED_INCLUDE_DIR "include/An1mated/")
 file(GLOB AN1MATED_HDRS include/An1mated/*.hpp)
@@ -87,6 +86,7 @@ target_link_libraries(An1mated
 
 ### Unit testing
 if(TESTS)
+	enable_testing()
 	find_package(Qt5Test REQUIRED)
 	# Take all test files
 	file(GLOB TEST_SRC tests/test*.cpp)
@@ -102,7 +102,8 @@ if(TESTS)
 			${QT5Core_INCLUDE_DIRS}
 			${QT5Test_INCLUDE_DIRS}
 			)
-		target_link_libraries(${test_name} Qt5::Test Qt5::Core libAn1mated)
+		target_link_libraries(${test_name} libAn1mated Qt5::Test Qt5::Core Qt5::Widgets)
+		add_test(${test_name} ${test_name})
 	endforeach()
 endif()
 

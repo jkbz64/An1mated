@@ -2,13 +2,14 @@
 #define ANIMATIONDOCUMENT_HPP
 
 #include <document.hpp>
-
+#include <animation.hpp>
+#include <bits/unique_ptr.h>
 
 class AnimationDocument : public Document
 {
     Q_OBJECT
 public:
-    AnimationDocument(const QString& fileName = QString(), QObject* parent = nullptr);
+    AnimationDocument(Animation&&, const QString& fileName = QString());
     virtual ~AnimationDocument();
 
     virtual bool writeToFile(const QString& = QString()) override;
@@ -28,8 +29,7 @@ signals:
     */
 
 private:
-    //TODO when animation implemented
-
+    Animation& m_animation;
 };
 
 

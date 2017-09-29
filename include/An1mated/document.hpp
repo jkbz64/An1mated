@@ -20,15 +20,16 @@ public:
 
     DocumentType getType() const;
     const QString& getFileName() const;
+    void setFilename(const QString&);
     QObject* getObject() const;
 
     virtual bool writeToFile(const QString& fileName) = 0;
 signals:
     void documentSaved();
-    void documentNameChanged(const QString&);
+    void documentNameChanged(QObject*, const QString&);
     void documentModified();
     void documentObjectChanged(QObject*);
-private:
+protected:
     DocumentType m_type;
     QString      m_fileName;
     QObject*     m_object = nullptr;

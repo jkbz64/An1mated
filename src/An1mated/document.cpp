@@ -9,3 +9,7 @@ Document::Document(DocumentType type, const QString &fileName, QObject *parent)
 
 }
 
+void Document::setFilename(const QString &name)
+{
+    m_fileName = name;
+}

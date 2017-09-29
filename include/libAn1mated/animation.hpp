@@ -1,16 +1,20 @@
 #ifndef ANIMATION_HPP
 #define ANIMATION_HPP
 
+#include <QObject>
 #include <QString>
 #include <QPixmap>
 #include <animationframe.hpp>
 #include <vector>
 
-class Animation
+class Animation : public QObject
 {
+    Q_OBJECT
 public:
     Animation(const QString&);
-    ~Animation() = default;
+    Animation(Animation&&);
+    virtual ~Animation() {  }
+
 
     const QString& getName() const;
 

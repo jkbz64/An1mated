@@ -3,6 +3,7 @@
 
 #include <QString>
 #include <QRect>
+#include <QObject>
 
 class AnimationFrame
 {

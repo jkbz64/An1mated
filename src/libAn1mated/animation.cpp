@@ -2,11 +2,20 @@
 
 Animation::Animation(const QString &name)
     :
+      QObject(nullptr),
       m_name(name)
 {
 
 }
 
+Animation::Animation(Animation &&animation)
+    :
+      QObject(nullptr),
+      m_name(animation.getName()),
+      m_frames(std::move(animation.m_frames))
+{
+
+}
 
 void Animation::addFrame(const AnimationFrame &frame)
 {
