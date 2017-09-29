@@ -29,6 +29,7 @@ signals:
 
 private:
     //TODO when animation implemented
+
 };
 
 
