@@ -6,6 +6,8 @@
 #include <animationdocument.hpp>
 #include <QLabel>
 
+#include <QInputDialog>
+
 #include <animation.hpp>
 
 MainWindow::MainWindow(QWidget *parent, Qt::WindowFlags flags)
@@ -28,11 +30,12 @@ MainWindow::MainWindow(QWidget *parent, Qt::WindowFlags flags)
     QVBoxLayout* layout = new QVBoxLayout(centralWidget());
     layout->addWidget(m_documentManager->getDocumentBar());
     m_editorStack = new QStackedLayout;
-    QWidget* spacerWidget = new QWidget(this);
-    spacerWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    m_editorStack->addWidget(spacerWidget);
-    m_editorStack->addWidget(new QLabel("lol"));
-    m_editorStack->addWidget(new QLabel("DOTA"));
+    QLabel* noEditorLabel = new QLabel(this);
+    noEditorLabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    noEditorLabel->setText("Create new animation or open existing one");
+    noEditorLabel->setAlignment(Qt::AlignHCenter);
+    m_editorStack->addWidget(noEditorLabel);
+
     layout->addLayout(m_editorStack);
 }
 
@@ -45,7 +48,11 @@ MainWindow::~MainWindow()
 
 void MainWindow::newAnimationDocument()
 {
-    m_documentManager->addDocument(std::make_shared<AnimationDocument>(Animation("lul")));
+    bool ok;
+    QString animationName = QInputDialog::getText(this, QString("Type new animation name:"), QString("Animation name:"),
+                                                  QLineEdit::Normal, "", &ok);
+    if(ok && !animationName.isEmpty())
+        m_documentManager->addDocument(std::make_shared<AnimationDocument>(Animation(animationName)));
 }
 
 void MainWindow::openFile()
