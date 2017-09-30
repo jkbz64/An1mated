@@ -3,7 +3,7 @@
 
 #include <QWidget>
 #include <document.hpp>
-
+#include <memory>
 
 class Editor : public QWidget
 {
@@ -12,13 +12,13 @@ public:
     Editor(QWidget* parent = nullptr) : QWidget(parent) { }
     virtual ~Editor() = default;
 
-    virtual void setDocument(std::weak_ptr<Document>) = 0;
-    std::weak_ptr<Document> getCurrentDocument() const;
+    virtual void setDocument(std::shared_ptr<Document>) = 0;
+    std::shared_ptr<Document> getCurrentDocument() const;
 protected:
-    std::weak_ptr<Document> m_currentDocument;
+    std::shared_ptr<Document> m_currentDocument;
 };
 
-inline std::weak_ptr<Document> Editor::getCurrentDocument() const
+inline std::shared_ptr<Document> Editor::getCurrentDocument() const
 {
     return m_currentDocument;
 }

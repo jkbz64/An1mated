@@ -54,7 +54,7 @@ void DocumentManager::updateCurrentDocument(int index)
     if(index != -1)
         emit currentDocumentChanged(*(m_documents.begin() + index));
     else
-        emit currentDocumentChanged(std::weak_ptr<Document>());
+        emit currentDocumentChanged(std::shared_ptr<Document>());
 }
 
 void DocumentManager::closeDocumentAt(int index)

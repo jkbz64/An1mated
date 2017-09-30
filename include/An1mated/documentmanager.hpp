@@ -23,7 +23,7 @@ public:
 signals:
     void documentAdded(std::shared_ptr<Document>);
     void documentRemoved(std::shared_ptr<Document>);
-    void currentDocumentChanged(std::weak_ptr<Document>);
+    void currentDocumentChanged(std::shared_ptr<Document>);
 private slots:
     void updateCurrentDocument(int);
     void closeDocumentAt(int);
