@@ -50,11 +50,11 @@ inline int DocumentManager::getDocumentCount() const
     return m_documents.size();
 }
 
-//Some kind of syntax sugar, it seems really ugly when you write make shared in make shared parentheses
+//Some kind of syntax sugar, it looks really ugly when you write make shared in make shared parentheses
 template<class T, typename... Args>
 inline void DocumentManager::addDocument(Args&&... arguments)
 {
-    m_documents.emplace_back(std::make_shared<T>(arguments...));
+    m_documents.emplace_back(std::make_shared<T>(std::forward<Args>(arguments)...));
     emit documentAdded(m_documents.back());
 }
 
