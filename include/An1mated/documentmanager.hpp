@@ -17,9 +17,13 @@ public:
 
     QTabBar* getDocumentBar() const;
     int getDocumentCount() const;
-    void addDocument(std::shared_ptr<Document>);
+
+    template<class T, typename... Args>
+    void addDocument(Args&&... arguments);
 signals:
-    void currentDocumentChanged(std::weak_ptr<Document> document);
+    void documentAdded(std::shared_ptr<Document>);
+    void documentRemoved(std::shared_ptr<Document>);
+    void currentDocumentChanged(std::weak_ptr<Document>);
 private slots:
     void updateCurrentDocument(int);
     void closeDocumentAt(int);
@@ -46,6 +50,12 @@ inline int DocumentManager::getDocumentCount() const
     return m_documents.size();
 }
 
-
+//Some kind of syntax sugar, it seems really ugly when you write make shared in make shared parentheses
+template<class T, typename... Args>
+inline void DocumentManager::addDocument(Args&&... arguments)
+{
+    m_documents.emplace_back(std::make_shared<T>(arguments...));
+    emit documentAdded(m_documents.back());
+}
 
 #endif

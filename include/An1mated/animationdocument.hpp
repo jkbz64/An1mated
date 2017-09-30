@@ -3,13 +3,13 @@
 
 #include <document.hpp>
 #include <animation.hpp>
-#include <bits/unique_ptr.h>
+#include <memory>
 
 class AnimationDocument : public Document
 {
     Q_OBJECT
 public:
-    AnimationDocument(Animation&&, const QString& fileName = QString());
+    AnimationDocument(std::shared_ptr<Animation>, const QString& = QString());
     virtual ~AnimationDocument();
 
     virtual bool writeToFile(const QString& = QString()) override;
@@ -28,8 +28,8 @@ signals:
     //TODO
     */
 
-private:
-    Animation& m_animation;
+public:
+    std::shared_ptr<Animation> m_animation;
 };
 
 

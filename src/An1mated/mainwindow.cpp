@@ -9,6 +9,7 @@
 #include <QInputDialog>
 
 #include <animation.hpp>
+#include <animationpreview.hpp>
 
 MainWindow::MainWindow(QWidget *parent, Qt::WindowFlags flags)
     :
@@ -27,14 +28,30 @@ MainWindow::MainWindow(QWidget *parent, Qt::WindowFlags flags)
     //Connect document manager
     connect(m_documentManager, &DocumentManager::currentDocumentChanged, this, &MainWindow::updateEditor);
 
+
     QVBoxLayout* layout = new QVBoxLayout(centralWidget());
+    //Place document bar at the top
     layout->addWidget(m_documentManager->getDocumentBar());
     m_editorStack = new QStackedLayout;
+    //0 - No editor stack layer
     QLabel* noEditorLabel = new QLabel(this);
     noEditorLabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     noEditorLabel->setText("Create new animation or open existing one");
     noEditorLabel->setAlignment(Qt::AlignHCenter);
     m_editorStack->addWidget(noEditorLabel);
+    //1 - Editor layer
+    AnimationPreview* animationPreview = new AnimationPreview(this);
+    m_editorStack->addWidget(animationPreview);
+
+    //TEMPORARY SOLUTION FOR CERTAIN EDITOR
+    connect(m_documentManager, &DocumentManager::currentDocumentChanged, [animationPreview](std::weak_ptr<Document> doc)
+    {
+        if(auto document = doc.lock())
+            animationPreview->setAnimation(qobject_cast<AnimationDocument*>(doc.lock().get())->m_animation);
+    });
+
+
+    //END TEMPORARY SOLUTION
 
     layout->addLayout(m_editorStack);
 }
@@ -52,7 +69,7 @@ void MainWindow::newAnimationDocument()
     QString animationName = QInputDialog::getText(this, QString("Type new animation name:"), QString("Animation name:"),
                                                   QLineEdit::Normal, "", &ok);
     if(ok && !animationName.isEmpty())
-        m_documentManager->addDocument(std::make_shared<AnimationDocument>(Animation(animationName)));
+        m_documentManager->addDocument<AnimationDocument>(std::make_shared<Animation>(animationName));
 }
 
 void MainWindow::openFile()

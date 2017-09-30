@@ -1,13 +1,13 @@
 #include <animationdocument.hpp>
 
-AnimationDocument::AnimationDocument(Animation&& animation, const QString &fileName)
+AnimationDocument::AnimationDocument(std::shared_ptr<Animation> animation, const QString &fileName)
     :
       Document(DocumentType::AnimationDocument, fileName),
-      m_animation(animation)
+      m_animation(std::move(animation))
 {
-    m_object = &m_animation;
+    m_object = m_animation.get();
     if(fileName.isEmpty())
-        setFilename(QString(animation.getName() + "*"));
+        setFilename(QString(m_animation->getName() + "*"));
 }
 
 AnimationDocument::~AnimationDocument()
