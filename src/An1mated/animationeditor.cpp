@@ -1,16 +1,19 @@
 #include <animationeditor.hpp>
+#include "ui_animationeditor.h"
+
 #include <animationpreview.hpp>
 #include <animationdocument.hpp>
 
 #include <QGridLayout>
+#include <QLabel>
+
 
 AnimationEditor::AnimationEditor(QWidget *parent)
     :
       Editor(parent),
-      m_animationPreview(new AnimationPreview(this))
+      m_ui(new Ui::AnimationEditor)
 {
-    QGridLayout gridLayout(this);
-    gridLayout.addWidget(m_animationPreview, 0, 0, 3, 1);
+    m_ui->setupUi(this);
 }
 
 void AnimationEditor::setDocument(std::shared_ptr<Document> doc)
@@ -19,11 +22,11 @@ void AnimationEditor::setDocument(std::shared_ptr<Document> doc)
     if(m_currentDocument)
     {
         auto&& currentDocument = qobject_cast<AnimationDocument*>(m_currentDocument.get());
-        m_animationPreview->setAnimation(currentDocument->m_animation);
+        m_ui->m_animationPreview->setAnimation(currentDocument->m_animation);
 
     }
     else
-        m_animationPreview->setAnimation(std::weak_ptr<Animation>());
+        m_ui->m_animationPreview->setAnimation(std::weak_ptr<Animation>());
 }
 
 

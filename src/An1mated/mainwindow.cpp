@@ -9,7 +9,7 @@
 #include <QInputDialog>
 
 #include <animation.hpp>
-#include <animationpreview.hpp>
+#include <animationeditor.hpp>
 
 MainWindow::MainWindow(QWidget *parent, Qt::WindowFlags flags)
     :
@@ -37,21 +37,12 @@ MainWindow::MainWindow(QWidget *parent, Qt::WindowFlags flags)
     QLabel* noEditorLabel = new QLabel(this);
     noEditorLabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     noEditorLabel->setText("Create new animation or open existing one");
-    noEditorLabel->setAlignment(Qt::AlignHCenter);
+    noEditorLabel->setAlignment(Qt::AlignCenter);
     m_editorStack->addWidget(noEditorLabel);
     //1 - Editor layer
-    AnimationPreview* animationPreview = new AnimationPreview(this);
-    m_editorStack->addWidget(animationPreview);
+    AnimationEditor* animationEditor = new AnimationEditor(this);
+    m_editorStack->addWidget(animationEditor);
 
-    //TEMPORARY SOLUTION FOR CERTAIN EDITOR
-    connect(m_documentManager, &DocumentManager::currentDocumentChanged, [animationPreview](std::weak_ptr<Document> doc)
-    {
-        if(auto document = doc.lock())
-            animationPreview->setAnimation(qobject_cast<AnimationDocument*>(doc.lock().get())->m_animation);
-    });
-
-
-    //END TEMPORARY SOLUTION
 
     layout->addLayout(m_editorStack);
 }

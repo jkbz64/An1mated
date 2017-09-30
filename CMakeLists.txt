@@ -63,6 +63,7 @@ file(GLOB AN1MATED_SRCS src/An1mated/*.cpp)
 
 set(AN1MATED_UI
 	${AN1MATED_SRCS_DIR}/mainwindow.ui
+	${AN1MATED_SRCS_DIR}/animationeditor.ui
 	)
 set(AN1MATED_RES
 	)

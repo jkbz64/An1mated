@@ -3,6 +3,11 @@
 
 #include <editor.hpp>
 
+namespace Ui
+{
+    class AnimationEditor;
+}
+
 class AnimationPreview;
 
 class AnimationEditor : public Editor
@@ -16,7 +21,7 @@ public:
 signals:
 
 protected:
-    AnimationPreview* m_animationPreview;
+    Ui::AnimationEditor* m_ui;
 };
 
 
