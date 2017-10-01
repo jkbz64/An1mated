@@ -9,10 +9,16 @@
 FramesGallery::FramesGallery(QWidget *parent)
     :
       QWidget(parent),
-      m_layout(new QHBoxLayout(this))
+      m_layout(new QHBoxLayout(this)),
+      m_dragSpacer(new QSpacerItem(0, 0))
 {
     setAcceptDrops(true);
     setLayout(m_layout);
+}
+
+FramesGallery::~FramesGallery()
+{
+
 }
 
 void FramesGallery::setAnimation(std::weak_ptr<Animation> animation)
@@ -40,6 +46,10 @@ void FramesGallery::updateGallery()
               selectFrame(i);
               m_draggedFrame = frameWidget;
               m_startDragPos = mapFromGlobal(QCursor::pos());
+              auto replaceIndex = m_layout->indexOf(m_draggedFrame);
+              m_layout->removeWidget(m_draggedFrame);
+              m_dragSpacer->changeSize(m_draggedFrame->size().width(), m_draggedFrame->size().height());
+              m_layout->insertSpacerItem(replaceIndex, m_dragSpacer);
            });
 
            connect(frameWidget, &AnimationFrameWidget::frameReleased, [this, frameWidget, animation, i]
@@ -56,7 +66,7 @@ void FramesGallery::updateGallery()
                            break;
                        --targetIndex;
                    }
-                   if(targetIndex  != i)
+                   if(targetIndex != i)
                     animation->moveFrameTo(i, targetIndex);
 
                    updateGallery();
@@ -89,6 +99,7 @@ void FramesGallery::clearGallery()
         for(auto& widget : m_frameWidgets)
             widget->deleteLater();
         m_frameWidgets.clear();
+        m_layout->removeItem(m_dragSpacer);
     }
 }
 
@@ -96,9 +107,9 @@ void FramesGallery::mouseMoveEvent(QMouseEvent *event)
 {
     if(m_draggedFrame)
     {
-        m_layout->removeWidget(m_draggedFrame);
         QPoint subPos = event->pos() - m_startDragPos;
-        m_draggedFrame->move(m_draggedFrame->pos().x() + subPos.x(), m_draggedFrame->pos().y() + subPos.y());
+        if(m_draggedFrame->pos().x() + subPos.x() >= pos().x() && m_draggedFrame->pos().x() + m_draggedFrame->size().width() + subPos.x() <= pos().x() + size().width())
+            m_draggedFrame->move(m_draggedFrame->pos().x() + subPos.x(), m_draggedFrame->pos().y());
         m_startDragPos = event->pos();
     }
 }

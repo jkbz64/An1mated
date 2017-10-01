@@ -7,13 +7,14 @@
 
 class AnimationFrameWidget;
 class QHBoxLayout;
+class QSpacerItem;
 
 class FramesGallery : public QWidget
 {
     Q_OBJECT
 public:
     FramesGallery(QWidget* parent = nullptr);
-    virtual ~FramesGallery() = default;
+    virtual ~FramesGallery();
     void selectFrame(int);
 signals:
     void frameSelected(int);
@@ -30,6 +31,7 @@ protected:
 
     QPoint m_startDragPos;
     AnimationFrameWidget* m_draggedFrame = nullptr;
+    QSpacerItem* m_dragSpacer;
 };
 
 #endif
