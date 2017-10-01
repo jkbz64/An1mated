@@ -19,15 +19,17 @@ signals:
     void frameSelected(int);
 public slots:
     void setAnimation(std::weak_ptr<Animation>);
-    void addFrame(const AnimationFrame&);
-    void removeFrame(int);
-
     void updateGallery();
 protected:
+    virtual void mouseMoveEvent(QMouseEvent*) override;
+
     void clearGallery();
     std::weak_ptr<Animation> m_currentAnimation;
     std::vector<AnimationFrameWidget*> m_frameWidgets;
     QHBoxLayout* m_layout;
+
+    QPoint m_startDragPos;
+    AnimationFrameWidget* m_draggedFrame = nullptr;
 };
 
 #endif

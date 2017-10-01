@@ -2,6 +2,7 @@
 #include <QHBoxLayout>
 #include <QFrame>
 #include <QLabel>
+#include <QMouseEvent>
 
 #include <animationframewidget.hpp>
 
@@ -10,6 +11,7 @@ FramesGallery::FramesGallery(QWidget *parent)
       QWidget(parent),
       m_layout(new QHBoxLayout(this))
 {
+    setAcceptDrops(true);
     setLayout(m_layout);
 }
 
@@ -33,26 +35,40 @@ void FramesGallery::updateGallery()
                                                                                  animation->getSpritesheet().copy(frame.getRect()),
                                                                                  this);
            //Make widget selectable
-           connect(frameWidget, &AnimationFrameWidget::frameClicked, [this, i]
+           connect(frameWidget, &AnimationFrameWidget::frameClicked, [this, frameWidget, i]
            {
               selectFrame(i);
+              m_draggedFrame = frameWidget;
+              m_startDragPos = mapFromGlobal(QCursor::pos());
            });
+
+           connect(frameWidget, &AnimationFrameWidget::frameReleased, [this, frameWidget, animation, i]
+           {
+               if(m_draggedFrame == frameWidget)
+               {
+                   m_draggedFrame = nullptr;
+                   //Resolve where to place widget
+                   int targetIndex = m_frameWidgets.size() - 1;
+                   auto it = m_frameWidgets.rbegin();
+                   for(; it != m_frameWidgets.rend(); ++it)
+                   {
+                       if(m_startDragPos.x() > (*it)->pos().x() + (*it)->size().width())
+                           break;
+                       --targetIndex;
+                   }
+                   if(targetIndex  != i)
+                    animation->moveFrameTo(i, targetIndex);
+
+                   updateGallery();
+               }
+           });
+
 
            m_frameWidgets.push_back(frameWidget);
            m_layout->addWidget(frameWidget);
            ++i;
        }
    }
-}
-
-void FramesGallery::addFrame(const AnimationFrame &frame)
-{
-
-}
-
-void FramesGallery::removeFrame(int index)
-{
-
 }
 
 void FramesGallery::selectFrame(int index)
@@ -73,5 +89,16 @@ void FramesGallery::clearGallery()
         for(auto& widget : m_frameWidgets)
             widget->deleteLater();
         m_frameWidgets.clear();
+    }
+}
+
+void FramesGallery::mouseMoveEvent(QMouseEvent *event)
+{
+    if(m_draggedFrame)
+    {
+        m_layout->removeWidget(m_draggedFrame);
+        QPoint subPos = event->pos() - m_startDragPos;
+        m_draggedFrame->move(m_draggedFrame->pos().x() + subPos.x(), m_draggedFrame->pos().y() + subPos.y());
+        m_startDragPos = event->pos();
     }
 }

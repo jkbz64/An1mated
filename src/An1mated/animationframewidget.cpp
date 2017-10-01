@@ -2,6 +2,8 @@
 #include <QLabel>
 #include <QVBoxLayout>
 #include <QMouseEvent>
+#include <QDrag>
+#include <QMimeData>
 
 AnimationFrameWidget::AnimationFrameWidget(const QString& frameName, QPixmap framePixmap, QWidget* parent)
     :
@@ -15,7 +17,7 @@ AnimationFrameWidget::AnimationFrameWidget(const QString& frameName, QPixmap fra
     QVBoxLayout* frameLayout = new QVBoxLayout(this);
     m_framePreview->setScaledContents(true);
     m_framePreview->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
-    m_framePreview->setPixmap(framePixmap.scaled(500, 500));
+    m_framePreview->setPixmap(framePixmap);
     frameLayout->addWidget(m_framePreview, 4, Qt::AlignCenter);
     frameLayout->addWidget(m_frameNameLabel, 0, Qt::AlignHCenter);
 }
@@ -24,6 +26,11 @@ void AnimationFrameWidget::mousePressEvent(QMouseEvent *event)
 {
     if(event->button() == Qt::MouseButton::LeftButton)
         emit frameClicked();
+}
+
+void AnimationFrameWidget::mouseReleaseEvent(QMouseEvent *event)
+{
+    emit frameReleased();
 }
 
 void AnimationFrameWidget::resizeEvent(QResizeEvent *event)

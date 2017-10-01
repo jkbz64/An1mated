@@ -15,7 +15,6 @@ public:
     Animation(Animation&&);
     virtual ~Animation() {  }
 
-
     const QString& getName() const;
 
     QPixmap getSpritesheet() const;
@@ -24,6 +23,8 @@ public:
 
     void addFrame(const QString&, const QRect&);
     void addFrame(const AnimationFrame&);
+
+    void moveFrameTo(int, int);
 private:
     QString m_name;
     QPixmap m_spritesheet;

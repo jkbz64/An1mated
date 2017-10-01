@@ -13,8 +13,10 @@ public:
     virtual ~AnimationFrameWidget() = default;
 signals:
     void frameClicked();
+    void frameReleased();
 protected:
     virtual void mousePressEvent(QMouseEvent*) override;
+    virtual void mouseReleaseEvent(QMouseEvent*) override;
     virtual void resizeEvent(QResizeEvent*) override;
 private:
     QLabel* m_frameNameLabel;

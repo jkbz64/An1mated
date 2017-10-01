@@ -19,7 +19,6 @@ signals:
 
     /*
     //Frame signals
-    void currentFrameChanged(Frame*);
     void frameAdded(Frame*);
     void frameRemoved(Frame*);
     void frameModified(Frame*);

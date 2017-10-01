@@ -32,3 +32,22 @@ void Animation::addFrame(const QString &name, const QRect &rect)
 {
     m_frames.emplace_back(name, rect);
 }
+
+void Animation::moveFrameTo(int from, int to)
+{
+    if(to > from)
+    {
+        auto fromIt = m_frames.begin() + from;
+        auto toIt = m_frames.begin() + to;
+        while(fromIt != toIt)
+            std::iter_swap(fromIt, fromIt++);
+    }
+
+    if(to < from)
+    {
+        auto fromIt = m_frames.begin() + from;
+        auto toIt = m_frames.begin() + to + 1;
+        while(fromIt != toIt)
+            std::iter_swap(fromIt, fromIt--);
+    }
+}
