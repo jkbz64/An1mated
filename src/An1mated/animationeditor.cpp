@@ -14,6 +14,8 @@ AnimationEditor::AnimationEditor(QWidget *parent)
       m_ui(new Ui::AnimationEditor)
 {
     m_ui->setupUi(this);
+
+    connect(m_ui->m_framesGallery, &FramesGallery::frameSelected, m_ui->m_animationPreview, &AnimationPreview::drawFrame);
 }
 
 AnimationEditor::~AnimationEditor()

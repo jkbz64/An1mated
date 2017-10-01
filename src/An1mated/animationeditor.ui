@@ -75,10 +75,16 @@
    <item row="4" column="0" colspan="2">
     <widget class="QScrollArea" name="scrollArea">
      <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+      <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
        <horstretch>0</horstretch>
        <verstretch>2</verstretch>
       </sizepolicy>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>100</height>
+      </size>
      </property>
      <property name="widgetResizable">
       <bool>true</bool>
@@ -110,8 +116,6 @@
         </widget>
        </item>
       </layout>
-      <zorder>m_framesGallery</zorder>
-      <zorder>m_framesGallery</zorder>
      </widget>
     </widget>
    </item>

@@ -3,6 +3,8 @@
 #include <QFrame>
 #include <QLabel>
 
+#include <animationframewidget.hpp>
+
 FramesGallery::FramesGallery(QWidget *parent)
     :
       QWidget(parent),
@@ -22,26 +24,24 @@ void FramesGallery::updateGallery()
    clearGallery();
    if(auto animation = m_currentAnimation.lock())
    {
+       int i = 0;
        for(const AnimationFrame& frame : animation->getFrames())
        {
            //Construct widget
-           QFrame* frameWidget = new QFrame(this);
-           frameWidget->setFrameStyle(QFrame::WinPanel | QFrame::Plain);
-           frameWidget->setLineWidth(1);
-           frameWidget->setMinimumWidth(300);
-           QVBoxLayout* frameLayout = new QVBoxLayout(frameWidget);
-           //Temp solution
-           //Show frame in label
-           QLabel* frameLabel = new QLabel(frameWidget);
-           frameLabel->setAlignment(Qt::AlignHCenter);
-           frameLabel->setPixmap(animation->getSpritesheet().copy(frame.getRect()));
-           frameLayout->addWidget(frameLabel);
-
-           frameLayout->addWidget(new QLabel(frame.getName(), frameWidget));
-           frameWidget->setLayout(frameLayout);
+           AnimationFrameWidget* frameWidget = new AnimationFrameWidget(frame.getName(),
+                                                                                 animation->getSpritesheet().copy(frame.getRect()),
+                                                                                 this);
+           connect(frameWidget, &AnimationFrameWidget::frameClicked, [i, this]()
+           {
+              for(QWidget* _frame : m_frameWidgets)
+                  _frame->setStyleSheet("");
+              m_frameWidgets[i]->setStyleSheet("background: #ADD8E6;");
+              emit frameSelected(i);
+           });
 
            m_frameWidgets.push_back(frameWidget);
            m_layout->addWidget(frameWidget);
+           ++i;
        }
    }
 }

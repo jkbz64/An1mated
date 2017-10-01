@@ -5,6 +5,7 @@
 #include <animation.hpp>
 #include <memory>
 
+class AnimationFrameWidget;
 class QHBoxLayout;
 
 class FramesGallery : public QWidget
@@ -14,7 +15,7 @@ public:
     FramesGallery(QWidget* parent = nullptr);
     virtual ~FramesGallery() = default;
 signals:
-    void frameClicked();
+    void frameSelected(int);
 public slots:
     void setAnimation(std::weak_ptr<Animation>);
     void addFrame(const AnimationFrame&);
@@ -24,7 +25,7 @@ public slots:
 protected:
     void clearGallery();
     std::weak_ptr<Animation> m_currentAnimation;
-    std::vector<QWidget*> m_frameWidgets;
+    std::vector<AnimationFrameWidget*> m_frameWidgets;
     QHBoxLayout* m_layout;
 };
 
