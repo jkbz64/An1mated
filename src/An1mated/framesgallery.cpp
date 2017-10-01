@@ -17,6 +17,7 @@ void FramesGallery::setAnimation(std::weak_ptr<Animation> animation)
 {
     m_currentAnimation = animation;
     updateGallery();
+    selectFrame(0);
 }
 
 void FramesGallery::updateGallery()
@@ -31,12 +32,10 @@ void FramesGallery::updateGallery()
            AnimationFrameWidget* frameWidget = new AnimationFrameWidget(frame.getName(),
                                                                                  animation->getSpritesheet().copy(frame.getRect()),
                                                                                  this);
-           connect(frameWidget, &AnimationFrameWidget::frameClicked, [i, this]()
+           //Make widget selectable
+           connect(frameWidget, &AnimationFrameWidget::frameClicked, [this, i]
            {
-              for(QWidget* _frame : m_frameWidgets)
-                  _frame->setStyleSheet("");
-              m_frameWidgets[i]->setStyleSheet("background: #ADD8E6;");
-              emit frameSelected(i);
+              selectFrame(i);
            });
 
            m_frameWidgets.push_back(frameWidget);
@@ -54,6 +53,17 @@ void FramesGallery::addFrame(const AnimationFrame &frame)
 void FramesGallery::removeFrame(int index)
 {
 
+}
+
+void FramesGallery::selectFrame(int index)
+{
+    if(index <= m_frameWidgets.size() - 1)
+    {
+        for(QWidget* frame : m_frameWidgets)
+            frame->setStyleSheet("");
+        m_frameWidgets[index]->setStyleSheet("background: #ADD8E6;");
+        emit frameSelected(index);
+    }
 }
 
 void FramesGallery::clearGallery()

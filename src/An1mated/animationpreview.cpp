@@ -27,6 +27,9 @@ void AnimationPreview::drawFrame(int index)
     m_animationScene.clear();
     if(auto animation = m_currentAnimation.lock())
     {
+        if(animation->getFrames().size() - 1 < index)
+            return;
+
         const auto frame = animation->getFrames()[index];
         m_animationScene.addPixmap(animation->getSpritesheet().copy(frame.getRect()));
     }

@@ -14,7 +14,8 @@ public:
 signals:
     void frameClicked();
 protected:
-    virtual void mouseReleaseEvent(QMouseEvent*);
+    virtual void mousePressEvent(QMouseEvent*) override;
+    virtual void resizeEvent(QResizeEvent*) override;
 private:
     QLabel* m_frameNameLabel;
     QLabel* m_framePreview;

@@ -20,8 +20,14 @@ AnimationFrameWidget::AnimationFrameWidget(const QString& frameName, QPixmap fra
     frameLayout->addWidget(m_frameNameLabel, 0, Qt::AlignHCenter);
 }
 
-void AnimationFrameWidget::mouseReleaseEvent(QMouseEvent *event)
+void AnimationFrameWidget::mousePressEvent(QMouseEvent *event)
 {
     if(event->button() == Qt::MouseButton::LeftButton)
         emit frameClicked();
+}
+
+void AnimationFrameWidget::resizeEvent(QResizeEvent *event)
+{
+    if(m_framePreview->pixmap()->size().width() < event->size().width() || m_framePreview->pixmap()->size().height() < event->size().height())
+        m_framePreview->setPixmap(m_framePreview->pixmap()->scaled(event->size()));
 }

@@ -14,6 +14,7 @@ class FramesGallery : public QWidget
 public:
     FramesGallery(QWidget* parent = nullptr);
     virtual ~FramesGallery() = default;
+    void selectFrame(int);
 signals:
     void frameSelected(int);
 public slots:
