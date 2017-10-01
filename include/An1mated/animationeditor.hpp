@@ -15,7 +15,7 @@ class AnimationEditor : public Editor
     Q_OBJECT
 public:
     AnimationEditor(QWidget* parent = nullptr);
-    virtual ~AnimationEditor() = default;
+    virtual ~AnimationEditor();
 
     virtual void setDocument(std::shared_ptr<Document>) override;
 signals:

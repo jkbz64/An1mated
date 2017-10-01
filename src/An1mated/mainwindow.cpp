@@ -41,8 +41,9 @@ MainWindow::MainWindow(QWidget *parent, Qt::WindowFlags flags)
     m_editorStack->addWidget(noEditorLabel);
     //1 - Editor layer
     AnimationEditor* animationEditor = new AnimationEditor(this);
-    m_editorStack->addWidget(animationEditor);
+    connect(m_documentManager, &DocumentManager::currentDocumentChanged, animationEditor, &AnimationEditor::setDocument);
 
+    m_editorStack->addWidget(animationEditor);
 
     layout->addLayout(m_editorStack);
 }

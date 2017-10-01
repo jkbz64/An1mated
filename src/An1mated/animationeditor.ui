@@ -22,15 +22,22 @@
     </widget>
    </item>
    <item row="1" column="0" colspan="2">
-    <widget class="AnimationPreview" name="m_animationPreview"/>
-   </item>
-   <item row="4" column="0" colspan="2">
-    <widget class="QWidget" name="m_frameGallery" native="true">
+    <widget class="AnimationPreview" name="m_animationPreview">
      <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
        <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
+       <verstretch>3</verstretch>
       </sizepolicy>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="0" colspan="2">
+    <widget class="QLabel" name="m_frameGalleryLabel">
+     <property name="text">
+      <string>Frame Gallery</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
      </property>
     </widget>
    </item>
@@ -65,14 +72,47 @@
      </property>
     </widget>
    </item>
-   <item row="3" column="0" colspan="2">
-    <widget class="QLabel" name="m_frameGalleryLabel">
-     <property name="text">
-      <string>Frame Gallery</string>
+   <item row="4" column="0" colspan="2">
+    <widget class="QScrollArea" name="scrollArea">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+       <horstretch>0</horstretch>
+       <verstretch>2</verstretch>
+      </sizepolicy>
      </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
+     <property name="widgetResizable">
+      <bool>true</bool>
      </property>
+     <widget class="QWidget" name="scrollAreaWidgetContents">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>773</width>
+        <height>178</height>
+       </rect>
+      </property>
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="FramesGallery" name="m_framesGallery" native="true">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
+       </item>
+      </layout>
+      <zorder>m_framesGallery</zorder>
+      <zorder>m_framesGallery</zorder>
+     </widget>
     </widget>
    </item>
   </layout>
@@ -82,6 +122,12 @@
    <class>AnimationPreview</class>
    <extends>QGraphicsView</extends>
    <header>animationpreview.hpp</header>
+  </customwidget>
+  <customwidget>
+   <class>FramesGallery</class>
+   <extends>QWidget</extends>
+   <header>framesgallery.hpp</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>
