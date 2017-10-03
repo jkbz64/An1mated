@@ -12,6 +12,7 @@ public:
     AnimationPreview(QWidget* parent = nullptr);
     virtual ~AnimationPreview();
 
+    void reset();
     void setBackground(const QPixmap& = QPixmap());
     void setSpritesheet(const QPixmap& = QPixmap());
     void setFrame(const AnimationFrame&);
@@ -20,8 +21,10 @@ protected:
     QGraphicsScene m_animationScene;
     QPixmap m_spritesheet;
     QGraphicsItem* m_background;
+
     QGraphicsItem* m_frame;
     QPoint m_framePosition;
+    QRect m_frameRect;
 };
 
 #endif

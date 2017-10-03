@@ -15,6 +15,8 @@ class FramesGallery : public QWidget
 public:
     FramesGallery(QWidget* parent = nullptr);
     virtual ~FramesGallery();
+    void reset();
+
     void setFrames(const std::vector<AnimationFrame>& = std::vector<AnimationFrame>());
     void selectFrame(int);
     void setSpritesheet(const QPixmap& = QPixmap());

@@ -21,6 +21,12 @@ FramesGallery::~FramesGallery()
     delete m_dragSpacer;
 }
 
+void FramesGallery::reset()
+{
+    setSpritesheet();
+    setFrames();
+}
+
 void FramesGallery::setFrames(const std::vector<AnimationFrame>& frames)
 {
     clearGallery();

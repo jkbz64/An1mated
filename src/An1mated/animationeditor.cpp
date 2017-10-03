@@ -55,9 +55,8 @@ void AnimationEditor::setDocument(std::shared_ptr<Document> doc)
     }
     else
     {
-        m_ui->m_animationPreview->setSpritesheet();
-        m_ui->m_framesGallery->setSpritesheet();
-        m_ui->m_framesGallery->setFrames();
+        m_ui->m_animationPreview->reset();
+        m_ui->m_framesGallery->reset();
     }
 }
 

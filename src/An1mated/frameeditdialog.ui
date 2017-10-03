@@ -15,50 +15,34 @@
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="1" column="2">
-    <widget class="QLabel" name="label_3">
+    <widget class="QLabel" name="xRectLabel">
      <property name="text">
       <string>x</string>
      </property>
     </widget>
    </item>
    <item row="6" column="1">
-    <widget class="QLineEdit" name="lineEdit"/>
+    <widget class="QLineEdit" name="frameNameEdit"/>
    </item>
    <item row="6" column="0">
-    <widget class="QLabel" name="label">
+    <widget class="QLabel" name="frameNameLabel">
      <property name="text">
       <string>Name</string>
      </property>
     </widget>
    </item>
-   <item row="0" column="3">
-    <widget class="QLabel" name="label_2">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="text">
-      <string>Rect</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
-     </property>
-    </widget>
-   </item>
    <item row="2" column="2">
-    <widget class="QLabel" name="label_4">
+    <widget class="QLabel" name="yRectLabel">
      <property name="text">
       <string>y</string>
      </property>
     </widget>
    </item>
    <item row="0" column="0" rowspan="6" colspan="2">
-    <widget class="QGraphicsView" name="graphicsView"/>
+    <widget class="QGraphicsView" name="frameEditor"/>
    </item>
    <item row="1" column="3">
-    <widget class="QSpinBox" name="spinBox"/>
+    <widget class="QSpinBox" name="xSpin"/>
    </item>
    <item row="6" column="3">
     <widget class="QDialogButtonBox" name="buttonBox">
@@ -77,27 +61,56 @@
     </widget>
    </item>
    <item row="2" column="3">
-    <widget class="QSpinBox" name="spinBox_2"/>
+    <widget class="QSpinBox" name="ySpin"/>
    </item>
    <item row="3" column="2">
-    <widget class="QLabel" name="label_5">
+    <widget class="QLabel" name="wRectLabel">
      <property name="text">
       <string>w</string>
      </property>
     </widget>
    </item>
    <item row="3" column="3">
-    <widget class="QSpinBox" name="spinBox_3"/>
+    <widget class="QSpinBox" name="wSpin"/>
    </item>
    <item row="4" column="2">
-    <widget class="QLabel" name="label_6">
+    <widget class="QLabel" name="hRectLabel">
      <property name="text">
       <string>h</string>
      </property>
     </widget>
    </item>
    <item row="4" column="3">
-    <widget class="QSpinBox" name="spinBox_4"/>
+    <widget class="QSpinBox" name="hSpin"/>
+   </item>
+   <item row="0" column="2" colspan="2">
+    <widget class="QLabel" name="frameRectLabel">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text">
+      <string>Rect</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="3">
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
+     </property>
+    </spacer>
    </item>
   </layout>
  </widget>

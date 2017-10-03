@@ -18,10 +18,22 @@ AnimationPreview::~AnimationPreview()
 
 }
 
+void AnimationPreview::reset()
+{
+    m_animationScene.clear();
+    setBackground();
+    setSpritesheet();
+    m_framePosition = QPoint(size().width() / 2, size().height() / 2);
+    m_background = nullptr;
+    m_frame = nullptr;
+}
+
 void AnimationPreview::setSpritesheet(const QPixmap& spritesheet)
 {
     m_animationScene.clear();
     m_spritesheet = spritesheet;
+    if(m_frame)
+        m_animationScene.removeItem(m_frame);
 }
 
 void AnimationPreview::setFrame(const AnimationFrame& frame)
@@ -55,7 +67,5 @@ void AnimationPreview::resizeEvent(QResizeEvent *event)
         }
     }
     else
-    {
         setSceneRect(0, 0, m_background->sceneBoundingRect().width(), m_background->sceneBoundingRect().height());
-    }
 }
