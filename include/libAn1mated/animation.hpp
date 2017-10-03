@@ -12,12 +12,13 @@ class Animation : public QObject
     Q_OBJECT
 public:
     Animation(const QString&);
+    Animation(const Animation&);
     Animation(Animation&&);
     virtual ~Animation() {  }
 
     const QString& getName() const;
 
-    QPixmap getSpritesheet() const;
+    const QPixmap& getSpritesheet() const;
 
     const std::vector<AnimationFrame>& getFrames() const;
 
@@ -36,7 +37,7 @@ inline const QString& Animation::getName() const
     return m_name;
 }
 
-inline QPixmap Animation::getSpritesheet() const
+inline const QPixmap& Animation::getSpritesheet() const
 {
     return m_spritesheet;
 }

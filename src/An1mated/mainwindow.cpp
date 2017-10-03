@@ -61,7 +61,7 @@ void MainWindow::newAnimationDocument()
     QString animationName = QInputDialog::getText(this, QString("Type new animation name:"), QString("Animation name:"),
                                                   QLineEdit::Normal, "", &ok);
     if(ok && !animationName.isEmpty())
-        m_documentManager->addDocument<AnimationDocument>(std::make_shared<Animation>(animationName));
+        m_documentManager->addDocument<AnimationDocument>(animationName);
 }
 
 void MainWindow::openFile()

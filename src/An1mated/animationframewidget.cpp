@@ -17,6 +17,8 @@ AnimationFrameWidget::AnimationFrameWidget(const QString& frameName, QPixmap fra
     QVBoxLayout* frameLayout = new QVBoxLayout(this);
     m_framePreview->setScaledContents(true);
     m_framePreview->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
+    if(framePixmap.size().width() + framePixmap.size().height() < 300)
+        framePixmap = framePixmap.scaled(200, 200);
     m_framePreview->setPixmap(framePixmap);
     frameLayout->addWidget(m_framePreview, 4, Qt::AlignCenter);
     frameLayout->addWidget(m_frameNameLabel, 0, Qt::AlignHCenter);
@@ -35,6 +37,5 @@ void AnimationFrameWidget::mouseReleaseEvent(QMouseEvent *event)
 
 void AnimationFrameWidget::resizeEvent(QResizeEvent *event)
 {
-    if(m_framePreview->pixmap()->size().width() < event->size().width() || m_framePreview->pixmap()->size().height() < event->size().height())
-        m_framePreview->setPixmap(m_framePreview->pixmap()->scaled(event->size()));
+
 }

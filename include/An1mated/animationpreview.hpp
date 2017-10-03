@@ -11,18 +11,17 @@ class AnimationPreview : public QGraphicsView
 public:
     AnimationPreview(QWidget* parent = nullptr);
     virtual ~AnimationPreview();
-signals:
 
-public slots:
-    void setAnimation(std::weak_ptr<Animation>);
-    void drawFrame(int);
+    void setBackground(const QPixmap& = QPixmap());
+    void setSpritesheet(const QPixmap& = QPixmap());
+    void setFrame(const AnimationFrame&);
 protected:
-
-private:
+    virtual void resizeEvent(QResizeEvent*) override;
     QGraphicsScene m_animationScene;
-    std::weak_ptr<Animation> m_currentAnimation;
+    QPixmap m_spritesheet;
+    QGraphicsItem* m_background;
+    QGraphicsItem* m_frame;
+    QPoint m_framePosition;
 };
-
-
 
 #endif

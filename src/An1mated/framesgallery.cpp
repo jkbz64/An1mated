@@ -18,72 +18,75 @@ FramesGallery::FramesGallery(QWidget *parent)
 
 FramesGallery::~FramesGallery()
 {
-
+    delete m_dragSpacer;
 }
 
-void FramesGallery::setAnimation(std::weak_ptr<Animation> animation)
+void FramesGallery::setFrames(const std::vector<AnimationFrame>& frames)
 {
-    m_currentAnimation = animation;
-    updateGallery();
+    clearGallery();
+
+    int i = 0;
+    for(const AnimationFrame& frame : frames)
+    {
+        //Construct widget
+        AnimationFrameWidget* frameWidget = new AnimationFrameWidget(frame.getName(),
+                                                                     m_spritesheet.copy(frame.getRect()),
+                                                                     this);
+        //Make widget selectable
+        connect(frameWidget, &AnimationFrameWidget::frameClicked, [this, frameWidget, i]
+        {
+           //selectFrame(i);
+           /*m_draggedFrame = frameWidget;
+           m_startDragPos = mapFromGlobal(QCursor::pos());
+           auto replaceIndex = m_layout->indexOf(m_draggedFrame);
+           m_layout->removeWidget(m_draggedFrame);
+           m_dragSpacer->changeSize(m_draggedFrame->size().width(), m_draggedFrame->size().height());
+           m_layout->insertSpacerItem(replaceIndex, m_dragSpacer);*/
+        });
+
+        connect(frameWidget, &AnimationFrameWidget::frameReleased, [this, frameWidget, i]
+        {
+            selectFrame(i);
+            /*
+            if(m_draggedFrame == frameWidget)
+            {
+                m_draggedFrame = nullptr;
+                //Resolve where to place widget
+                int targetIndex = m_frameWidgets.size() - 1;
+                auto it = m_frameWidgets.rbegin();
+                for(; it != m_frameWidgets.rend(); ++it)
+                {
+                    if(m_startDragPos.x() > (*it)->pos().x() + (*it)->size().width())
+                        break;
+                    --targetIndex;
+                }
+                //if(targetIndex != i)
+                 //animation->moveFrameTo(i, targetIndex);
+
+                updateGallery();
+            }*/
+        });
+
+        m_frameWidgets.push_back(frameWidget);
+        m_layout->addWidget(frameWidget);
+        ++i;
+    }
     selectFrame(0);
 }
 
 void FramesGallery::updateGallery()
 {
-   clearGallery();
-   if(auto animation = m_currentAnimation.lock())
-   {
-       int i = 0;
-       for(const AnimationFrame& frame : animation->getFrames())
-       {
-           //Construct widget
-           AnimationFrameWidget* frameWidget = new AnimationFrameWidget(frame.getName(),
-                                                                                 animation->getSpritesheet().copy(frame.getRect()),
-                                                                                 this);
-           //Make widget selectable
-           connect(frameWidget, &AnimationFrameWidget::frameClicked, [this, frameWidget, i]
-           {
-              selectFrame(i);
-              m_draggedFrame = frameWidget;
-              m_startDragPos = mapFromGlobal(QCursor::pos());
-              auto replaceIndex = m_layout->indexOf(m_draggedFrame);
-              m_layout->removeWidget(m_draggedFrame);
-              m_dragSpacer->changeSize(m_draggedFrame->size().width(), m_draggedFrame->size().height());
-              m_layout->insertSpacerItem(replaceIndex, m_dragSpacer);
-           });
 
-           connect(frameWidget, &AnimationFrameWidget::frameReleased, [this, frameWidget, animation, i]
-           {
-               if(m_draggedFrame == frameWidget)
-               {
-                   m_draggedFrame = nullptr;
-                   //Resolve where to place widget
-                   int targetIndex = m_frameWidgets.size() - 1;
-                   auto it = m_frameWidgets.rbegin();
-                   for(; it != m_frameWidgets.rend(); ++it)
-                   {
-                       if(m_startDragPos.x() > (*it)->pos().x() + (*it)->size().width())
-                           break;
-                       --targetIndex;
-                   }
-                   if(targetIndex != i)
-                    animation->moveFrameTo(i, targetIndex);
+}
 
-                   updateGallery();
-               }
-           });
-
-
-           m_frameWidgets.push_back(frameWidget);
-           m_layout->addWidget(frameWidget);
-           ++i;
-       }
-   }
+void FramesGallery::setSpritesheet(const QPixmap &spritesheet)
+{
+    m_spritesheet = spritesheet;
 }
 
 void FramesGallery::selectFrame(int index)
 {
-    if(index <= m_frameWidgets.size() - 1)
+    if(index < m_frameWidgets.size())
     {
         for(QWidget* frame : m_frameWidgets)
             frame->setStyleSheet("");
@@ -96,8 +99,7 @@ void FramesGallery::clearGallery()
 {
     if(m_frameWidgets.size() > 0)
     {
-        for(auto& widget : m_frameWidgets)
-            widget->deleteLater();
+        std::for_each(m_frameWidgets.begin(), m_frameWidgets.end(), [](AnimationFrameWidget* widget) { widget->deleteLater(); });
         m_frameWidgets.clear();
         m_layout->removeItem(m_dragSpacer);
     }

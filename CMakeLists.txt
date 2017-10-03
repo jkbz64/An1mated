@@ -61,18 +61,12 @@ file(GLOB AN1MATED_HDRS include/An1mated/*.hpp)
 set(AN1MATED_SRCS_DIR "src/An1mated/")
 file(GLOB AN1MATED_SRCS src/An1mated/*.cpp)
 
-set(AN1MATED_UI
-	${AN1MATED_SRCS_DIR}/mainwindow.ui
-	${AN1MATED_SRCS_DIR}/animationeditor.ui
-	)
-set(AN1MATED_RES
-	)
+file(GLOB AN1MATED_UIS src/An1mated/*.ui)
 
 add_executable(An1mated 
 	${AN1MATED_HDRS}
 	${AN1MATED_SRCS} 
-	${AN1MATED_UI} 
-	${AN1MATED_RES})
+	${AN1MATED_UIS})
 
 target_include_directories(An1mated PUBLIC
 	${LIB_AN1MATED_INCLUDE_DIR}

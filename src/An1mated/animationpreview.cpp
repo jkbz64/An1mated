@@ -1,10 +1,16 @@
 #include <animationpreview.hpp>
+#include <QGraphicsItem>
+#include <QResizeEvent>
 
 AnimationPreview::AnimationPreview(QWidget *parent)
     :
-      QGraphicsView(parent)
+      QGraphicsView(parent),
+      m_frame(nullptr),
+      m_background(nullptr),
+      m_framePosition(size().width() / 2, size().height() / 2)
 {
-
+    setSceneRect(0, 0, size().width(), size().height());
+    setScene(&m_animationScene);
 }
 
 AnimationPreview::~AnimationPreview()
@@ -12,26 +18,44 @@ AnimationPreview::~AnimationPreview()
 
 }
 
-void AnimationPreview::setAnimation(std::weak_ptr<Animation> a)
-{
-    m_currentAnimation = a;
-    if(auto animation = m_currentAnimation.lock())
-    {
-        m_animationScene.clear();
-        setScene(&m_animationScene);
-    }
-}
-
-void AnimationPreview::drawFrame(int index)
+void AnimationPreview::setSpritesheet(const QPixmap& spritesheet)
 {
     m_animationScene.clear();
-    if(auto animation = m_currentAnimation.lock())
-    {
-        if(animation->getFrames().size() - 1 < index)
-            return;
-
-        const auto frame = animation->getFrames()[index];
-        m_animationScene.addPixmap(animation->getSpritesheet().copy(frame.getRect()));
-    }
+    m_spritesheet = spritesheet;
 }
 
+void AnimationPreview::setFrame(const AnimationFrame& frame)
+{
+    if(m_frame)
+        m_animationScene.removeItem(m_frame);
+    m_frame = m_animationScene.addPixmap(m_spritesheet.copy(frame.getRect()));
+    m_frame->setPos(m_framePosition);
+}
+
+void AnimationPreview::setBackground(const QPixmap &pixmap)
+{
+    if(m_background)
+        m_animationScene.removeItem(m_background);
+
+    setSceneRect(0, 0, pixmap.size().width(), pixmap.height());
+    m_background = m_animationScene.addPixmap(pixmap);
+    m_background->setZValue(-1);
+    m_background->setPos(0, 0);
+}
+
+void AnimationPreview::resizeEvent(QResizeEvent *event)
+{
+    if(!m_background)
+    {
+        setSceneRect(0, 0, event->size().width(), event->size().height());
+        if(m_frame)
+        {
+            m_framePosition = QPoint(event->size().width() / 2, event->size().height() / 2);
+            m_frame->setPos(m_framePosition);
+        }
+    }
+    else
+    {
+        setSceneRect(0, 0, m_background->sceneBoundingRect().width(), m_background->sceneBoundingRect().height());
+    }
+}
