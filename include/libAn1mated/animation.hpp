@@ -17,9 +17,7 @@ public:
     virtual ~Animation() {  }
 
     const QString& getName() const;
-
     const QPixmap& getSpritesheet() const;
-
     const std::vector<AnimationFrame>& getFrames() const;
 
     void addFrame(const QString&, const QRect&);

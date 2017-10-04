@@ -9,6 +9,8 @@
 
 #include <QFileDialog>
 
+#include <frameeditdialog.hpp>
+
 AnimationEditor::AnimationEditor(QWidget *parent)
     :
       Editor(parent),
@@ -28,6 +30,8 @@ AnimationEditor::AnimationEditor(QWidget *parent)
        if(!bgPath.isEmpty())
            m_ui->m_animationPreview->setBackground(QPixmap(bgPath));
     });
+
+    connect(m_ui->m_newFrameButton, &QPushButton::released, this, &AnimationEditor::newFrame);
 }
 
 AnimationEditor::~AnimationEditor()
@@ -57,6 +61,20 @@ void AnimationEditor::setDocument(std::shared_ptr<Document> doc)
     {
         m_ui->m_animationPreview->reset();
         m_ui->m_framesGallery->reset();
+    }
+}
+
+void AnimationEditor::newFrame()
+{
+    if(m_currentDocument)
+    {
+        auto&& currentDocument = qobject_cast<AnimationDocument*>(m_currentDocument.get());
+        AnimationFrame frame("");
+        FrameEditDialog dialog(currentDocument->getSpritesheet(), frame, this);
+        if(dialog.exec() == QDialog::Accepted)
+        {
+            //currentDocument->addFrame(frame);
+        }
     }
 }
 

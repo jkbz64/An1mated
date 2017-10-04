@@ -2,6 +2,7 @@
 #define FRAMEEDITDIALOG_HPP
 
 #include <QDialog>
+#include <animationframe.hpp>
 
 namespace Ui
 {
@@ -13,11 +14,11 @@ class FrameEditDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit FrameEditDialog(QWidget *parent = 0);
+    explicit FrameEditDialog(const QPixmap&, AnimationFrame&, QWidget *parent = 0);
     ~FrameEditDialog();
-
 private:
-    Ui::FrameEditDialog *ui;
+    Ui::FrameEditDialog *m_ui;
+    AnimationFrame& m_frame;
 };
 
 #endif // FRAMEEDITDIALOG_HPP

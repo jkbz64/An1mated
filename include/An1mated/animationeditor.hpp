@@ -20,6 +20,8 @@ public:
     virtual void setDocument(std::shared_ptr<Document>) override;
 signals:
 
+public slots:
+    void newFrame();
 protected:
     Ui::AnimationEditor* m_ui;
 };

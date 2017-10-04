@@ -1,14 +1,17 @@
 #include "frameeditdialog.hpp"
 #include "ui_frameeditdialog.h"
 
-FrameEditDialog::FrameEditDialog(QWidget *parent) :
+FrameEditDialog::FrameEditDialog(const QPixmap& spritesheet, AnimationFrame& frame, QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::FrameEditDialog)
+    m_ui(new Ui::FrameEditDialog),
+    m_frame(frame)
 {
-    ui->setupUi(this);
+    m_ui->setupUi(this);
+    m_ui->frameEditView->setSpritesheet(spritesheet);
+    m_ui->frameEditView->setRect(frame.getRect());
 }
 
 FrameEditDialog::~FrameEditDialog()
 {
-    delete ui;
+    delete m_ui;
 }
