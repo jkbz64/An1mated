@@ -51,6 +51,13 @@ void FramesGallery::updateGallery()
 
 }
 
+void FramesGallery::addFrame(const AnimationFrame& frame)
+{
+    auto&& frameWidget = createFrameWidget(frame);
+    m_frameWidgets.emplace_back(frameWidget);
+    m_layout->addWidget(m_frameWidgets.back());
+}
+
 void FramesGallery::updateFrame(int at, const AnimationFrame &updatedFrame)
 {
     if(at >= 0 && at < m_frameWidgets.size())

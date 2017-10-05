@@ -18,16 +18,16 @@ AnimationEditor::AnimationEditor(QWidget *parent)
 {
     m_ui->setupUi(this);
 
-    connect(m_ui->m_framesGallery, &FramesGallery::frameSelected, m_ui->m_animationPreview, &AnimationPreview::setFrame);
-    connect(m_ui->m_setBackgroundButton, &QPushButton::released, this, [this]()
+    connect(m_ui->framesGallery, &FramesGallery::frameSelected, m_ui->animationPreview, &AnimationPreview::setFrame);
+    connect(m_ui->setBackgroundButton, &QPushButton::released, this, [this]()
     {
        QString bgPath = QFileDialog::getOpenFileName(this, tr("Set background"), QDir::current().dirName(), tr("Images (*.png *.jpg)"));
        if(!bgPath.isEmpty())
-           m_ui->m_animationPreview->setBackground(QPixmap(bgPath));
+           m_ui->animationPreview->setBackground(QPixmap(bgPath));
     });
 
-    connect(m_ui->m_newFrameButton, &QPushButton::released, this, &AnimationEditor::newFrame);
-    connect(m_ui->m_framesGallery, &FramesGallery::frameDoubleClicked, this, &AnimationEditor::editFrame);
+    connect(m_ui->newFrameButton, &QPushButton::released, this, &AnimationEditor::newFrame);
+    connect(m_ui->framesGallery, &FramesGallery::frameDoubleClicked, this, &AnimationEditor::editFrame);
 }
 
 AnimationEditor::~AnimationEditor()
@@ -45,22 +45,23 @@ void AnimationEditor::setDocument(std::shared_ptr<Document> doc)
     if(m_currentDocument)
     {
         auto&& currentDocument = qobject_cast<AnimationDocument*>(m_currentDocument.get());
-        connect(currentDocument, &AnimationDocument::spritesheetChanged, m_ui->m_animationPreview, &AnimationPreview::setSpritesheet);
-        connect(currentDocument, &AnimationDocument::spritesheetChanged, m_ui->m_framesGallery, &FramesGallery::setSpritesheet);
-        connect(currentDocument, &AnimationDocument::framesModified, m_ui->m_framesGallery, &FramesGallery::setFrames);
+        connect(currentDocument, &AnimationDocument::spritesheetChanged, m_ui->animationPreview, &AnimationPreview::setSpritesheet);
+        connect(currentDocument, &AnimationDocument::spritesheetChanged, m_ui->framesGallery, &FramesGallery::setSpritesheet);
+        connect(currentDocument, &AnimationDocument::frameAdded, m_ui->framesGallery, &FramesGallery::addFrame);
+        connect(currentDocument, &AnimationDocument::framesModified, m_ui->framesGallery, &FramesGallery::setFrames);
         connect(currentDocument, &AnimationDocument::frameChanged, [this, currentDocument](int index)
         {
-            m_ui->m_framesGallery->updateFrame(index, currentDocument->getFrame(index));
+            m_ui->framesGallery->updateFrame(index, currentDocument->getFrame(index));
         });
 
-        m_ui->m_animationPreview->setSpritesheet(currentDocument->getSpritesheet());
-        m_ui->m_framesGallery->setSpritesheet(currentDocument->getSpritesheet());
-        m_ui->m_framesGallery->setFrames(currentDocument->getFrames());
+        m_ui->animationPreview->setSpritesheet(currentDocument->getSpritesheet());
+        m_ui->framesGallery->setSpritesheet(currentDocument->getSpritesheet());
+        m_ui->framesGallery->setFrames(currentDocument->getFrames());
     }
     else
     {
-        m_ui->m_animationPreview->reset();
-        m_ui->m_framesGallery->reset();
+        m_ui->animationPreview->reset();
+        m_ui->framesGallery->reset();
     }
 }
 
@@ -72,9 +73,7 @@ void AnimationEditor::newFrame()
         AnimationFrame frame("");
         FrameEditDialog dialog(currentDocument->getSpritesheet(), frame, this);
         if(dialog.exec() == QDialog::Accepted)
-        {
-            //currentDocument->addFrame(frame);
-        }
+            currentDocument->addFrame(frame);
     }
 }
 

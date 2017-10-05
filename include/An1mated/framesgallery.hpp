@@ -24,6 +24,7 @@ signals:
     void frameSelected(const AnimationFrame&);
 public slots:
     void updateGallery();
+    void addFrame(const AnimationFrame&);
     void updateFrame(int, const AnimationFrame&);
 protected:
     AnimationFrameWidget* createFrameWidget(const AnimationFrame&);

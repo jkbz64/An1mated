@@ -15,7 +15,7 @@
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0" colspan="2">
-    <widget class="QLabel" name="m_animationPreviewLabel">
+    <widget class="QLabel" name="animationPreviewLabel">
      <property name="text">
       <string>Animation Preview</string>
      </property>
@@ -25,21 +25,21 @@
     </widget>
    </item>
    <item row="5" column="0">
-    <widget class="QPushButton" name="m_newFrameButton">
+    <widget class="QPushButton" name="newFrameButton">
      <property name="text">
       <string>New Frame</string>
      </property>
     </widget>
    </item>
    <item row="0" column="2">
-    <widget class="QPushButton" name="m_setBackgroundButton">
+    <widget class="QPushButton" name="setBackgroundButton">
      <property name="text">
       <string>Set Background Image</string>
      </property>
     </widget>
    </item>
    <item row="1" column="0" colspan="3">
-    <widget class="AnimationPreview" name="m_animationPreview">
+    <widget class="AnimationPreview" name="animationPreview">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
        <horstretch>0</horstretch>
@@ -56,7 +56,7 @@
     </widget>
    </item>
    <item row="3" column="0" colspan="3">
-    <widget class="QLabel" name="m_frameGalleryLabel">
+    <widget class="QLabel" name="frameGalleryLabel">
      <property name="text">
       <string>Frame Gallery</string>
      </property>
@@ -66,7 +66,7 @@
     </widget>
    </item>
    <item row="4" column="0" colspan="3">
-    <widget class="QScrollArea" name="scrollArea">
+    <widget class="QScrollArea" name="framesGalleryScrollArea">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
        <horstretch>0</horstretch>
@@ -99,7 +99,7 @@
       </property>
       <layout class="QHBoxLayout" name="horizontalLayout">
        <item>
-        <widget class="FramesGallery" name="m_framesGallery" native="true">
+        <widget class="FramesGallery" name="framesGallery" native="true">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
            <horstretch>0</horstretch>
@@ -113,14 +113,14 @@
     </widget>
    </item>
    <item row="5" column="2">
-    <widget class="QPushButton" name="m_deleteFrameButton">
+    <widget class="QPushButton" name="deleteFrameButton">
      <property name="text">
       <string>Delete Frame</string>
      </property>
     </widget>
    </item>
    <item row="5" column="1">
-    <widget class="QPushButton" name="m_editTilesetButton">
+    <widget class="QPushButton" name="editTilesetButton">
      <property name="text">
       <string>Edit Tileset</string>
      </property>

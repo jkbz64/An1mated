@@ -25,8 +25,12 @@ MainWindow::MainWindow(QWidget *parent, Qt::WindowFlags flags)
     //Open
     connect(m_ui->actionOpen, &QAction::triggered, this, &MainWindow::openFile);
 
+
+    ///Exit
+    connect(m_ui->actionExit, &QAction::triggered, this, &MainWindow::close);
     //Connect document manager
     connect(m_documentManager, &DocumentManager::currentDocumentChanged, this, &MainWindow::updateEditor);
+
 
 
     QVBoxLayout* layout = new QVBoxLayout(centralWidget());

@@ -39,7 +39,7 @@ void AnimationDocument::addFrame(const QString &frame, const QRect &rect)
 void AnimationDocument::addFrame(const AnimationFrame &frame)
 {
     m_animation.addFrame(frame);
-    emit frameAdded(frame);
+    emit frameAdded(m_animation.getFrames().back());
 }
 
 void AnimationDocument::replaceFrame(const QString& name, const AnimationFrame& newFrame)

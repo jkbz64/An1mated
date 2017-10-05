@@ -1,5 +1,6 @@
 #include "frameeditdialog.hpp"
 #include "ui_frameeditdialog.h"
+#include <QMessageBox>
 
 FrameEditDialog::FrameEditDialog(const QPixmap& spritesheet, AnimationFrame& frame, QWidget *parent) :
     QDialog(parent),
@@ -28,6 +29,11 @@ FrameEditDialog::FrameEditDialog(const QPixmap& spritesheet, AnimationFrame& fra
        m_ui->frameEditView->setRect(QRect(m_frame.getRect().x(), m_frame.getRect().y(), m_frame.getRect().width(), value));
     });
 
+    connect(m_ui->frameNameEdit, &QLineEdit::textChanged, [this, &frame](const QString& name)
+    {
+        frame.setName(name);
+    });
+
     m_ui->xSpin->setMaximum(spritesheet.width());
     m_ui->ySpin->setMaximum(spritesheet.height());
 
@@ -52,4 +58,12 @@ void FrameEditDialog::updateRectValues(const QRect& rect)
     m_ui->wSpin->setValue(rect.width());
     m_ui->hSpin->setValue(rect.height());
     m_frame.setRect(QRect(m_ui->xSpin->value(), m_ui->ySpin->value(), m_ui->wSpin->value(), m_ui->hSpin->value()));
+}
+
+void FrameEditDialog::accept()
+{
+    if(!m_ui->frameNameEdit->text().isEmpty())
+        QDialog::accept();
+    else
+        QMessageBox::warning(this, tr("Empty frame name"), tr("Frame name is not specified, cannot create/modify frame"), QMessageBox::Ok);
 }
