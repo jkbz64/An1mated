@@ -2,6 +2,7 @@
 #define ANIMATIONEDITOR_HPP
 
 #include <editor.hpp>
+#include <animationframe.hpp>
 
 namespace Ui
 {
@@ -22,6 +23,7 @@ signals:
 
 public slots:
     void newFrame();
+    void editFrame(const AnimationFrame&);
 protected:
     Ui::AnimationEditor* m_ui;
 };

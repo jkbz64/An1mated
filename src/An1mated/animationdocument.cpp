@@ -29,3 +29,32 @@ bool AnimationDocument::writeToFile(const QString &fileName)
 {
 
 }
+
+void AnimationDocument::addFrame(const QString &frame, const QRect &rect)
+{
+    m_animation.addFrame(frame, rect);
+    emit frameAdded(m_animation.getFrames().back());
+}
+
+void AnimationDocument::addFrame(const AnimationFrame &frame)
+{
+    m_animation.addFrame(frame);
+    emit frameAdded(frame);
+}
+
+void AnimationDocument::replaceFrame(const QString& name, const AnimationFrame& newFrame)
+{
+    m_animation.replaceFrame(name, newFrame);
+    emit frameChanged(m_animation.getIndexOf(name));
+}
+
+void AnimationDocument::removeFrame(int index)
+{
+    m_animation.removeFrame(index);
+}
+
+void AnimationDocument::removeFrame(const QString &name)
+{
+    m_animation.removeFrame(name);
+}
+

@@ -27,7 +27,7 @@ AnimationFrameWidget::AnimationFrameWidget(const QString& frameName, QPixmap fra
 void AnimationFrameWidget::mousePressEvent(QMouseEvent *event)
 {
     if(event->button() == Qt::MouseButton::LeftButton)
-        emit frameClicked();
+        emit framePressed();
 }
 
 void AnimationFrameWidget::mouseReleaseEvent(QMouseEvent *event)
@@ -39,3 +39,9 @@ void AnimationFrameWidget::resizeEvent(QResizeEvent *event)
 {
 
 }
+
+void AnimationFrameWidget::mouseDoubleClickEvent(QMouseEvent *event)
+{
+    emit frameDoubleClicked();
+}
+

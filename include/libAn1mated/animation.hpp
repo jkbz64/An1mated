@@ -20,8 +20,14 @@ public:
     const QPixmap& getSpritesheet() const;
     const std::vector<AnimationFrame>& getFrames() const;
 
+    int getIndexOf(const QString&);
+    int getIndexOf(const AnimationFrame&);
+
     void addFrame(const QString&, const QRect&);
     void addFrame(const AnimationFrame&);
+    void replaceFrame(const QString&, const AnimationFrame&);
+    void removeFrame(int);
+    void removeFrame(const QString&);
 
     void moveFrameTo(int, int);
 private:

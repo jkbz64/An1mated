@@ -30,6 +30,28 @@ Animation::Animation(Animation &&animation)
 
 }
 
+int Animation::getIndexOf(const QString &name)
+{
+    auto found = std::find_if(m_frames.begin(), m_frames.end(), [&name](const AnimationFrame& frame)
+    {
+        return frame.getName() == name;
+    });
+    if(found != m_frames.end())
+        return found - m_frames.begin();
+    return -1;
+}
+
+int Animation::getIndexOf(const AnimationFrame &ofFrame)
+{
+    auto found = std::find_if(m_frames.begin(), m_frames.end(), [&ofFrame](const AnimationFrame& frame)
+    {
+        return frame.getName() == ofFrame.getName();
+    });
+    if(found != m_frames.end())
+        return found - m_frames.begin();
+    return -1;
+}
+
 void Animation::addFrame(const AnimationFrame &frame)
 {
     m_frames.emplace_back(frame);
@@ -38,6 +60,25 @@ void Animation::addFrame(const AnimationFrame &frame)
 void Animation::addFrame(const QString &name, const QRect &rect)
 {
     m_frames.emplace_back(name, rect);
+}
+
+void Animation::replaceFrame(const QString& name, const AnimationFrame &frame)
+{
+    std::replace_if(m_frames.begin(), m_frames.end(), [&name](const AnimationFrame& f)
+    {
+        return f.getName() == name;
+    }, frame);
+}
+
+void Animation::removeFrame(int index)
+{
+    if(index >= 0 && index < m_frames.size())
+        m_frames.erase(m_frames.begin() + index);
+}
+
+void Animation::removeFrame(const QString &name)
+{
+    m_frames.erase(std::remove_if(m_frames.begin(), m_frames.end(), [&name](const AnimationFrame& frame){ return frame.getName() == name; }));
 }
 
 void Animation::moveFrameTo(int from, int to)

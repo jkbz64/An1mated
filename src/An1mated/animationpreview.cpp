@@ -49,7 +49,7 @@ void AnimationPreview::setFrame(const AnimationFrame& frame)
 void AnimationPreview::setBackground(const QPixmap &pixmap)
 {
     if(m_background)
-        m_animationScene.removeItem(m_background);
+            m_animationScene.removeItem(m_background);
 
     setSceneRect(0, 0, pixmap.size().width(), pixmap.height());
     m_background = m_animationScene.addPixmap(pixmap);

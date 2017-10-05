@@ -18,12 +18,17 @@ public:
     const AnimationFrame& getFrame(int) const;
     const std::vector<AnimationFrame>& getFrames() const;
     void addFrame(const QString&, const QRect&);
+    void addFrame(const AnimationFrame&);
+    void replaceFrame(const QString&, const AnimationFrame&);
     void removeFrame(int);
+    void removeFrame(const QString&);
 
     void setSpritesheet();
     const QPixmap& getSpritesheet() const;
 signals:
     void animationChanged();
+    void frameAdded(const AnimationFrame&);
+    void frameChanged(int);
     void framesModified(const std::vector<AnimationFrame>&);
     void spritesheetChanged(const QPixmap&);
     void animationNameChanged(const QString&);

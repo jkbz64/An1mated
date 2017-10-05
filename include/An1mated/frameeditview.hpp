@@ -6,8 +6,10 @@
 
 class FrameEditView : public QGraphicsView
 {
+    Q_OBJECT
 public:
     FrameEditView(QWidget* parent = nullptr);
+    virtual ~FrameEditView();
     void setSpritesheet(const QPixmap&);
     void setRect(const QRect&);
 signals:

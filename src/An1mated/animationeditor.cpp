@@ -18,12 +18,7 @@ AnimationEditor::AnimationEditor(QWidget *parent)
 {
     m_ui->setupUi(this);
 
-    connect(m_ui->m_framesGallery, &FramesGallery::frameSelected, [this](int index)
-    {
-        m_ui->m_animationPreview->setFrame(qobject_cast<AnimationDocument*>(m_currentDocument.get())->getFrame(index));
-    });
-
-
+    connect(m_ui->m_framesGallery, &FramesGallery::frameSelected, m_ui->m_animationPreview, &AnimationPreview::setFrame);
     connect(m_ui->m_setBackgroundButton, &QPushButton::released, this, [this]()
     {
        QString bgPath = QFileDialog::getOpenFileName(this, tr("Set background"), QDir::current().dirName(), tr("Images (*.png *.jpg)"));
@@ -32,6 +27,7 @@ AnimationEditor::AnimationEditor(QWidget *parent)
     });
 
     connect(m_ui->m_newFrameButton, &QPushButton::released, this, &AnimationEditor::newFrame);
+    connect(m_ui->m_framesGallery, &FramesGallery::frameDoubleClicked, this, &AnimationEditor::editFrame);
 }
 
 AnimationEditor::~AnimationEditor()
@@ -52,6 +48,10 @@ void AnimationEditor::setDocument(std::shared_ptr<Document> doc)
         connect(currentDocument, &AnimationDocument::spritesheetChanged, m_ui->m_animationPreview, &AnimationPreview::setSpritesheet);
         connect(currentDocument, &AnimationDocument::spritesheetChanged, m_ui->m_framesGallery, &FramesGallery::setSpritesheet);
         connect(currentDocument, &AnimationDocument::framesModified, m_ui->m_framesGallery, &FramesGallery::setFrames);
+        connect(currentDocument, &AnimationDocument::frameChanged, [this, currentDocument](int index)
+        {
+            m_ui->m_framesGallery->updateFrame(index, currentDocument->getFrame(index));
+        });
 
         m_ui->m_animationPreview->setSpritesheet(currentDocument->getSpritesheet());
         m_ui->m_framesGallery->setSpritesheet(currentDocument->getSpritesheet());
@@ -78,4 +78,15 @@ void AnimationEditor::newFrame()
     }
 }
 
+void AnimationEditor::editFrame(const AnimationFrame& frame)
+{
+    if(m_currentDocument)
+    {
+        auto&& currentDocument = qobject_cast<AnimationDocument*>(m_currentDocument.get());
+        AnimationFrame editedFrame = frame;
+        FrameEditDialog dialog(currentDocument->getSpritesheet(), editedFrame, this);
+        if(dialog.exec() == QDialog::Accepted)
+            currentDocument->replaceFrame(frame.getName(), editedFrame);
+    }
+}
 
