@@ -8,6 +8,7 @@ FrameEditDialog::FrameEditDialog(const QPixmap& spritesheet, AnimationFrame& fra
     m_frame(frame)
 {
     m_ui->setupUi(this);
+    m_ui->frameNameEdit->setText(frame.getName());
     connect(m_ui->frameEditView, &FrameEditView::rectModified, this, &FrameEditDialog::updateRectValues);
     connect(m_ui->xSpin, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), [this](int value)
     {
