@@ -13,7 +13,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # Enable automoc / autoic / autorcc
 option(CMAKE_AUTOMOC "Enable automoc" ON)
 option(CMAKE_AUTOUIC "Enable autouic" ON)
-option(CMAKE_AUTORCC "Enable autorcc" ON)
 
 # Including moc'ed files is sometimes retarded
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
