@@ -10,9 +10,11 @@ FramesGallery::FramesGallery(QWidget *parent)
     :
       QWidget(parent),
       m_layout(new QHBoxLayout(this)),
+      m_draggedFrame(nullptr),
+      m_startDragIndex(-1),
+      m_spacerIndex(-1),
       m_dragSpacer(new QSpacerItem(0, 0))
 {
-    setAcceptDrops(true);
     setLayout(m_layout);
 }
 
@@ -77,38 +79,36 @@ AnimationFrameWidget *FramesGallery::createFrameWidget(const AnimationFrame &fra
 
     connect(frameWidget, &AnimationFrameWidget::framePressed, [this, frame, frameWidget]
     {
-        //Reset all widgets style
+        //Reset all widgets stylesheet
         std::for_each(m_frameWidgets.begin(), m_frameWidgets.end(), [](QWidget* w) { w->setStyleSheet(""); });
         frameWidget->setStyleSheet("background: #ADD8E6;");
         emit frameSelected(frame);
-       /*m_draggedFrame = frameWidget;
-       m_startDragPos = mapFromGlobal(QCursor::pos());
-       auto replaceIndex = m_layout->indexOf(m_draggedFrame);
-       m_layout->removeWidget(m_draggedFrame);
-       m_dragSpacer->changeSize(m_draggedFrame->size().width(), m_draggedFrame->size().height());
-       m_layout->insertSpacerItem(replaceIndex, m_dragSpacer);*/
+        //Handle dragging
+        m_draggedFrame = frameWidget;
+        //Get start drag position
+        m_startDragPos = mapFromGlobal(QCursor::pos());
+        //Get index of frame in layout so we can replace it with spacer item
+        m_startDragIndex = m_spacerIndex = m_layout->indexOf(m_draggedFrame);
+        //Remove widget from layout
+        m_layout->removeWidget(m_draggedFrame);
+        //Make spacer width and height same as dragged frame
+        m_dragSpacer->changeSize(m_draggedFrame->size().width(), m_draggedFrame->size().height());
+        //And insert spacer at position
+        m_layout->insertSpacerItem(m_spacerIndex, m_dragSpacer);
     });
 
-    connect(frameWidget, &AnimationFrameWidget::frameReleased, [this]
+    connect(frameWidget, &AnimationFrameWidget::frameReleased, [this, frameWidget]
     {
-        /*
         if(m_draggedFrame == frameWidget)
         {
+            //Insert dragged frame at spacer position
+            m_layout->removeItem(m_dragSpacer);
+            m_layout->insertWidget(m_spacerIndex, m_draggedFrame);
+            if(m_spacerIndex != m_startDragIndex)
+                emit frameMoved(m_startDragIndex, m_spacerIndex);
+            m_startDragIndex = m_spacerIndex = -1;
             m_draggedFrame = nullptr;
-            //Resolve where to place widget
-            int targetIndex = m_frameWidgets.size() - 1;
-            auto it = m_frameWidgets.rbegin();
-            for(; it != m_frameWidgets.rend(); ++it)
-            {
-                if(m_startDragPos.x() > (*it)->pos().x() + (*it)->size().width())
-                    break;
-                --targetIndex;
-            }
-            //if(targetIndex != i)
-             //animation->moveFrameTo(i, targetIndex);
-
-            updateGallery();
-        }*/
+        }
     });
 
     connect(frameWidget, &AnimationFrameWidget::frameDoubleClicked, [this, frame]()
@@ -139,8 +139,53 @@ void FramesGallery::mouseMoveEvent(QMouseEvent *event)
     if(m_draggedFrame)
     {
         QPoint subPos = event->pos() - m_startDragPos;
-        if(m_draggedFrame->pos().x() + subPos.x() >= pos().x() && m_draggedFrame->pos().x() + m_draggedFrame->size().width() + subPos.x() <= pos().x() + size().width())
+        if(m_draggedFrame->pos().x() + subPos.x() >= pos().x() - (m_draggedFrame->size().width() / 2) &&
+           m_draggedFrame->pos().x() + m_draggedFrame->size().width() + subPos.x() < pos().x() + size().width() + (m_draggedFrame->size().width() / 2))
             m_draggedFrame->move(m_draggedFrame->pos().x() + subPos.x(), m_draggedFrame->pos().y());
         m_startDragPos = event->pos();
+
+        if(m_layout->count() > 1)
+        {
+            //When spacer is in middle of frames but not at the beggining and end
+            if(m_spacerIndex > 0 && m_spacerIndex < m_layout->count() - 1)
+            {
+                const auto widgetAfterSpacer = m_layout->itemAt(m_spacerIndex + 1)->widget();
+                //Handle after spacer
+                if(m_draggedFrame->pos().x() > widgetAfterSpacer->pos().x())
+                {
+                    m_layout->removeItem(m_dragSpacer);
+                    m_layout->insertSpacerItem(m_spacerIndex + 1, m_dragSpacer);
+                    ++m_spacerIndex;
+                }
+                const auto widgetBeforeSpacer = m_layout->itemAt(m_spacerIndex - 1)->widget();
+                //Handle before spacer
+                if(m_draggedFrame->pos().x() < widgetBeforeSpacer->pos().x())
+                {
+                    m_layout->removeItem(m_dragSpacer);
+                    m_layout->insertSpacerItem(m_spacerIndex - 1, m_dragSpacer);
+                    --m_spacerIndex;
+                }
+            }
+            else if(m_spacerIndex == 0) // Spacer at the beginning
+            {
+                 const auto widgetAfterSpacer = m_layout->itemAt(m_spacerIndex + 1)->widget();
+                 if(m_draggedFrame->pos().x() > widgetAfterSpacer->pos().x())
+                 {
+                     m_layout->removeItem(m_dragSpacer);
+                     m_layout->insertSpacerItem(m_spacerIndex + 1, m_dragSpacer);
+                     ++m_spacerIndex;
+                 }
+            }
+            else if(m_spacerIndex == m_layout->count() - 1) // Spacer at the end
+            {
+                const auto widgetBeforeSpacer = m_layout->itemAt(m_spacerIndex - 1)->widget();
+                if(m_draggedFrame->pos().x() < widgetBeforeSpacer->pos().x())
+                {
+                    m_layout->removeItem(m_dragSpacer);
+                    m_layout->insertSpacerItem(m_spacerIndex - 1, m_dragSpacer);
+                    --m_spacerIndex;
+                }
+            }
+        }
     }
 }

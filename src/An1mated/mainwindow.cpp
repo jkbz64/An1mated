@@ -37,6 +37,11 @@ MainWindow::MainWindow(QWidget *parent, Qt::WindowFlags flags)
 
 
     QVBoxLayout* layout = new QVBoxLayout(centralWidget());
+    QWidget* hLine = new QWidget(this);
+    hLine->setFixedHeight(2);
+    hLine->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    hLine->setStyleSheet("background-color: #c0c0c0;");
+    layout->addWidget(hLine);
     //Place document bar at the top
     layout->addWidget(m_documentManager->getDocumentBar());
     m_editorStack = new QStackedLayout;

@@ -14,7 +14,7 @@ public:
     Animation(const QString&);
     Animation(const Animation&);
     Animation(Animation&&);
-    virtual ~Animation() {  }
+    virtual ~Animation() = default;
 
     const QString& getName() const;
     const QPixmap& getSpritesheet() const;

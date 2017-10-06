@@ -45,6 +45,7 @@ void AnimationEditor::setDocument(std::shared_ptr<Document> doc)
     if(m_currentDocument)
     {
         auto&& currentDocument = qobject_cast<AnimationDocument*>(m_currentDocument.get());
+        //From document
         connect(currentDocument, &AnimationDocument::spritesheetChanged, m_ui->animationPreview, &AnimationPreview::setSpritesheet);
         connect(currentDocument, &AnimationDocument::spritesheetChanged, m_ui->framesGallery, &FramesGallery::setSpritesheet);
         connect(currentDocument, &AnimationDocument::frameAdded, m_ui->framesGallery, &FramesGallery::addFrame);
@@ -53,6 +54,8 @@ void AnimationEditor::setDocument(std::shared_ptr<Document> doc)
         {
             m_ui->framesGallery->updateFrame(index, currentDocument->getFrame(index));
         });
+        //To document
+        connect(m_ui->framesGallery, &FramesGallery::frameMoved, currentDocument, &AnimationDocument::moveFrame);
 
         m_ui->animationPreview->setSpritesheet(currentDocument->getSpritesheet());
         m_ui->framesGallery->setSpritesheet(currentDocument->getSpritesheet());

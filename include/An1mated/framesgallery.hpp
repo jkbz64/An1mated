@@ -22,6 +22,7 @@ public:
 signals:
     void frameDoubleClicked(const AnimationFrame&);
     void frameSelected(const AnimationFrame&);
+    void frameMoved(int, int);
 public slots:
     void updateGallery();
     void addFrame(const AnimationFrame&);
@@ -36,7 +37,9 @@ protected:
     QHBoxLayout* m_layout;
 
     QPoint m_startDragPos;
-    AnimationFrameWidget* m_draggedFrame = nullptr;
+    AnimationFrameWidget* m_draggedFrame;
+    int m_startDragIndex;
+    int m_spacerIndex;
     QSpacerItem* m_dragSpacer;
 };
 

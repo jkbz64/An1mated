@@ -58,3 +58,7 @@ void AnimationDocument::removeFrame(const QString &name)
     m_animation.removeFrame(name);
 }
 
+void AnimationDocument::moveFrame(int from, int to)
+{
+    m_animation.moveFrameTo(from, to);
+}

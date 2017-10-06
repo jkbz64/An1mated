@@ -22,6 +22,7 @@ public:
     void replaceFrame(const QString&, const AnimationFrame&);
     void removeFrame(int);
     void removeFrame(const QString&);
+    void moveFrame(int, int);
 
     void setSpritesheet();
     const QPixmap& getSpritesheet() const;
