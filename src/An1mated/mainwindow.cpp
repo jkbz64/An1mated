@@ -19,6 +19,7 @@ MainWindow::MainWindow(QWidget *parent, Qt::WindowFlags flags)
 {
     m_ui->setupUi(this);
 
+    m_ui->toolBar->setContextMenuPolicy(Qt::PreventContextMenu);
     //File bar
     //New
     connect(m_ui->actionNewAnimation, &QAction::triggered, this, &MainWindow::newAnimationDocument);
@@ -28,6 +29,8 @@ MainWindow::MainWindow(QWidget *parent, Qt::WindowFlags flags)
 
     ///Exit
     connect(m_ui->actionExit, &QAction::triggered, this, &MainWindow::close);
+
+
     //Connect document manager
     connect(m_documentManager, &DocumentManager::currentDocumentChanged, this, &MainWindow::updateEditor);
 

@@ -28,8 +28,4 @@ protected:
     Ui::AnimationEditor* m_ui;
 };
 
-
-
-
-
 #endif

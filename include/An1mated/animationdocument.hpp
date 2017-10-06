@@ -51,5 +51,4 @@ inline const std::vector<AnimationFrame>& AnimationDocument::getFrames() const
     return m_animation.getFrames();
 }
 
-
 #endif
