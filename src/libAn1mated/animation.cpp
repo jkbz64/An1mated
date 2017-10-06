@@ -88,7 +88,7 @@ void Animation::moveFrameTo(int from, int to)
     if(to < from)
     {
         auto fromIt = m_frames.begin() + from;
-        auto toIt = m_frames.begin() + to + 1;
+        auto toIt = m_frames.begin() + to;
         while(fromIt != toIt)
             std::iter_swap(fromIt, fromIt--);
     }

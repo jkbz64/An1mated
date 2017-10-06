@@ -10,7 +10,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake_modules/")
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# Enable automoc / autoic / autorcc
+# Enable automoc / autoic
 option(CMAKE_AUTOMOC "Enable automoc" ON)
 option(CMAKE_AUTOUIC "Enable autouic" ON)
 
