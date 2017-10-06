@@ -1,6 +1,5 @@
 #include <QTest>
 #include <animation.hpp>
-#include <iostream>
 
 class AnimationTest : public QObject
 {
