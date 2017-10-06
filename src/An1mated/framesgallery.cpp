@@ -144,6 +144,8 @@ void FramesGallery::mouseMoveEvent(QMouseEvent *event)
             m_draggedFrame->move(m_draggedFrame->pos().x() + subPos.x(), m_draggedFrame->pos().y());
         m_startDragPos = event->pos();
 
+
+        //TODO I believe this can look better
         if(m_layout->count() > 1)
         {
             //When spacer is in middle of frames but not at the beggining and end
@@ -154,16 +156,14 @@ void FramesGallery::mouseMoveEvent(QMouseEvent *event)
                 if(m_draggedFrame->pos().x() > widgetAfterSpacer->pos().x())
                 {
                     m_layout->removeItem(m_dragSpacer);
-                    m_layout->insertSpacerItem(m_spacerIndex + 1, m_dragSpacer);
-                    ++m_spacerIndex;
+                    m_layout->insertSpacerItem(++m_spacerIndex, m_dragSpacer);
                 }
                 const auto widgetBeforeSpacer = m_layout->itemAt(m_spacerIndex - 1)->widget();
                 //Handle before spacer
                 if(m_draggedFrame->pos().x() < widgetBeforeSpacer->pos().x())
                 {
                     m_layout->removeItem(m_dragSpacer);
-                    m_layout->insertSpacerItem(m_spacerIndex - 1, m_dragSpacer);
-                    --m_spacerIndex;
+                    m_layout->insertSpacerItem(--m_spacerIndex, m_dragSpacer);
                 }
             }
             else if(m_spacerIndex == 0) // Spacer at the beginning
@@ -172,8 +172,7 @@ void FramesGallery::mouseMoveEvent(QMouseEvent *event)
                  if(m_draggedFrame->pos().x() > widgetAfterSpacer->pos().x())
                  {
                      m_layout->removeItem(m_dragSpacer);
-                     m_layout->insertSpacerItem(m_spacerIndex + 1, m_dragSpacer);
-                     ++m_spacerIndex;
+                     m_layout->insertSpacerItem(++m_spacerIndex, m_dragSpacer);
                  }
             }
             else if(m_spacerIndex == m_layout->count() - 1) // Spacer at the end
@@ -182,8 +181,7 @@ void FramesGallery::mouseMoveEvent(QMouseEvent *event)
                 if(m_draggedFrame->pos().x() < widgetBeforeSpacer->pos().x())
                 {
                     m_layout->removeItem(m_dragSpacer);
-                    m_layout->insertSpacerItem(m_spacerIndex - 1, m_dragSpacer);
-                    --m_spacerIndex;
+                    m_layout->insertSpacerItem(--m_spacerIndex, m_dragSpacer);
                 }
             }
         }
