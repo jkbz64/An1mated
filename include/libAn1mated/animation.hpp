@@ -3,7 +3,6 @@
 
 #include <QObject>
 #include <QString>
-#include <QPixmap>
 #include <animationframe.hpp>
 #include <vector>
 
@@ -16,8 +15,10 @@ public:
     Animation(Animation&&);
     virtual ~Animation() = default;
 
+    void setSpritesheetName(const QString&);
+
     const QString& getName() const;
-    const QPixmap& getSpritesheet() const;
+    const QString& getSpritesheetName() const;
     const std::vector<AnimationFrame>& getFrames() const;
 
     int getIndexOf(const QString&);
@@ -32,7 +33,7 @@ public:
     void moveFrameTo(int, int);
 private:
     QString m_name;
-    QPixmap m_spritesheet;
+    QString m_spritesheet;
     std::vector<AnimationFrame> m_frames;
 };
 
@@ -41,7 +42,7 @@ inline const QString& Animation::getName() const
     return m_name;
 }
 
-inline const QPixmap& Animation::getSpritesheet() const
+inline const QString& Animation::getSpritesheetName() const
 {
     return m_spritesheet;
 }

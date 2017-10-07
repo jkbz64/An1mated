@@ -24,6 +24,11 @@ Animation::Animation(Animation &&animation)
 
 }
 
+void Animation::setSpritesheetName(const QString &spritesheetName)
+{
+    m_spritesheet = spritesheetName;
+}
+
 int Animation::getIndexOf(const QString &name)
 {
     auto found = std::find_if(m_frames.begin(), m_frames.end(), [&name](const AnimationFrame& frame)

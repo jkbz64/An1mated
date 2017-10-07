@@ -6,8 +6,8 @@ set(CMAKE_BUILD_TYPE Debug CACHE STRING "Choose the type of build(Release or Deb
 set(LIB_AN1MATED_BUILD_TYPE Shared CACHE STRING "Choose the type of libAn1mated build(Static OR Shared)")
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake_modules/")
 
-# Enforce C++14 standard
-set(CMAKE_CXX_STANDARD 14)
+# Enforce C++11 standard
+set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Enable automoc / autoic
@@ -47,10 +47,9 @@ set_target_properties(libAn1mated PROPERTIES PREFIX "")
 
 target_include_directories(libAn1mated PUBLIC
  ${LIB_AN1MATED_INCLUDE_DIR}
- ${Qt5Core_INCLUDE_DIRS}
- ${Qt5Widgets_INCLUDE_DIRS})
+ ${Qt5Core_INCLUDE_DIRS})
 
-target_link_libraries(libAn1mated Qt5::Core Qt5::Widgets)
+target_link_libraries(libAn1mated Qt5::Core)
 
 # Get include dir and headers
 set(AN1MATED_INCLUDE_DIR "include/An1mated/")
@@ -60,6 +59,7 @@ file(GLOB AN1MATED_HDRS include/An1mated/*.hpp)
 set(AN1MATED_SRCS_DIR "src/An1mated/")
 file(GLOB AN1MATED_SRCS src/An1mated/*.cpp)
 
+# Get ui files
 file(GLOB AN1MATED_UIS src/An1mated/*.ui)
 
 add_executable(An1mated 
@@ -88,15 +88,15 @@ if(TESTS)
 	foreach(test_source_file ${TEST_SRC})
 		# Get filename without extension
 		get_filename_component(test_name ${test_source_file} NAME_WE)
-		# Add test
+		# Create test
 		add_executable(${test_name} ${test_source_file})
 		target_include_directories(${test_name} PUBLIC
 			${LIB_AN1MATED_INCLUDE_DIR}
 			${QT5Core_INCLUDE_DIRS}
-			${QT5Widgets_INCLUDE_DIRS}
 			${QT5Test_INCLUDE_DIRS}
 		)
-		target_link_libraries(${test_name} libAn1mated Qt5::Test Qt5::Core Qt5::Widgets)
+		target_link_libraries(${test_name} libAn1mated Qt5::Test Qt5::Core)
+		# Add test to cmmake's CTest
 		add_test(${test_name} ${test_name})
 	endforeach()
 endif()

@@ -20,6 +20,12 @@ AnimationDocument::AnimationDocument(const Animation& animation, const QString &
         setFilename(QString(m_animation.getName() + "*"));
 }
 
+void AnimationDocument::setSpritesheet(const QString &spritesheetName)
+{
+    m_animation.setSpritesheetName(spritesheetName);
+    emit spritesheetChanged(getSpritesheet());
+}
+
 AnimationDocument::~AnimationDocument()
 {
 

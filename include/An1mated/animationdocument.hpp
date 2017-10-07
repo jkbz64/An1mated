@@ -3,7 +3,7 @@
 
 #include <document.hpp>
 #include <animation.hpp>
-#include <memory>
+#include <QPixmap>
 
 class AnimationDocument : public Document
 {
@@ -24,8 +24,8 @@ public:
     void removeFrame(const QString&);
     void moveFrame(int, int);
 
-    void setSpritesheet();
-    const QPixmap& getSpritesheet() const;
+    void setSpritesheet(const QString&);
+    QPixmap getSpritesheet() const;
 signals:
     void animationChanged();
     void frameAdded(const AnimationFrame&);
@@ -37,9 +37,9 @@ public:
     Animation m_animation;
 };
 
-inline const QPixmap& AnimationDocument::getSpritesheet() const
+inline QPixmap AnimationDocument::getSpritesheet() const
 {
-    return m_animation.getSpritesheet();
+    return QPixmap(m_animation.getSpritesheetName());
 }
 
 inline const AnimationFrame& AnimationDocument::getFrame(int index) const
