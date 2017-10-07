@@ -32,7 +32,8 @@ MainWindow::MainWindow(QWidget *parent, Qt::WindowFlags flags)
 
 
     //Connect document manager
-    connect(m_documentManager, &DocumentManager::currentDocumentChanged, this, &MainWindow::updateEditor);
+    connect(m_documentManager, &DocumentManager::currentDocumentChanged, [this](std::shared_ptr<Document> doc){ setEditorType(doc->getType()); });
+
 
 
 
@@ -81,23 +82,18 @@ void MainWindow::openFile()
 
 }
 
-void MainWindow::updateEditor(std::weak_ptr<Document> doc)
+void MainWindow::setEditorType(const Document::DocumentType& type)
 {
-    if(auto document = doc.lock())
+    switch(type)
     {
-        switch(document->getType())
-        {
-        case Document::DocumentType::AnimationDocument:
-            m_editorStack->setCurrentIndex(1);
+    case Document::DocumentType::AnimationDocument:
+        m_editorStack->setCurrentIndex(1);
         break;
-        case Document::DocumentType::MultiAnimationDocument:
-            m_editorStack->setCurrentIndex(2);
+    case Document::DocumentType::MultiAnimationDocument:
+        m_editorStack->setCurrentIndex(2);
         break;
-        default:
-            m_editorStack->setCurrentIndex(0);
-        break;
-        }
-    }
-    else
+    default:
         m_editorStack->setCurrentIndex(0);
+        break;
+    }
 }

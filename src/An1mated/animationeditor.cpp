@@ -37,8 +37,12 @@ AnimationEditor::~AnimationEditor()
 
 void AnimationEditor::setDocument(std::shared_ptr<Document> doc)
 {
-    if(m_currentDocument && m_currentDocument != doc) // Disconnect old document from this editor
+    if(m_currentDocument) // Disconnect old document from this editor
+    {
         m_currentDocument->disconnect();
+        //TODO fix it better
+        disconnect(m_ui->framesGallery, &FramesGallery::frameMoved, m_currentDocument.get(), 0);
+    }
 
     m_currentDocument = std::move(doc);
 
