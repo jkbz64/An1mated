@@ -6,16 +6,20 @@ set(CMAKE_BUILD_TYPE Debug CACHE STRING "Choose the type of build(Release or Deb
 set(LIB_AN1MATED_BUILD_TYPE Shared CACHE STRING "Choose the type of libAn1mated build(Static OR Shared)")
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake_modules/")
 
+# Enable some flags when not using msvc compiler
+if (NOT MSVC)
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unknown-warning -Wno-unknown-warning-option -Wall -Wextra -Wpedantic -pedantic -pedantic-errors -Wno-noexcept-type")
+endif()
+
 # Enforce C++11 standard
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 # Enable automoc / autoic
 option(CMAKE_AUTOMOC "Enable automoc" ON)
 option(CMAKE_AUTOUIC "Enable autouic" ON)
 
-# Including moc'ed files is sometimes retarded
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 # Enable tests?
 option(TESTS "Enable build of tests" ON)

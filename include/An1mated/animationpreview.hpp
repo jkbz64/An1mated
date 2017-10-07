@@ -21,7 +21,6 @@ protected:
     QGraphicsScene m_animationScene;
     QPixmap m_spritesheet;
     QGraphicsItem* m_background;
-
     QGraphicsItem* m_frame;
     QPoint m_framePosition;
     QRect m_frameRect;

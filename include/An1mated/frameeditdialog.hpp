@@ -19,7 +19,6 @@ public slots:
     void updateRectValues(const QRect&);
     virtual void accept() override;
 protected:
-    virtual void resizeEvent(QResizeEvent*) override;
     Ui::FrameEditDialog *m_ui;
     AnimationFrame& m_frame;
 };

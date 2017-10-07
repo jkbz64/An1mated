@@ -35,22 +35,22 @@ void FrameEditView::setRect(const QRect &rect)
     emit rectModified(m_frameRect);
 }
 
-void FrameEditView::mousePressEvent(QMouseEvent *)
+void FrameEditView::mousePressEvent(QMouseEvent*)
 {
 
 }
 
-void FrameEditView::mouseMoveEvent(QMouseEvent *)
+void FrameEditView::mouseMoveEvent(QMouseEvent*)
 {
 
 }
 
-void FrameEditView::mouseReleaseEvent(QMouseEvent *)
+void FrameEditView::mouseReleaseEvent(QMouseEvent*)
 {
 
 }
 
-void FrameEditView::resizeEvent(QResizeEvent *event)
+void FrameEditView::resizeEvent(QResizeEvent*)
 {
     if(m_background)
         setSceneRect(0, 0, m_background->sceneBoundingRect().width(), m_background->sceneBoundingRect().height());

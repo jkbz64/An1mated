@@ -21,7 +21,6 @@ protected:
     virtual void mousePressEvent(QMouseEvent*) override;
     virtual void mouseDoubleClickEvent(QMouseEvent*) override;
     virtual void mouseReleaseEvent(QMouseEvent*) override;
-    virtual void resizeEvent(QResizeEvent*) override;
 private:
     QLabel* m_frameNameLabel;
     QLabel* m_framePreview;

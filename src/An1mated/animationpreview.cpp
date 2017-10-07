@@ -5,8 +5,8 @@
 AnimationPreview::AnimationPreview(QWidget *parent)
     :
       QGraphicsView(parent),
-      m_frame(nullptr),
       m_background(nullptr),
+      m_frame(nullptr),
       m_framePosition(size().width() / 2, size().height() / 2)
 {
     setSceneRect(0, 0, size().width(), size().height());

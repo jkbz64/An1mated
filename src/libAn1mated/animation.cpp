@@ -9,6 +9,7 @@ Animation::Animation(const QString &name)
 }
 
 Animation::Animation(const Animation &other)
+    : QObject(this)
 {
    m_name = other.m_name;
    m_frames = std::move(other.m_frames);
@@ -71,7 +72,7 @@ void Animation::replaceFrame(const QString& name, const AnimationFrame &frame)
 
 void Animation::removeFrame(int index)
 {
-    if(index >= 0 && index < m_frames.size())
+    if(index >= 0 && static_cast<unsigned>(index) < m_frames.size())
         m_frames.erase(m_frames.begin() + index);
 }
 

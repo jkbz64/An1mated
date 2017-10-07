@@ -30,17 +30,12 @@ void AnimationFrameWidget::mousePressEvent(QMouseEvent *event)
         emit framePressed();
 }
 
-void AnimationFrameWidget::mouseReleaseEvent(QMouseEvent *event)
+void AnimationFrameWidget::mouseReleaseEvent(QMouseEvent*)
 {
     emit frameReleased();
 }
 
-void AnimationFrameWidget::resizeEvent(QResizeEvent *event)
-{
-
-}
-
-void AnimationFrameWidget::mouseDoubleClickEvent(QMouseEvent *event)
+void AnimationFrameWidget::mouseDoubleClickEvent(QMouseEvent *)
 {
     emit frameDoubleClicked();
 }

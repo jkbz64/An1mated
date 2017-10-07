@@ -62,7 +62,7 @@ void FramesGallery::addFrame(const AnimationFrame& frame)
 
 void FramesGallery::updateFrame(int at, const AnimationFrame &updatedFrame)
 {
-    if(at >= 0 && at < m_frameWidgets.size())
+    if(at >= 0 && static_cast<unsigned>(at) < m_frameWidgets.size())
     {
         m_frameWidgets[at]->deleteLater();
         auto&& frameWidget = createFrameWidget(updatedFrame);

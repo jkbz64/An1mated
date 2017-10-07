@@ -47,11 +47,6 @@ FrameEditDialog::~FrameEditDialog()
     delete m_ui;
 }
 
-void FrameEditDialog::resizeEvent(QResizeEvent *event)
-{
-
-}
-
 void FrameEditDialog::updateRectValues(const QRect& rect)
 {
     m_ui->xSpin->setValue(rect.x());
