@@ -12,8 +12,8 @@ class DocumentManager : public QObject
 {
     Q_OBJECT
 public:
-    static DocumentManager *instance();
-    static void deleteInstance();
+    DocumentManager(QObject *parent = nullptr);
+    virtual ~DocumentManager();
 
     QTabBar* getDocumentBar() const;
     int getDocumentCount() const;
@@ -29,9 +29,6 @@ private slots:
     void closeDocumentAt(int);
     void moveDocument(int, int);
 private:
-    DocumentManager(QObject *parent = nullptr);
-    ~DocumentManager();
-
     //Documents
     std::vector<std::shared_ptr<Document>> m_documents;
     //Document tab bar

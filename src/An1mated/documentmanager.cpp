@@ -36,19 +36,6 @@ DocumentManager::~DocumentManager()
     delete m_documentTabBar;
 }
 
-DocumentManager* DocumentManager::instance()
-{
-    if(!m_instance)
-        m_instance = new DocumentManager(nullptr);
-    return m_instance;
-}
-
-void DocumentManager::deleteInstance()
-{
-    delete m_instance;
-    m_instance = nullptr;
-}
-
 void DocumentManager::updateCurrentDocument(int index)
 {
     if(index != -1)

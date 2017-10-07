@@ -15,7 +15,7 @@ MainWindow::MainWindow(QWidget *parent, Qt::WindowFlags flags)
     :
       QMainWindow(parent, flags),
       m_ui(new Ui::MainWindow),
-      m_documentManager(DocumentManager::instance())
+      m_documentManager(new DocumentManager(this))
 {
     m_ui->setupUi(this);
 
@@ -63,7 +63,6 @@ MainWindow::MainWindow(QWidget *parent, Qt::WindowFlags flags)
 
 MainWindow::~MainWindow()
 {
-    DocumentManager::deleteInstance();
     delete m_editorStack;
     delete m_ui;
 }
