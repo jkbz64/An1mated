@@ -62,12 +62,9 @@ void Animation::addFrame(const QString &name, const QRect &rect)
     m_frames.emplace_back(name, rect);
 }
 
-void Animation::replaceFrame(const QString& name, const AnimationFrame &frame)
+void Animation::replaceFrame(int index, const AnimationFrame &frame)
 {
-    std::replace_if(m_frames.begin(), m_frames.end(), [&name](const AnimationFrame& f)
-    {
-        return f.getName() == name;
-    }, frame);
+    m_frames[index] = frame;
 }
 
 void Animation::removeFrame(int index)
@@ -84,7 +81,7 @@ void Animation::removeFrame(const QString &name)
 void Animation::moveFrameTo(int from, int to)
 {
     if(to > from)
-    {
+    {        
         auto fromIt = m_frames.begin() + from;
         auto toIt = m_frames.begin() + to;
         while(fromIt != toIt)

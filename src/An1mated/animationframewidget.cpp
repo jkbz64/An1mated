@@ -30,13 +30,16 @@ void AnimationFrameWidget::mousePressEvent(QMouseEvent *event)
         emit framePressed();
 }
 
-void AnimationFrameWidget::mouseReleaseEvent(QMouseEvent*)
+void AnimationFrameWidget::mouseReleaseEvent(QMouseEvent* event)
 {
     emit frameReleased();
+    if(event->button() == Qt::MouseButton::RightButton)
+        emit frameRightClicked();
 }
 
-void AnimationFrameWidget::mouseDoubleClickEvent(QMouseEvent *)
+void AnimationFrameWidget::mouseDoubleClickEvent(QMouseEvent *event)
 {
-    emit frameDoubleClicked();
+    if(event->button() == Qt::MouseButton::LeftButton)
+        emit frameDoubleClicked();
 }
 

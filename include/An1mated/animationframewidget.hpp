@@ -15,6 +15,7 @@ public:
 signals:
     void framePressed();
     void frameClicked();
+    void frameRightClicked();
     void frameDoubleClicked();
     void frameReleased();
 protected:

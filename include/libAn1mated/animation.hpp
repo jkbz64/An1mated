@@ -26,7 +26,7 @@ public:
 
     void addFrame(const QString&, const QRect&);
     void addFrame(const AnimationFrame&);
-    void replaceFrame(const QString&, const AnimationFrame&);
+    void replaceFrame(int, const AnimationFrame&);
     void removeFrame(int);
     void removeFrame(const QString&);
 

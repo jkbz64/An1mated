@@ -20,16 +20,19 @@ public:
     void setFrames(const std::vector<AnimationFrame>& = std::vector<AnimationFrame>());
     void setSpritesheet(const QPixmap& = QPixmap());
 signals:
-    void frameDoubleClicked(const AnimationFrame&);
+    void frameDoubleClicked(int);
     void frameSelected(const AnimationFrame&);
     void frameMoved(int, int);
+    void newFrameRequested();
+    void deleteFrameRequested(int);
+    void editFrameRequested(int);
 public slots:
-    void updateGallery();
     void addFrame(const AnimationFrame&);
     void updateFrame(int, const AnimationFrame&);
 protected:
     AnimationFrameWidget* createFrameWidget(const AnimationFrame&);
     virtual void mouseMoveEvent(QMouseEvent*) override;
+    virtual void mouseReleaseEvent(QMouseEvent*) override;
 
     void clearGallery();
     QPixmap m_spritesheet;

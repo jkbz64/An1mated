@@ -23,7 +23,7 @@ signals:
 
 public slots:
     void newFrame();
-    void editFrame(const AnimationFrame&);
+    void editFrame(int);
 protected:
     Ui::AnimationEditor* m_ui;
 };

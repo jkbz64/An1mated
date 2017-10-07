@@ -48,10 +48,10 @@ void AnimationDocument::addFrame(const AnimationFrame &frame)
     emit frameAdded(m_animation.getFrames().back());
 }
 
-void AnimationDocument::replaceFrame(const QString& name, const AnimationFrame& newFrame)
+void AnimationDocument::replaceFrame(int index, const AnimationFrame& newFrame)
 {
-    m_animation.replaceFrame(name, newFrame);
-    emit frameChanged(m_animation.getIndexOf(name));
+    m_animation.replaceFrame(index, newFrame);
+    emit frameChanged(index);
 }
 
 void AnimationDocument::removeFrame(int index)

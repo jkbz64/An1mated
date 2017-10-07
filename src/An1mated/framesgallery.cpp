@@ -3,6 +3,7 @@
 #include <QFrame>
 #include <QLabel>
 #include <QMouseEvent>
+#include <QMenu>
 
 #include <animationframewidget.hpp>
 
@@ -111,9 +112,31 @@ AnimationFrameWidget *FramesGallery::createFrameWidget(const AnimationFrame &fra
         }
     });
 
-    connect(frameWidget, &AnimationFrameWidget::frameDoubleClicked, [this, frame]()
+    connect(frameWidget, &AnimationFrameWidget::frameRightClicked, [this, frame, frameWidget]
     {
-        emit frameDoubleClicked(frame);
+        std::for_each(m_frameWidgets.begin(), m_frameWidgets.end(), [](QWidget* w) { w->setStyleSheet(""); });
+        frameWidget->setStyleSheet("background: #ADD8E6;");
+        emit frameSelected(frame);
+
+        QMenu contextMenu(tr("Frame context"), this);
+        QAction newFrameAction(tr("New frame"), this);
+        connect(&newFrameAction, &QAction::triggered, [this](bool){ emit newFrameRequested(); });
+        QAction removeFrameAction(tr("Remove frame"), this);
+        //TODO
+        QAction editFrameAction(tr("Edit frame"), this);
+        connect(&editFrameAction, &QAction::triggered, [this, frameWidget](bool){ emit editFrameRequested(m_layout->indexOf(frameWidget)); });
+
+        contextMenu.addAction(&newFrameAction);
+        contextMenu.addAction(&removeFrameAction);
+        contextMenu.addSeparator();
+        contextMenu.addAction(&editFrameAction);
+
+        contextMenu.exec(QCursor::pos());
+    });
+
+    connect(frameWidget, &AnimationFrameWidget::frameDoubleClicked, [this, frameWidget]
+    {
+        emit frameDoubleClicked(m_layout->indexOf(frameWidget));
     });
 
     return frameWidget;
@@ -133,6 +156,19 @@ void FramesGallery::clearGallery()
         m_layout->removeItem(m_dragSpacer);
     }
 }
+
+void FramesGallery::mouseReleaseEvent(QMouseEvent *event)
+{
+    if(event->button() == Qt::MouseButton::RightButton)
+    {
+        QMenu contextMenu(tr("New frame context"), this);
+        QAction newFrameAction(tr("New frame"), this);
+        connect(&newFrameAction, &QAction::triggered, [this](bool){ emit newFrameRequested(); });
+        contextMenu.addAction(&newFrameAction);
+        contextMenu.exec(QCursor::pos());
+    }
+}
+
 
 void FramesGallery::mouseMoveEvent(QMouseEvent *event)
 {
