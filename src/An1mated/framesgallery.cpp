@@ -49,11 +49,6 @@ void FramesGallery::setFrames(const std::vector<AnimationFrame>& frames)
     }
 }
 
-void FramesGallery::updateGallery()
-{
-
-}
-
 void FramesGallery::addFrame(const AnimationFrame& frame)
 {
     auto&& frameWidget = createFrameWidget(frame);
