@@ -33,9 +33,25 @@ MainWindow::MainWindow(QWidget *parent, Qt::WindowFlags flags)
 
 
     //Connect document manager
-    connect(m_documentManager, &DocumentManager::currentDocumentChanged, [this](std::shared_ptr<Document> doc){ setEditorType(doc->getType()); });
+    connect(m_documentManager, &DocumentManager::currentDocumentChanged, [this](std::shared_ptr<Document> doc)
+    {
+        if(doc)
+        {
+            setEditorType(doc->getType());
+            if(doc->getFileName().isEmpty())
+                m_ui->actionSave->setEnabled(false);
+            else
+                m_ui->actionSave->setEnabled(true);
+        }
+        else
+        {
+            setEditorType(static_cast<Document::DocumentType>(-1));
+            m_ui->actionSave->setEnabled(false);
+        }
 
+    });
 
+    m_ui->actionSave->setEnabled(false);
 
 
     QVBoxLayout* layout = new QVBoxLayout(centralWidget());
@@ -87,12 +103,14 @@ void MainWindow::setEditorType(const Document::DocumentType& type)
     {
     case Document::DocumentType::AnimationDocument:
         m_editorStack->setCurrentIndex(1);
+        m_ui->actionEditSpritesheet->setEnabled(true);
         break;
     case Document::DocumentType::MultiAnimationDocument:
         m_editorStack->setCurrentIndex(2);
         break;
     default:
         m_editorStack->setCurrentIndex(0);
+        m_ui->actionEditSpritesheet->setEnabled(false);
         break;
     }
 }

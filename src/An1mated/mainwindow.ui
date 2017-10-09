@@ -16,6 +16,9 @@
   <widget class="QWidget" name="centralwidget"/>
   <widget class="QStatusBar" name="statusbar"/>
   <widget class="QToolBar" name="toolBar">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
    <property name="windowTitle">
     <string>toolBar</string>
    </property>
@@ -51,6 +54,7 @@
    <addaction name="separator"/>
    <addaction name="actionExit"/>
    <addaction name="separator"/>
+   <addaction name="actionEditSpritesheet"/>
   </widget>
   <action name="actionOpen">
    <property name="icon">
@@ -94,6 +98,18 @@
    </property>
    <property name="text">
     <string>Save</string>
+   </property>
+  </action>
+  <action name="actionEditSpritesheet">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>../../icons/editSpritesheetIcon.png</normaloff>../../icons/editSpritesheetIcon.png</iconset>
+   </property>
+   <property name="text">
+    <string>Edit Spritesheet</string>
    </property>
   </action>
  </widget>
