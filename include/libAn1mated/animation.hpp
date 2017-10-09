@@ -10,7 +10,7 @@ class Animation : public QObject
 {
     Q_OBJECT
 public:
-    Animation(const QString&);
+    explicit Animation(const QString&, const QString& = QString());
     Animation(const Animation&);
     Animation(Animation&&);
     virtual ~Animation() = default;

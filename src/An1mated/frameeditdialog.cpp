@@ -37,6 +37,8 @@ FrameEditDialog::FrameEditDialog(const QPixmap& spritesheet, AnimationFrame& fra
 
     m_ui->xSpin->setMaximum(spritesheet.width());
     m_ui->ySpin->setMaximum(spritesheet.height());
+    m_ui->wSpin->setMaximum(spritesheet.width());
+    m_ui->hSpin->setMaximum(spritesheet.height());
 
     m_ui->frameEditView->setSpritesheet(spritesheet);
     m_ui->frameEditView->setRect(frame.getRect());

@@ -7,6 +7,7 @@
 #include <QLabel>
 
 #include <QInputDialog>
+#include <newanimationdialog.hpp>
 
 #include <animation.hpp>
 #include <animationeditor.hpp>
@@ -69,11 +70,10 @@ MainWindow::~MainWindow()
 
 void MainWindow::newAnimationDocument()
 {
-    bool ok;
-    QString animationName = QInputDialog::getText(this, QString("Type new animation name:"), QString("Animation name:"),
-                                                  QLineEdit::Normal, "", &ok);
-    if(ok && !animationName.isEmpty())
-        m_documentManager->addDocument<AnimationDocument>(animationName);
+    QString animationName, spritesheetName;
+    NewAnimationDialog dialog(animationName, spritesheetName, this);
+    if(dialog.exec() == QDialog::Accepted)
+        m_documentManager->addDocument<AnimationDocument>(Animation(animationName, spritesheetName));
 }
 
 void MainWindow::openFile()

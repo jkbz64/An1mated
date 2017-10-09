@@ -55,7 +55,7 @@ void AnimationEditor::setDocument(std::shared_ptr<Document> doc)
         connect(currentDocument, &AnimationDocument::spritesheetChanged, m_ui->framesGallery, &FramesGallery::setSpritesheet);
         connect(currentDocument, &AnimationDocument::frameAdded, m_ui->framesGallery, &FramesGallery::addFrame);
         connect(currentDocument, &AnimationDocument::framesModified, m_ui->framesGallery, &FramesGallery::setFrames);
-        connect(currentDocument, &AnimationDocument::frameChanged, [this, currentDocument](int index)
+        connect(currentDocument, &AnimationDocument::frameChanged, [this, currentDocument](int)
         {
             m_ui->framesGallery->setFrames(currentDocument->getFrames());
         });

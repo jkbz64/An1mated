@@ -1,25 +1,28 @@
 #include <animation.hpp>
 
-Animation::Animation(const QString &name)
+Animation::Animation(const QString &name, const QString& spritesheet)
     :
       QObject(nullptr),
-      m_name(name)
+      m_name(name),
+      m_spritesheet(spritesheet)
 {
 
 }
 
 Animation::Animation(const Animation &other)
-    : QObject(this)
+    : QObject(nullptr),
+      m_name(other.m_name),
+      m_spritesheet(other.m_spritesheet),
+      m_frames(other.m_frames)
 {
-   m_name = other.m_name;
-   m_frames = std::move(other.m_frames);
-   m_spritesheet = other.m_spritesheet;
+
 }
 
 Animation::Animation(Animation &&animation)
     :
       QObject(nullptr),
-      m_name(animation.getName()),
+      m_name(std::move(animation.m_name)),
+      m_spritesheet(std::move(animation.m_spritesheet)),
       m_frames(std::move(animation.m_frames))
 {
 

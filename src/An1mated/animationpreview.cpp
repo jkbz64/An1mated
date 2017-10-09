@@ -6,11 +6,11 @@ AnimationPreview::AnimationPreview(QWidget *parent)
     :
       QGraphicsView(parent),
       m_background(nullptr),
-      m_frame(nullptr),
-      m_framePosition(size().width() / 2, size().height() / 2)
+      m_frame(nullptr)
 {
     setSceneRect(0, 0, size().width(), size().height());
     setScene(&m_animationScene);
+    reset();
 }
 
 AnimationPreview::~AnimationPreview()

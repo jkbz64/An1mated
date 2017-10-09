@@ -10,7 +10,7 @@ class AnimationDocument : public Document
     Q_OBJECT
 public:
     AnimationDocument(const QString&, const QString& = QString());
-    AnimationDocument(const Animation&, const QString& = QString());
+    AnimationDocument(Animation&&, const QString& = QString());
     virtual ~AnimationDocument();
 
     virtual bool writeToFile(const QString& = QString()) override;
@@ -39,7 +39,7 @@ public:
 
 inline QPixmap AnimationDocument::getSpritesheet() const
 {
-    return QPixmap(m_animation.getSpritesheetName());
+    return m_animation.getSpritesheetName();
 }
 
 inline const AnimationFrame& AnimationDocument::getFrame(int index) const
