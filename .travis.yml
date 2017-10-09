@@ -2,10 +2,25 @@ language: cpp
 sudo: required
 dist: trusty
 
+env:
+ global:
+ - secure: "DvzsBC0mZT7rc9vSmW1vEacunNo2UxGUYaxVtixHASuM5J7jsX7NaPYd2XcDG4OdCryWRq2VkiFzTNA7IRUz3I4Kz+S3mQz+ZYSMUH36S/syJykepTVm29S7TX8WPpH8sPEVIaiiJ+l7cW18G7uXoBKC3vMNZwKOruE5ecu3KdQKlpGkcvE9RpTJANm7DwJs0eKK4VolO1/CvAvbY7rzvjfE4g2VPUzDkQZXJnkKg57TgL6eauB3H07BqbTDyC2kAKAV6NgDGw1mAwKpEAOq6ohlS2xF1AXa9ANPJkApM5rE2kU97V401zG52scQik0DKA4XMitO54maqrTpXqDEtmuyBRVCvOtugdgejKH1T6ipcExXHNkREJVaekDCj+T3zqzKLNZkU7y0xx6pO/Avu2XOrvEomuMAoAsAJdrOV1uMsIV5s5FajFA+XQ+pMSaQoiaGAAbmmmRhifrIPmtQn+0Evj3YeIhz2cGhL4WtghzGDv5SHeo2K1MHsGGC4A5A+qRZE0bswwKduQDuylbEuKeGt1IyCkUv9cqGLEWO93xop5DZP48VOzkmlqastF3KQ2nJUwZIYO9tyerfeKNMM5AkNs1IOmvY4jklUy04RiCpufq7ly/eI8OyCA8eF0/awz+HbZxTIpZCBK9EEndnK6XXKt6LS+jakv/2UUTy7Sw="
+
 before_install:
+ - echo -n | openssl s_client -connect scan.coverity.com:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | sudo tee -a /etc/ssl/certs/ca-
  - sudo apt-get install qtbase5-dev
  - export DISPLAY=:99.0
  - sh -e /etc/init.d/xvfb start
+
+addons:
+  coverity_scan:
+    project:
+      name: "jkbz64/An1mated"
+      description: "Build submitted via Travis CI"
+    notification_email: kamiljkbz@gmail.com
+    build_command_prepend: "mkdir build; cd build; cmake .."
+    build_command:   "make -j 4"
+    branch_pattern: coverity_scan
 
 compiler:
  - gcc
@@ -13,5 +28,5 @@ compiler:
 script:
  - mkdir build
  - cd build
- - cmake .. && make -j2
+ - cmake .. && make -j 2
  - make test
