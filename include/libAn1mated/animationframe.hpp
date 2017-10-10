@@ -8,7 +8,7 @@
 class AnimationFrame
 {
 public:
-    AnimationFrame(const QString&, const QRect& = QRect(), float = 0.f);
+    AnimationFrame(const QString&, const QRect& = QRect(), float = 0.5f);
 
     const QString& getName() const;
     const QRect& getRect() const;
@@ -37,6 +37,5 @@ inline const float& AnimationFrame::getDelay() const
 {
     return m_delay;
 }
-
 
 #endif

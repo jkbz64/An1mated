@@ -8,6 +8,7 @@
 #include <QLabel>
 
 #include <QFileDialog>
+#include <QTimer>
 
 #include <frameeditdialog.hpp>
 
@@ -32,6 +33,26 @@ AnimationEditor::AnimationEditor(QWidget *parent)
     connect(m_ui->frameSlider, &QSlider::sliderMoved, [this](int index)
     {
        m_ui->framesGallery->selectFrame(index);
+    });
+
+
+    connect(m_ui->playAnimationButton, &QPushButton::released, [this]()
+    {
+        if(m_currentDocument)
+        {
+            const auto&& document = qobject_cast<AnimationDocument*>(m_currentDocument.get());
+            QTimer::singleShot(document->getFrame(m_ui->frameSlider->value()).getDelay() * 1000, this, [this, document]()
+            {
+                m_ui->framesGallery->selectFrame(m_ui->frameSlider->value() + 1);
+                if(m_ui->frameSlider->value() + 1 <= document->getFrames().size() - 1)
+                    m_ui->playAnimationButton->click();
+                else
+                {
+                    if(m_ui->loopCheckBox->isChecked())
+                        QTimer::singleShot(document->getFrame(m_ui->frameSlider->value()).getDelay() * 1000, this, [this]{ m_ui->framesGallery->selectFrame(0); m_ui->playAnimationButton->click(); });
+                }
+            });
+        }
     });
 
     connect(m_ui->framesGallery, &FramesGallery::newFrameRequested, this, &AnimationEditor::newFrame);
