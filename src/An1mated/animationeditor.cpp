@@ -15,9 +15,12 @@
 AnimationEditor::AnimationEditor(QWidget *parent)
     :
       Editor(parent),
-      m_ui(new Ui::AnimationEditor)
+      m_ui(new Ui::AnimationEditor),
+      m_stopAnimation(false)
 {
     m_ui->setupUi(this);
+
+
     connect(m_ui->framesGallery, &FramesGallery::frameSelected, [this](int index)
     {
        m_ui->frameSlider->setValue(index);
@@ -40,20 +43,38 @@ AnimationEditor::AnimationEditor(QWidget *parent)
     {
         if(m_currentDocument)
         {
+            m_stopAnimation = false;
             const auto&& document = qobject_cast<AnimationDocument*>(m_currentDocument.get());
-            QTimer::singleShot(document->getFrame(m_ui->frameSlider->value()).getDelay() * 1000, this, [this, document]()
+            if(document->getFrames().size() > 0)
             {
-                m_ui->framesGallery->selectFrame(m_ui->frameSlider->value() + 1);
-                if(m_ui->frameSlider->value() + 1 <= document->getFrames().size() - 1)
-                    m_ui->playAnimationButton->click();
-                else
+                QTimer::singleShot(document->getFrame(m_ui->frameSlider->value()).getDelay() * 1000, this, [this, document]()
                 {
-                    if(m_ui->loopCheckBox->isChecked())
-                        QTimer::singleShot(document->getFrame(m_ui->frameSlider->value()).getDelay() * 1000, this, [this]{ m_ui->framesGallery->selectFrame(0); m_ui->playAnimationButton->click(); });
-                }
-            });
+                    if(m_stopAnimation)
+                    {
+                        m_stopAnimation = false;
+                        return;
+                    }
+
+                    m_ui->framesGallery->selectFrame(m_ui->frameSlider->value() + 1);
+                    if(m_ui->frameSlider->value() + 1 <= document->getFrames().size() - 1)
+                        m_ui->playAnimationButton->click();
+                    else
+                    {
+                        if(m_ui->loopCheckBox->isChecked())
+                        {
+                            QTimer::singleShot(document->getFrame(m_ui->frameSlider->value()).getDelay() * 1000, this, [this]
+                            {
+                                m_ui->framesGallery->selectFrame(0);
+                                m_ui->playAnimationButton->click();
+                            });
+                        }
+                    }
+                });
+            }
         }
     });
+
+    connect(m_ui->stopAnimationButton, &QPushButton::released, [this]() { m_stopAnimation = true; });
 
     connect(m_ui->framesGallery, &FramesGallery::newFrameRequested, this, &AnimationEditor::newFrame);
     connect(m_ui->framesGallery, &FramesGallery::editFrameRequested, this, &AnimationEditor::editFrame);
@@ -79,7 +100,7 @@ void AnimationEditor::setDocument(std::shared_ptr<Document> doc)
     if(m_currentDocument) // Disconnect old document from this editor
     {
         m_currentDocument->disconnect();
-        //TODO fix it better
+        //TODO fix it
         disconnect(m_ui->framesGallery, &FramesGallery::frameMoved, m_currentDocument.get(), 0);
     }
 

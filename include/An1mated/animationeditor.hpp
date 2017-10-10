@@ -28,6 +28,7 @@ private slots:
 
 protected:
     Ui::AnimationEditor* m_ui;
+    bool m_stopAnimation;
 };
 
 #endif
