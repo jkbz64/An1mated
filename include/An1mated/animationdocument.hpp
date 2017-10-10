@@ -28,8 +28,6 @@ public:
     QPixmap getSpritesheet() const;
 signals:
     void animationChanged();
-    void frameAdded(const AnimationFrame&);
-    void frameChanged(int);
     void framesModified(const std::vector<AnimationFrame>&);
     void spritesheetChanged(const QPixmap&);
     void animationNameChanged(const QString&);

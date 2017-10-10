@@ -24,6 +24,8 @@ signals:
 public slots:
     void newFrame();
     void editFrame(int);
+private slots:
+
 protected:
     Ui::AnimationEditor* m_ui;
 };

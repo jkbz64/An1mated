@@ -19,16 +19,15 @@ public:
 
     void setFrames(const std::vector<AnimationFrame>& = std::vector<AnimationFrame>());
     void setSpritesheet(const QPixmap& = QPixmap());
+    void selectFrame(int);
+    int getSelectedFrameIndex() const;
 signals:
     void frameDoubleClicked(int);
-    void frameSelected(const AnimationFrame&);
+    void frameSelected(int);
     void frameMoved(int, int);
     void newFrameRequested();
     void deleteFrameRequested(int);
     void editFrameRequested(int);
-public slots:
-    void addFrame(const AnimationFrame&);
-    void updateFrame(int, const AnimationFrame&);
 protected:
     AnimationFrameWidget* createFrameWidget(const AnimationFrame&);
     virtual void mouseMoveEvent(QMouseEvent*) override;
@@ -37,6 +36,7 @@ protected:
     void clearGallery();
     QPixmap m_spritesheet;
     std::vector<AnimationFrameWidget*> m_frameWidgets;
+    unsigned int m_selectedFrameIndex;
     QHBoxLayout* m_layout;
 
     QPoint m_startDragPos;
@@ -45,5 +45,10 @@ protected:
     int m_spacerIndex;
     QSpacerItem* m_dragSpacer;
 };
+
+inline int FramesGallery::getSelectedFrameIndex() const
+{
+    return m_selectedFrameIndex;
+}
 
 #endif

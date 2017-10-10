@@ -10,6 +10,7 @@
 FramesGallery::FramesGallery(QWidget *parent)
     :
       QWidget(parent),
+      m_selectedFrameIndex(0),
       m_layout(new QHBoxLayout(this)),
       m_draggedFrame(nullptr),
       m_startDragIndex(-1),
@@ -26,6 +27,7 @@ FramesGallery::~FramesGallery()
 
 void FramesGallery::reset()
 {
+    m_selectedFrameIndex = 0;
     setSpritesheet();
     setFrames();
 }
@@ -34,7 +36,7 @@ void FramesGallery::setFrames(const std::vector<AnimationFrame>& frames)
 {
     clearGallery();
 
-    int i = 0;
+    unsigned int i = 0;
     for(const AnimationFrame& frame : frames)
     {
         m_frameWidgets.push_back(createFrameWidget(frame));
@@ -43,27 +45,18 @@ void FramesGallery::setFrames(const std::vector<AnimationFrame>& frames)
     }
 
     if(!m_frameWidgets.empty())
-    {
-        m_frameWidgets.front()->setStyleSheet("background: #ADD8E6;");
-        emit frameSelected(frames.front());
-    }
+        selectFrame(0);
+    else
+        m_selectedFrameIndex = -1;
 }
 
-void FramesGallery::addFrame(const AnimationFrame& frame)
-{
-    auto&& frameWidget = createFrameWidget(frame);
-    m_frameWidgets.emplace_back(frameWidget);
-    m_layout->addWidget(m_frameWidgets.back());
-}
-
-void FramesGallery::updateFrame(int at, const AnimationFrame &updatedFrame)
+void FramesGallery::selectFrame(int at)
 {
     if(at >= 0 && static_cast<unsigned>(at) < m_frameWidgets.size())
     {
-        m_frameWidgets[at]->deleteLater();
-        auto&& frameWidget = createFrameWidget(updatedFrame);
-        m_layout->replaceWidget(m_frameWidgets[at], frameWidget);
-        m_frameWidgets[at] = frameWidget;
+        emit m_frameWidgets[at]->framePressed();
+        emit m_frameWidgets[at]->frameReleased();
+        m_selectedFrameIndex = at;
     }
 }
 
@@ -78,7 +71,7 @@ AnimationFrameWidget *FramesGallery::createFrameWidget(const AnimationFrame &fra
         //Reset all widgets stylesheet
         std::for_each(m_frameWidgets.begin(), m_frameWidgets.end(), [](QWidget* w) { w->setStyleSheet(""); });
         frameWidget->setStyleSheet("background: #ADD8E6;");
-        emit frameSelected(frame);
+        emit frameSelected(m_layout->indexOf(frameWidget));
         //Handle dragging
         m_draggedFrame = frameWidget;
         //Get start drag position
@@ -100,6 +93,7 @@ AnimationFrameWidget *FramesGallery::createFrameWidget(const AnimationFrame &fra
             //Insert dragged frame at spacer position
             m_layout->removeItem(m_dragSpacer);
             m_layout->insertWidget(m_spacerIndex, m_draggedFrame);
+            m_selectedFrameIndex = m_layout->indexOf(frameWidget);
             if(m_spacerIndex != m_startDragIndex)
                 emit frameMoved(m_startDragIndex, m_spacerIndex);
             m_startDragIndex = m_spacerIndex = -1;
@@ -111,8 +105,7 @@ AnimationFrameWidget *FramesGallery::createFrameWidget(const AnimationFrame &fra
     {
         std::for_each(m_frameWidgets.begin(), m_frameWidgets.end(), [](QWidget* w) { w->setStyleSheet(""); });
         frameWidget->setStyleSheet("background: #ADD8E6;");
-        emit frameSelected(frame);
-
+        emit frameSelected(m_layout->indexOf(frameWidget));
         QMenu contextMenu(tr("Frame context"), this);
         QAction newFrameAction(tr("New frame"), this);
         connect(&newFrameAction, &QAction::triggered, [this](bool){ emit newFrameRequested(); });

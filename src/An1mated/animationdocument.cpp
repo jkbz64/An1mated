@@ -40,32 +40,35 @@ bool AnimationDocument::writeToFile(const QString&)
 void AnimationDocument::addFrame(const QString &frame, const QRect &rect)
 {
     m_animation.addFrame(frame, rect);
-    emit frameAdded(m_animation.getFrames().back());
+    emit framesModified(m_animation.getFrames());
 }
 
 void AnimationDocument::addFrame(const AnimationFrame &frame)
 {
     m_animation.addFrame(frame);
-    emit frameAdded(m_animation.getFrames().back());
+    emit framesModified(m_animation.getFrames());
 }
 
 void AnimationDocument::replaceFrame(int index, const AnimationFrame& newFrame)
 {
     m_animation.replaceFrame(index, newFrame);
-    emit frameChanged(index);
+    emit framesModified(m_animation.getFrames());
 }
 
 void AnimationDocument::removeFrame(int index)
 {
     m_animation.removeFrame(index);
+    emit framesModified(m_animation.getFrames());
 }
 
 void AnimationDocument::removeFrame(const QString &name)
 {
     m_animation.removeFrame(name);
+    emit framesModified(m_animation.getFrames());
 }
 
 void AnimationDocument::moveFrame(int from, int to)
 {
     m_animation.moveFrameTo(from, to);
+    emit framesModified(m_animation.getFrames());
 }

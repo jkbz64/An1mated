@@ -112,6 +112,11 @@
     <string>Edit Spritesheet</string>
    </property>
   </action>
+  <action name="actionSetBackgroundImage">
+   <property name="text">
+    <string>setBackgroundImage</string>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections/>

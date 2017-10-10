@@ -17,18 +17,35 @@ AnimationEditor::AnimationEditor(QWidget *parent)
       m_ui(new Ui::AnimationEditor)
 {
     m_ui->setupUi(this);
+    connect(m_ui->framesGallery, &FramesGallery::frameSelected, [this](int index)
+    {
+       m_ui->frameSlider->setValue(index);
+    });
 
-    connect(m_ui->framesGallery, &FramesGallery::frameSelected, m_ui->animationPreview, &AnimationPreview::setFrame);
+    connect(m_ui->frameSlider, &QSlider::valueChanged, [this](int index)
+    {
+        m_ui->currentFrameLabel->setText(QString::number(m_ui->frameSlider->value()));
+        if(m_currentDocument)
+            m_ui->animationPreview->setFrame(qobject_cast<AnimationDocument*>(m_currentDocument.get())->getFrame(index));
+    });
+
+    connect(m_ui->frameSlider, &QSlider::sliderMoved, [this](int index)
+    {
+       m_ui->framesGallery->selectFrame(index);
+    });
+
     connect(m_ui->framesGallery, &FramesGallery::newFrameRequested, this, &AnimationEditor::newFrame);
-    //TODO connect(m_ui->framesGallery, &FramesGallery::deleteFrameRequested, this, &AnimationEditor::deleteFrame);
     connect(m_ui->framesGallery, &FramesGallery::editFrameRequested, this, &AnimationEditor::editFrame);
     connect(m_ui->framesGallery, &FramesGallery::frameDoubleClicked, this, &AnimationEditor::editFrame);
-    connect(m_ui->setBackgroundButton, &QPushButton::released, this, [this]()
+
+
+    //TODO connect(m_ui->framesGallery, &FramesGallery::deleteFrameRequested, this, &AnimationEditor::deleteFrame);
+    /*connect(m_ui->setBackgroundButton, &QPushButton::released, this, [this]()
     {
        QString bgPath = QFileDialog::getOpenFileName(this, tr("Set background"), QDir::current().dirName(), tr("Images (*.png *.jpg)"));
        if(!bgPath.isEmpty())
            m_ui->animationPreview->setBackground(QPixmap(bgPath));
-    });
+    });*/
 }
 
 AnimationEditor::~AnimationEditor()
@@ -49,22 +66,31 @@ void AnimationEditor::setDocument(std::shared_ptr<Document> doc)
 
     if(m_currentDocument)
     {
-        auto&& currentDocument = qobject_cast<AnimationDocument*>(m_currentDocument.get());
+        const auto&& currentDocument = qobject_cast<AnimationDocument*>(m_currentDocument.get());
         //From document
-        connect(currentDocument, &AnimationDocument::spritesheetChanged, m_ui->animationPreview, &AnimationPreview::setSpritesheet);
-        connect(currentDocument, &AnimationDocument::spritesheetChanged, m_ui->framesGallery, &FramesGallery::setSpritesheet);
-        connect(currentDocument, &AnimationDocument::frameAdded, m_ui->framesGallery, &FramesGallery::addFrame);
-        connect(currentDocument, &AnimationDocument::framesModified, m_ui->framesGallery, &FramesGallery::setFrames);
-        connect(currentDocument, &AnimationDocument::frameChanged, [this, currentDocument](int)
+        //Spritesheet
+        connect(currentDocument, &AnimationDocument::spritesheetChanged, [this](const QPixmap& spritesheet)
         {
-            m_ui->framesGallery->setFrames(currentDocument->getFrames());
+           m_ui->animationPreview->setSpritesheet(spritesheet);
+           m_ui->framesGallery->setSpritesheet(spritesheet);
         });
-        //To document
+        //Frames
+        connect(currentDocument, &AnimationDocument::framesModified, [this](const std::vector<AnimationFrame>& frames)
+        {
+            const int selectedFrameIndex = m_ui->framesGallery->getSelectedFrameIndex();
+            m_ui->framesGallery->setFrames(frames);
+            m_ui->framesGallery->selectFrame(selectedFrameIndex);
+            m_ui->frameSlider->setValue(selectedFrameIndex);
+            m_ui->frameSlider->setMinimum(0);
+            m_ui->frameSlider->setMaximum(frames.size() - 1);
+            m_ui->maxFramesLabel->setText(QString::number(frames.size() - 1));
+        });
         connect(m_ui->framesGallery, &FramesGallery::frameMoved, currentDocument, &AnimationDocument::moveFrame);
 
         m_ui->animationPreview->setSpritesheet(currentDocument->getSpritesheet());
         m_ui->framesGallery->setSpritesheet(currentDocument->getSpritesheet());
         m_ui->framesGallery->setFrames(currentDocument->getFrames());
+        m_ui->framesGallery->selectFrame(0);
     }
     else
     {
