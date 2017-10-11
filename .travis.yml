@@ -20,6 +20,11 @@ install:
  - sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-6 90
  - sudo apt-get -y install qt59base
  - source /opt/qt59/bin/qt59-env.sh
+ - curl -R -O http://www.lua.org/ftp/lua-5.3.4.tar.gz
+ - tar zxf lua-5.3.4.tar.gz
+ - cd lua-5.3.4
+ - sudo make linux install
+ - cd ..
 
 addons:
   coverity_scan:

@@ -20,12 +20,14 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 option(CMAKE_AUTOMOC "Enable automoc" ON)
 option(CMAKE_AUTOUIC "Enable autouic" ON)
 
-
 # Enable tests?
 option(TESTS "Enable build of tests" ON)
 
 # Detect Qt5 package with Core and Widgets components
 find_package(Qt5 COMPONENTS Core Widgets Test REQUIRED)
+find_package(Lua53 REQUIRED)
+
+set(SOL2_ROOT ${CMAKE_SOURCE_DIR}/lib/sol2)
 
 ## Setup libAn1mated library
 # Get include dir and headers
@@ -51,9 +53,12 @@ set_target_properties(libAn1mated PROPERTIES PREFIX "")
 
 target_include_directories(libAn1mated PUBLIC
  ${LIB_AN1MATED_INCLUDE_DIR}
- ${Qt5Core_INCLUDE_DIRS})
+ ${Qt5Core_INCLUDE_DIRS}
+ ${LUA_INCLUDE_DIR}
+ ${SOL2_ROOT}
+)
 
-target_link_libraries(libAn1mated Qt5::Core)
+target_link_libraries(libAn1mated Qt5::Core ${LUA_LIBRARIES})
 
 # Get include dir and headers
 set(AN1MATED_INCLUDE_DIR "include/An1mated/")
@@ -75,12 +80,17 @@ target_include_directories(An1mated PUBLIC
 	${LIB_AN1MATED_INCLUDE_DIR}
 	${AN1MATED_INCLUDE_DIR}
 	${Qt5Core_INCLUDE_DIRS}
-	${Qt5Widgets_INCLUDE_DIRS})
+	${Qt5Widgets_INCLUDE_DIRS}
+	${SOL2_ROOT}
+	${LUA_INCLUDE_DIR}
+)
 
 target_link_libraries(An1mated 
 	libAn1mated 
 	Qt5::Core 
-	Qt5::Widgets)
+	Qt5::Widgets
+	${LUA_LIBRARIES}
+)
 
 ### Unit testing
 if(TESTS)
