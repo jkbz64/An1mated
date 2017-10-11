@@ -23,6 +23,8 @@ protected:
     QRect m_frameRect;
     QGraphicsItem* m_background;
     QGraphicsItem* m_frame;
+    bool m_isDragging;
+    QPoint m_startDragPosition;
 };
 
 #endif // FRAMEEDITVIEW_H
