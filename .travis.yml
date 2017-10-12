@@ -32,12 +32,12 @@ addons:
       name: "jkbz64/An1mated"
       description: "Build submitted via Travis CI"
     notification_email: kamiljkbz@gmail.com
-    build_command_prepend: "cd build; cmake ..; make clean;"
+    build_command_prepend: "cd build; cmake .. -DCMAKE_CXX_STANDARD_LIBRARIES="-ldl -lreadline"; make clean;"
     build_command:   "make -j 2"
     branch_pattern: coverity_scan
 
 script:
  - mkdir build
  - cd build
- - cmake .. && make -j 2
+ - cmake .. -DCMAKE_CXX_STANDARD_LIBRARIES="-ldl -lreadline" && make -j 2
  - make test
