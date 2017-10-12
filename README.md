@@ -10,3 +10,10 @@ C++14
 Qt5 - Core, Widgets and optionally Test
 Lua 5.3
 ```
+
+### Building
+```
+mkdir build && cd build
+cmake ..
+make -j4
+```

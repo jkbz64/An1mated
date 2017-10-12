@@ -54,11 +54,14 @@ set_target_properties(libAn1mated PROPERTIES PREFIX "")
 target_include_directories(libAn1mated PUBLIC
  ${LIB_AN1MATED_INCLUDE_DIR}
  ${Qt5Core_INCLUDE_DIRS}
- ${LUA_INCLUDE_DIR}
+ ${LUA53_INCLUDE_DIR}
  ${SOL2_ROOT}
 )
 
-target_link_libraries(libAn1mated Qt5::Core ${LUA_LIBRARIES})
+target_link_libraries(libAn1mated
+	stdc++fs
+	Qt5::Core
+	${LUA53_LIBRARIES})
 
 # Get include dir and headers
 set(AN1MATED_INCLUDE_DIR "include/An1mated/")
@@ -82,14 +85,15 @@ target_include_directories(An1mated PUBLIC
 	${Qt5Core_INCLUDE_DIRS}
 	${Qt5Widgets_INCLUDE_DIRS}
 	${SOL2_ROOT}
-	${LUA_INCLUDE_DIR}
+	${LUA53_INCLUDE_DIR}
 )
 
 target_link_libraries(An1mated 
 	libAn1mated 
 	Qt5::Core 
 	Qt5::Widgets
-	${LUA_LIBRARIES}
+	stdc++fs
+	${LUA53_LIBRARIES}
 )
 
 ### Unit testing
@@ -108,11 +112,35 @@ if(TESTS)
 			${LIB_AN1MATED_INCLUDE_DIR}
 			${QT5Core_INCLUDE_DIRS}
 			${QT5Test_INCLUDE_DIRS}
+			${SOL2_ROOT}
+			${LUA53_INCLUDE_DIR}
 		)
-		target_link_libraries(${test_name} libAn1mated Qt5::Test Qt5::Core)
+		target_link_libraries(${test_name}
+			libAn1mated
+			Qt5::Test
+			Qt5::Core
+			stdc++fs
+			${LUA53_LIBRARIES})
 		# Add test to cmmake's CTest
 		add_test(${test_name} ${test_name})
 	endforeach()
 endif()
 
 
+# Copy default writers / readers into binary dir
+file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/readers)
+file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/writers)
+
+file(GLOB READERS_SRC readers/*.lua)
+source_group(READERS FILES ${READERS_SRC})
+foreach(READER ${READERS_SRC})
+	get_filename_component(READER_NAME ${READER} NAME)
+	configure_file(readers/${READER_NAME} ${CMAKE_BINARY_DIR}/readers/${READER_NAME} @ONLY)
+endforeach()
+
+file(GLOB WRITERS_SRC writers/*.lua)
+source_group(WRITERS FILES ${WRITERS_SRC})
+foreach(WRITER ${WRITERS_SRC})
+	get_filename_component(WRITER_NAME ${WRITER} NAME)
+	configure_file(writers/${WRITER_NAME} ${CMAKE_BINARY_DIR}/writers/${WRITER_NAME} @ONLY)
+endforeach()

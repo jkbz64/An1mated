@@ -1,5 +1,14 @@
 #include <animation.hpp>
 
+Animation::Animation()
+    :
+      QObject(nullptr),
+      m_name(""),
+      m_spritesheet("")
+{
+
+}
+
 Animation::Animation(const QString &name, const QString& spritesheet)
     :
       QObject(nullptr),
@@ -26,6 +35,11 @@ Animation::Animation(Animation &&animation)
       m_frames(std::move(animation.m_frames))
 {
 
+}
+
+void Animation::setName(const QString &name)
+{
+    m_name = name;
 }
 
 void Animation::setSpritesheetName(const QString &spritesheetName)

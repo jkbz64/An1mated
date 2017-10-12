@@ -21,9 +21,10 @@ public:
     explicit MainWindow(QWidget* parent = nullptr, Qt::WindowFlags flags = 0);
     ~MainWindow();
     void setEditorType(const Document::DocumentType&);
-private slots:
+public slots:
     void newAnimationDocument();
     void openFile();
+    void setDocument(std::shared_ptr<Document>);
 private:
     Ui::MainWindow* m_ui;
     DocumentManager* m_documentManager;

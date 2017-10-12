@@ -9,12 +9,14 @@
 class Animation : public QObject
 {
     Q_OBJECT
-public:
-    explicit Animation(const QString&, const QString& = QString());
+public:   
+    Animation();
+    Animation(const QString&, const QString& = QString());
     Animation(const Animation&);
     Animation(Animation&&);
     virtual ~Animation() = default;
 
+    void setName(const QString&);
     void setSpritesheetName(const QString&);
 
     const QString& getName() const;
