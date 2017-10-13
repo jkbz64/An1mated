@@ -15,13 +15,13 @@ endif()
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
-
 # Enable automoc / autoic
 option(CMAKE_AUTOMOC "Enable automoc" ON)
 option(CMAKE_AUTOUIC "Enable autouic" ON)
-
 # Enable tests?
 option(TESTS "Enable build of tests" ON)
+# Enable defaul writers and readers?
+option(DEFAULTS "Copy default writers and readers" ON)
 
 # Detect Qt5 package with Core and Widgets components
 find_package(Qt5 COMPONENTS Core Widgets Test REQUIRED)
@@ -131,16 +131,18 @@ endif()
 file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/readers)
 file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/writers)
 
-file(GLOB READERS_SRC readers/*.lua)
-source_group(READERS FILES ${READERS_SRC})
-foreach(READER ${READERS_SRC})
-	get_filename_component(READER_NAME ${READER} NAME)
-	configure_file(readers/${READER_NAME} ${CMAKE_BINARY_DIR}/readers/${READER_NAME} @ONLY)
-endforeach()
+if(DEFAULTS)
+	file(GLOB READERS_SRC default/readers/*.lua)
+	source_group(READERS FILES ${READERS_SRC})
+	foreach(READER ${READERS_SRC})
+		get_filename_component(READER_NAME ${READER} NAME)
+		configure_file(default/readers/${READER_NAME} ${CMAKE_BINARY_DIR}/readers/${READER_NAME} @ONLY)
+	endforeach()
 
-file(GLOB WRITERS_SRC writers/*.lua)
-source_group(WRITERS FILES ${WRITERS_SRC})
-foreach(WRITER ${WRITERS_SRC})
-	get_filename_component(WRITER_NAME ${WRITER} NAME)
-	configure_file(writers/${WRITER_NAME} ${CMAKE_BINARY_DIR}/writers/${WRITER_NAME} @ONLY)
-endforeach()
+	file(GLOB WRITERS_SRC default/writers/*.lua)
+	source_group(WRITERS FILES ${WRITERS_SRC})
+	foreach(WRITER ${WRITERS_SRC})
+		get_filename_component(WRITER_NAME ${WRITER} NAME)
+		configure_file(default/writers/${WRITER_NAME} ${CMAKE_BINARY_DIR}/writers/${WRITER_NAME} @ONLY)
+	endforeach()
+endif()
