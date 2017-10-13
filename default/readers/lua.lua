@@ -1,3 +1,7 @@
+-- Exposed vars
+-- content - content of file as string
+-- animation - animation which we 'write' to
+
 local animationTable = loadstring(content)()
 animation:setName(animationTable.name)
 animation:setSpritesheet(animationTable.spritesheet or '')

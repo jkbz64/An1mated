@@ -24,7 +24,7 @@ option(TESTS "Enable build of tests" ON)
 option(DEFAULTS "Copy default writers and readers" ON)
 
 # Detect Qt5 package with Core and Widgets components
-find_package(Qt5 COMPONENTS Core Widgets Test REQUIRED)
+find_package(Qt5 REQUIRED Core Widgets OPTIONAL_COMPONENTS Test)
 find_package(Lua53 REQUIRED)
 
 set(SOL2_ROOT ${CMAKE_SOURCE_DIR}/lib/sol2)
@@ -59,9 +59,13 @@ target_include_directories(libAn1mated PUBLIC
 )
 
 target_link_libraries(libAn1mated
-	stdc++fs
 	Qt5::Core
-	${LUA53_LIBRARIES})
+	${LUA53_LIBRARIES}
+)
+
+if(CMAKE_COMPILER_IS_GNUCXX)
+	target_link_libraries(libAn1mated stdc++fs)
+endif()
 
 # Get include dir and headers
 set(AN1MATED_INCLUDE_DIR "include/An1mated/")
@@ -92,9 +96,12 @@ target_link_libraries(An1mated
 	libAn1mated 
 	Qt5::Core 
 	Qt5::Widgets
-	stdc++fs
 	${LUA53_LIBRARIES}
 )
+
+if(CMAKE_COMPILER_IS_GNUCXX)
+	target_link_libraries(An1mated stdc++fs)
+endif()
 
 ### Unit testing
 if(TESTS)

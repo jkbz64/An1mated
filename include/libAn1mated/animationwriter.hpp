@@ -4,14 +4,20 @@
 #include <sol/state.hpp>
 #include <QStringList>
 #include <animation.hpp>
-#include <experimental/filesystem>
+
+#ifdef __linux__
+    #include <experimental/filesystem>
+    namespace std { using namespace std::experimental; }
+#elif _WIN32
+    #include <filesystem>
+#endif
 
 namespace AnimationWriter
 {
     static QStringList getWriteTypes()
     {
         QStringList types;
-        for(auto f : std::experimental::filesystem::directory_iterator("writers"))
+        for(auto f : std::filesystem::directory_iterator("writers"))
             types.append(QString::fromStdString(f.path().stem()));
         return types;
     }
