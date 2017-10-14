@@ -10,8 +10,6 @@ namespace AnimationReader
     static QStringList getReadTypes()
     {
         QStringList types;
-        for(auto f : std::experimental::filesystem::directory_iterator("readers"))
-            types.append(QString::fromStdString(f.path().stem()));
         return types;
     }
 

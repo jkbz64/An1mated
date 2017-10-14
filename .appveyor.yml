@@ -1,0 +1,39 @@
+image:
+ - Visual Studio 2015
+
+environment:
+ QTDIR: 'C:\Qt\5.9.1\mingw53_32'
+ LUA_DIR: 'C:\lua-5.3.4\src\'
+
+clone_folder: c:\projects\source
+
+install:
+- git submodule update --init --recursive
+- cmd: >-
+   set PATH=%PATH%;C:\MinGW\bin
+
+   cd C:\
+  
+   curl -R -O http://www.lua.org/ftp/lua-5.3.4.tar.gz
+   
+   7z x lua-5.3.4.tar.gz
+
+   7z x lua-5.3.4.tar
+
+   cd lua-5.3.4
+
+   mingw32-make mingw install
+build_script:
+- cmd: set PATH=%PATH:C:\Program Files\Git\usr\bin;=% 
+- cmd: >-
+   cd c:\projects\source
+   
+   mkdir build
+
+   cd build
+
+   cmake c:\projects\source -G "MinGW Makefiles" "-DCMAKE_PREFIX_PATH=%QTDIR%; C:\MinGW\"
+
+   mingw32-make libAn1mated
+
+   mingw32-make An1mated
