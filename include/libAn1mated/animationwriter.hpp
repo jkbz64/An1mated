@@ -5,16 +5,22 @@
 #include <QStringList>
 #include <animation.hpp>
 
-#include <experimental/filesystem>
+#include <QDirIterator>
+#include <QFileInfo>
 
 namespace AnimationWriter
 {
     static QStringList getWriteTypes()
     {
         QStringList types;
-	std::experimental::filesystem::path path(u8"writers");
-        for(auto f : std::experimental::filesystem::directory_iterator(path))
-            types.append(QString::fromStdString(f.path().stem().string()));
+        QDirIterator it(QDir::currentPath() + "/writers/");
+        while(it.hasNext())
+        {
+             QFileInfo info(it.next());
+             if(!info.isDir() && info.suffix() == "lua")
+                 types.append(info.baseName());
+        }
+        std::unique(types.begin(), types.end());
         return types;
     }
 

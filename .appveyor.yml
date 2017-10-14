@@ -1,6 +1,8 @@
 image:
  - Visual Studio 2015
 
+os: unstable
+
 environment:
  QTDIR: 'C:\Qt\5.9.1\mingw53_32'
  LUA_DIR: 'C:\lua-5.3.4\src\'
@@ -34,6 +36,4 @@ build_script:
 
    cmake c:\projects\source -G "MinGW Makefiles" "-DCMAKE_PREFIX_PATH=%QTDIR%; C:\MinGW\"
 
-   mingw32-make libAn1mated
-
-   mingw32-make An1mated
+   mingw32-make
