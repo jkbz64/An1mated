@@ -5,13 +5,24 @@
 #include <QString>
 #include <animation.hpp>
 
+#include <QDirIterator>
+#include <QFileInfo>
+
+#include <iostream>
+
 namespace AnimationReader
 {
     static QStringList getReadTypes()
     {
         QStringList types;
-        for(auto f : std::experimental::filesystem::directory_iterator("readers"))
-            types.append(QString::fromStdString(f.path().stem()));
+        QDirIterator it(QDir::currentPath() + "/readers/");
+        while(it.hasNext())
+        {
+             QFileInfo info(it.next());
+             if(!info.isDir())
+                 types.append(info.baseName());
+        }
+        std::unique(types.begin(), types.end());
         return types;
     }
 

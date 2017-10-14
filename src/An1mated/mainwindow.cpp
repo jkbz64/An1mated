@@ -84,16 +84,7 @@ void MainWindow::newAnimationDocument()
 void MainWindow::openFile()
 {
     QStringList types;
-    try
-    {
-        types = AnimationReader::getReadTypes();
-    }
-    catch(std::exception& e)
-    {
-        QMessageBox::warning(this, "No readers directory", QString(e.what()), QMessageBox::Ok);
-        return;
-    }
-
+    types = AnimationReader::getReadTypes();
     if(types.isEmpty())
     {
         QMessageBox::warning(this, "No readers available", "No availabe readers, check reader directory", QMessageBox::Ok);

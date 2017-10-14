@@ -63,10 +63,6 @@ target_link_libraries(libAn1mated
 	${LUA53_LIBRARIES}
 )
 
-if(CMAKE_COMPILER_IS_GNUCXX)
-	target_link_libraries(libAn1mated stdc++fs)
-endif()
-
 # Get include dir and headers
 set(AN1MATED_INCLUDE_DIR "include/An1mated/")
 file(GLOB AN1MATED_HDRS include/An1mated/*.hpp)
@@ -99,10 +95,6 @@ target_link_libraries(An1mated
 	${LUA53_LIBRARIES}
 )
 
-if(CMAKE_COMPILER_IS_GNUCXX)
-	target_link_libraries(An1mated stdc++fs)
-endif()
-
 ### Unit testing
 if(TESTS)
 	enable_testing()
@@ -126,7 +118,6 @@ if(TESTS)
 			libAn1mated
 			Qt5::Test
 			Qt5::Core
-			stdc++fs
 			${LUA53_LIBRARIES})
 		# Add test to cmmake's CTest
 		add_test(${test_name} ${test_name})
