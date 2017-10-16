@@ -110,9 +110,10 @@ AnimationFrameWidget *FramesGallery::createFrameWidget(const AnimationFrame &fra
         QAction newFrameAction(tr("New frame"), this);
         connect(&newFrameAction, &QAction::triggered, [this](bool){ emit newFrameRequested(); });
         QAction removeFrameAction(tr("Remove frame"), this);
-        //TODO
+        connect(&removeFrameAction, &QAction::triggered, [this, frameWidget](bool){ emit deleteFrameRequested(m_layout->indexOf(frameWidget)); });
         QAction editFrameAction(tr("Edit frame"), this);
         connect(&editFrameAction, &QAction::triggered, [this, frameWidget](bool){ emit editFrameRequested(m_layout->indexOf(frameWidget)); });
+
 
         contextMenu.addAction(&newFrameAction);
         contextMenu.addAction(&removeFrameAction);

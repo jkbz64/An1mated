@@ -34,6 +34,8 @@ MainWindow::MainWindow(QWidget *parent, Qt::WindowFlags flags)
     connect(m_ui->actionNewAnimation, &QAction::triggered, this, &MainWindow::newAnimationDocument);
     //Open
     connect(m_ui->actionOpen, &QAction::triggered, this, &MainWindow::openFile);
+    //Save
+    connect(m_ui->actionSave, &QAction::triggered, this, &MainWindow::saveFile);
     ///Exit
     connect(m_ui->actionExit, &QAction::triggered, this, &MainWindow::close);
 
@@ -125,8 +127,48 @@ void MainWindow::openFile()
     }
 }
 
+void MainWindow::saveFile()
+{
+    QStringList types;
+    types = AnimationWriter::getWriteTypes();
+    if(types.isEmpty())
+    {
+        QMessageBox::warning(this, "No writers available", "No availabe writers, check writers directory", QMessageBox::Ok);
+        return;
+    }
+
+    QString filter;
+    filter.append("All Animation files (");
+    for(const auto& type : types)
+        filter.append("*." + type + " ");
+    filter.append(");; ");
+    for(const auto& type : types)
+        filter.append(type.toUpper() + " (*." + type + ");; ");
+    filter.chop(2);
+
+    QString filename = QFileDialog::getSaveFileName(this,
+                                                    tr("Save file"),
+                                                    QDir::currentPath(),
+                                                    filter);
+    QFile openfile(filename);
+    if(openfile.open(QIODevice::WriteOnly))
+    {
+        try{
+            auto content = AnimationWriter::serialize("lua", qobject_cast<AnimationDocument*>(m_currentDocument.get())->getAnimation());
+            openfile.write(content);
+        }catch(sol::error& e)
+        {
+            QMessageBox::warning(this, "Serialization error", QString(e.what()), QMessageBox::Ok);
+        }catch(std::exception& e)
+        {
+
+        }
+    }
+}
+
 void MainWindow::setDocument(std::shared_ptr<Document> document)
 {
+    m_currentDocument = document;
     m_ui->actionSave->setEnabled(false);
     m_ui->actionEditSpritesheet->setEnabled(false);
     if(document)
