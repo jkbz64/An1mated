@@ -24,10 +24,12 @@ public:
 public slots:
     void newAnimationDocument();
     void openFile();
+    void saveFile();
     void setDocument(std::shared_ptr<Document>);
 private:
     Ui::MainWindow* m_ui;
     DocumentManager* m_documentManager;
+    std::shared_ptr<Document> m_currentDocument;
     QStackedLayout* m_editorStack;
 };
 

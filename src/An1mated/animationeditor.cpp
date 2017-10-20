@@ -20,7 +20,6 @@ AnimationEditor::AnimationEditor(QWidget *parent)
 {
     m_ui->setupUi(this);
 
-
     connect(m_ui->framesGallery, &FramesGallery::frameSelected, [this](int index)
     {
        m_ui->frameSlider->setValue(index);
@@ -64,6 +63,12 @@ AnimationEditor::AnimationEditor(QWidget *parent)
                         {
                             QTimer::singleShot(document->getFrame(m_ui->frameSlider->value()).getDelay() * 1000, this, [this]
                             {
+                                if(m_stopAnimation)
+                                {
+                                    m_stopAnimation = false;
+                                    return;
+                                }
+
                                 m_ui->framesGallery->selectFrame(0);
                                 m_ui->playAnimationButton->click();
                             });
@@ -79,15 +84,7 @@ AnimationEditor::AnimationEditor(QWidget *parent)
     connect(m_ui->framesGallery, &FramesGallery::newFrameRequested, this, &AnimationEditor::newFrame);
     connect(m_ui->framesGallery, &FramesGallery::editFrameRequested, this, &AnimationEditor::editFrame);
     connect(m_ui->framesGallery, &FramesGallery::frameDoubleClicked, this, &AnimationEditor::editFrame);
-
-
-    //TODO connect(m_ui->framesGallery, &FramesGallery::deleteFrameRequested, this, &AnimationEditor::deleteFrame);
-    /*connect(m_ui->setBackgroundButton, &QPushButton::released, this, [this]()
-    {
-       QString bgPath = QFileDialog::getOpenFileName(this, tr("Set background"), QDir::current().dirName(), tr("Images (*.png *.jpg)"));
-       if(!bgPath.isEmpty())
-           m_ui->animationPreview->setBackground(QPixmap(bgPath));
-    });*/
+    connect(m_ui->framesGallery, &FramesGallery::deleteFrameRequested, this, &AnimationEditor::deleteFrame);
 }
 
 AnimationEditor::~AnimationEditor()
@@ -110,13 +107,13 @@ void AnimationEditor::setDocument(std::shared_ptr<Document> doc)
     {
         const auto&& currentDocument = qobject_cast<AnimationDocument*>(m_currentDocument.get());
         //From document
-        //Spritesheet
+        //Spritesheet changed handler
         connect(currentDocument, &AnimationDocument::spritesheetChanged, [this](const QPixmap& spritesheet)
         {
            m_ui->animationPreview->setSpritesheet(spritesheet);
            m_ui->framesGallery->setSpritesheet(spritesheet);
         });
-        //Frames
+        //Frames modified handler
         connect(currentDocument, &AnimationDocument::framesModified, [this](const std::vector<AnimationFrame>& frames)
         {
             const int selectedFrameIndex = m_ui->framesGallery->getSelectedFrameIndex();
@@ -163,5 +160,11 @@ void AnimationEditor::editFrame(int index)
         if(dialog.exec() == QDialog::Accepted)
             currentDocument->replaceFrame(index, editedFrame);
     }
+}
+
+void AnimationEditor::deleteFrame(int index)
+{
+    if(m_currentDocument)
+        qobject_cast<AnimationDocument*>(m_currentDocument.get())->removeFrame(index);
 }
 

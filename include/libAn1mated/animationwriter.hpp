@@ -4,21 +4,30 @@
 #include <sol/state.hpp>
 #include <QStringList>
 #include <animation.hpp>
-#include <experimental/filesystem>
+
+#include <QDirIterator>
+#include <QFileInfo>
+
+#include <iostream>
 
 namespace AnimationWriter
 {
     static QStringList getWriteTypes()
     {
         QStringList types;
-        for(auto f : std::experimental::filesystem::directory_iterator("writers"))
-            types.append(QString::fromStdString(f.path().stem()));
+        QDirIterator it(QDir::currentPath() + "/writers/");
+        while(it.hasNext())
+        {
+             QFileInfo info(it.next());
+             if(!info.isDir() && info.suffix() == "lua")
+                 types.append(info.baseName());
+        }
+        std::unique(types.begin(), types.end());
         return types;
     }
 
-    static std::string serialize(QString writer, const Animation& animation)
+    static QByteArray serialize(QString writer, const Animation& animation)
     {
-        std::string content;
         sol::state state;
         state.open_libraries();
         state.new_usertype<Animation>("Animation",
@@ -32,11 +41,25 @@ namespace AnimationWriter
                                       },
                                       "getFrames", &Animation::getFrames
         );
-        state.new_usertype<AnimationFrame>("AnimationFrame");
-        state.set("content", &content);
+
+        state.new_usertype<QRect>("QRect",
+                                  "new", sol::no_constructor,
+                                  "x", &QRect::x,
+                                  "y", &QRect::y,
+                                  "w", &QRect::width,
+                                  "h", &QRect::height);
+
+        state.new_usertype<AnimationFrame>("AnimationFrame",
+                                           "getName", [](AnimationFrame& frame)
+                                           {
+                                               return frame.getName().toStdString();
+                                           },
+                                           "getRect", &AnimationFrame::getRect);
+        state.set("content", "");
         state.set("animation", animation);
-        state.do_file("writers/" + writer.toStdString() + ".lua");
-        return content;
+        state.safe_script_file("writers/" + writer.toStdString() + ".lua");
+        sol::string_view content = state["content"];
+        return QByteArray(content.data());
     }
 }
 

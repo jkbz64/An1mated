@@ -5,13 +5,24 @@
 #include <QString>
 #include <animation.hpp>
 
+#include <QDirIterator>
+#include <QFileInfo>
+
+#include <iostream>
+
 namespace AnimationReader
 {
     static QStringList getReadTypes()
     {
         QStringList types;
-        for(auto f : std::experimental::filesystem::directory_iterator("readers"))
-            types.append(QString::fromStdString(f.path().stem()));
+        QDirIterator it(QDir::currentPath() + "/readers/");
+        while(it.hasNext())
+        {
+             QFileInfo info(it.next());
+             if(!info.isDir())
+                 types.append(info.baseName());
+        }
+        std::unique(types.begin(), types.end());
         return types;
     }
 
@@ -20,6 +31,7 @@ namespace AnimationReader
         sol::state state;
         state.open_libraries();
         state.new_usertype<Animation>("Animation",
+                                      "new", sol::no_constructor,
                                       "setName", [](Animation& animation, const std::string& name)
                                       {
                                           animation.setName(QString::fromStdString(name));
@@ -28,14 +40,12 @@ namespace AnimationReader
                                       {
                                           animation.setSpritesheetName(QString::fromStdString(spritesheet));
                                       },
-                                      "addFrame", static_cast<void (Animation::*)(const AnimationFrame&)>(&Animation::addFrame)
+                                      "addFrame", [](Animation& animation, const std::string& name, int x, int y, int w, int h)
+                                      {
+                                          animation.addFrame(QString::fromStdString(name), QRect(x, y, w, h));
+                                      }
         );
-        state.new_usertype<AnimationFrame>("AnimationFrame");
         Animation animation;
-        state.set_function("addFrame", [&animation](const std::string& name, int x, int y, int w, int h)
-        {
-            animation.addFrame(QString::fromStdString(name), QRect(x, y, w, h));
-        });
         state.set("animation", &animation);
         state.set("content", fileContent);
         state.safe_script_file("readers/" + reader.toStdString() + ".lua");

@@ -15,6 +15,7 @@ public:
 
     virtual bool writeToFile(const QString& = QString()) override;
 
+    const Animation& getAnimation() const;
     const AnimationFrame& getFrame(int) const;
     const std::vector<AnimationFrame>& getFrames() const;
     void addFrame(const QString&, const QRect&);
@@ -34,6 +35,11 @@ signals:
 public:
     Animation m_animation;
 };
+
+inline const Animation& AnimationDocument::getAnimation() const
+{
+    return m_animation;
+}
 
 inline QPixmap AnimationDocument::getSpritesheet() const
 {

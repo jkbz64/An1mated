@@ -24,6 +24,7 @@ signals:
 public slots:
     void newFrame();
     void editFrame(int);
+    void deleteFrame(int);
 private slots:
 
 protected:
