@@ -51,11 +51,22 @@ FrameEditDialog::~FrameEditDialog()
 
 void FrameEditDialog::updateRectValues(const QRect& rect)
 {
+    m_ui->xSpin->blockSignals(true);
+    m_ui->ySpin->blockSignals(true);
+    m_ui->wSpin->blockSignals(true);
+    m_ui->hSpin->blockSignals(true);
+
     m_ui->xSpin->setValue(rect.x());
     m_ui->ySpin->setValue(rect.y());
     m_ui->wSpin->setValue(rect.width());
     m_ui->hSpin->setValue(rect.height());
+
     m_frame.setRect(QRect(m_ui->xSpin->value(), m_ui->ySpin->value(), m_ui->wSpin->value(), m_ui->hSpin->value()));
+
+    m_ui->xSpin->blockSignals(false);
+    m_ui->ySpin->blockSignals(false);
+    m_ui->wSpin->blockSignals(false);
+    m_ui->hSpin->blockSignals(false);
 }
 
 void FrameEditDialog::accept()
