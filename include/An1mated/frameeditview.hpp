@@ -13,6 +13,7 @@ public:
     virtual ~FrameEditView();
     void setSpritesheet(const QPixmap&);
     void setRect(const QRect&);
+    MovableRect* getRect();
 signals:
     void rectModified(QRect);
     void rectChangedPosition(QPoint);

@@ -10,7 +10,6 @@ MovableRect::MovableRect(const QRectF& size, QGraphicsItem *parent) :
     m_dragged(false)
 {
     setFlags(QGraphicsItem::ItemIsMovable);
-    setSelected(true);
 
     QPen pen(Qt::white, 1, Qt::DotLine);
     setPen(pen);
@@ -19,19 +18,13 @@ MovableRect::MovableRect(const QRectF& size, QGraphicsItem *parent) :
 void MovableRect::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     m_dragged = true;
-    setSelected(true);
-    offset = event->pos();
+    QGraphicsRectItem::mousePressEvent(event);
 }
 
 void MovableRect::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
     if(m_dragged)
-    {
-        const auto newPos = event->pos() - offset;
-        setPos(pos().x() + newPos.x(), pos().y() + newPos.y());
-        emit rectModified(QRect(pos().toPoint(), rect().toRect().size()));
-        offset = event->pos();
-    }
+        emit rectModified(QRect(sceneBoundingRect().topLeft().toPoint(), rect().toRect().size()));
     QGraphicsRectItem::mouseMoveEvent(event);
 }
 

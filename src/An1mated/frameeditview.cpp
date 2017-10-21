@@ -45,9 +45,15 @@ void FrameEditView::setRect(const QRect &rect)
             });
             m_scene.addItem(m_frame);
         }
-        else  m_frame->setRect(QRectF(rect));
+        else
+            m_frame->setRect(QRectF(m_frameRect));
     }
     emit rectModified(m_frameRect);
+}
+
+MovableRect* FrameEditView::getRect()
+{
+    return m_frame;
 }
 
 void FrameEditView::resizeEvent(QResizeEvent* event)

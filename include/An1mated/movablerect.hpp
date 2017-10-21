@@ -15,9 +15,7 @@ protected:
     virtual void mousePressEvent(QGraphicsSceneMouseEvent*) override;
     virtual void mouseMoveEvent(QGraphicsSceneMouseEvent*) override;
     virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent*) override;
-
     bool m_dragged;
-    QPointF offset;
 };
 
 
