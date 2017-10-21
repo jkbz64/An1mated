@@ -1,35 +1,26 @@
 #include <movablerect.hpp>
-#include <QMouseEvent>
-#include <QGraphicsSceneMouseEvent>
-#include <QtGlobal>
 #include <QPen>
+#include <QGraphicsScene>
 
 MovableRect::MovableRect(const QRectF& size, QGraphicsItem *parent) :
     QObject(nullptr),
-    QGraphicsRectItem(size, parent),
-    m_dragged(false)
+    QGraphicsRectItem(size, parent)
 {
-    setFlags(QGraphicsItem::ItemIsMovable);
-
+    setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemSendsScenePositionChanges);
     QPen pen(Qt::white, 1, Qt::DotLine);
     setPen(pen);
 }
 
-void MovableRect::mousePressEvent(QGraphicsSceneMouseEvent *event)
+QVariant MovableRect::itemChange(GraphicsItemChange change, const QVariant &value)
 {
-    m_dragged = true;
-    QGraphicsRectItem::mousePressEvent(event);
-}
-
-void MovableRect::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
-{
-    if(m_dragged)
-        emit rectModified(QRect(sceneBoundingRect().topLeft().toPoint(), rect().toRect().size()));
-    QGraphicsRectItem::mouseMoveEvent(event);
-}
-
-void MovableRect::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
-{
-    m_dragged = false;
-    QGraphicsRectItem::mouseReleaseEvent(event);
+    if (change == ItemPositionChange)
+    {
+        const auto newPos = value.toPoint();
+        if(newPos.x() >= 0 && newPos.x() + rect().width() <= scene()->width() && newPos.y() >= 0 && newPos.y() + rect().height() <= scene()->height())
+            emit rectModified(QRect(value.toPoint(), rect().toRect().size()));
+        else
+            return pos();
+        return value.toPointF();
+    }
+    return QGraphicsRectItem::itemChange(change, value);
 }
