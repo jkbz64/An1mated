@@ -121,8 +121,11 @@ void AnimationEditor::setDocument(std::shared_ptr<Document> doc)
             m_ui->framesGallery->selectFrame(selectedFrameIndex);
             m_ui->frameSlider->setValue(selectedFrameIndex);
             m_ui->frameSlider->setMinimum(0);
-            m_ui->frameSlider->setMaximum(frames.size() - 1);
-            m_ui->maxFramesLabel->setText(QString::number(frames.size() - 1));
+            if(!frames.empty())
+                m_ui->frameSlider->setMaximum(frames.size() - 1);
+            else
+                m_ui->frameSlider->setMaximum(0);
+            m_ui->maxFramesLabel->setText(QString::number(m_ui->frameSlider->maximum()));
         });
         connect(m_ui->framesGallery, &FramesGallery::frameMoved, currentDocument, &AnimationDocument::moveFrame);
 
