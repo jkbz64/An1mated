@@ -113,7 +113,7 @@ void MainWindow::openFile()
         {
             try {
                 auto&& animation = AnimationReader::deserialize(fileinfo.suffix(), openfile.readAll().toStdString());
-                m_documentManager->addDocument<AnimationDocument>(std::move(animation));
+                m_documentManager->addDocument<AnimationDocument>(std::move(animation), fileinfo.absoluteFilePath());
             }
             catch(sol::error& e)
             {

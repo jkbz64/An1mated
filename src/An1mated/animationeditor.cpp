@@ -55,7 +55,7 @@ AnimationEditor::AnimationEditor(QWidget *parent)
                     }
 
                     m_ui->framesGallery->selectFrame(m_ui->frameSlider->value() + 1);
-                    if(m_ui->frameSlider->value() + 1 <= document->getFrames().size() - 1)
+                    if(m_ui->frameSlider->value() + 1 <= static_cast<int>(document->getFrames().size()) - 1)
                         m_ui->playAnimationButton->click();
                     else
                     {
@@ -79,7 +79,7 @@ AnimationEditor::AnimationEditor(QWidget *parent)
         }
     });
 
-    connect(m_ui->stopAnimationButton, &QPushButton::released, [this]() { m_stopAnimation = true; });
+    connect(m_ui->stopAnimationButton, &QPushButton::released, [this] { m_stopAnimation = true; });
 
     connect(m_ui->framesGallery, &FramesGallery::newFrameRequested, this, &AnimationEditor::newFrame);
     connect(m_ui->framesGallery, &FramesGallery::editFrameRequested, this, &AnimationEditor::editFrame);
@@ -131,8 +131,9 @@ void AnimationEditor::setDocument(std::shared_ptr<Document> doc)
 
         m_ui->animationPreview->setSpritesheet(currentDocument->getSpritesheet());
         m_ui->framesGallery->setSpritesheet(currentDocument->getSpritesheet());
-        m_ui->framesGallery->setFrames(currentDocument->getFrames());
+        emit currentDocument->framesModified(currentDocument->getFrames());
         m_ui->framesGallery->selectFrame(0);
+        m_ui->frameSlider->setValue(0);
     }
     else
     {

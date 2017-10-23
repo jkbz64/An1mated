@@ -81,7 +81,7 @@ AnimationFrameWidget *FramesGallery::createFrameWidget(const AnimationFrame &fra
         //Remove widget from layout
         m_layout->removeWidget(m_draggedFrame);
         //Make spacer width and height same as dragged frame
-        m_dragSpacer->changeSize(m_draggedFrame->size().width(), m_draggedFrame->size().height());
+        m_dragSpacer->changeSize(m_draggedFrame->size().width() + 5, m_draggedFrame->size().height());
         //And insert spacer at position
         m_layout->insertSpacerItem(m_spacerIndex, m_dragSpacer);
     });
