@@ -35,19 +35,11 @@ void FramesGallery::reset()
 void FramesGallery::setFrames(const std::vector<AnimationFrame>& frames)
 {
     clearGallery();
-
-    unsigned int i = 0;
     for(const AnimationFrame& frame : frames)
     {
         m_frameWidgets.push_back(createFrameWidget(frame));
         m_layout->addWidget(m_frameWidgets.back());
-        ++i;
     }
-
-    if(!m_frameWidgets.empty())
-        selectFrame(0);
-    else
-        m_selectedFrameIndex = -1;
 }
 
 void FramesGallery::selectFrame(int at)

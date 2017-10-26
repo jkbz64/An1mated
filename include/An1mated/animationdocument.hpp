@@ -16,7 +16,7 @@ public:
     virtual bool writeToFile(const QString& = QString()) override;
 
     const Animation& getAnimation() const;
-    const AnimationFrame& getFrame(int) const;
+    const AnimationFrame& getFrame(std::size_t) const;
     const std::vector<AnimationFrame>& getFrames() const;
     void addFrame(const QString&, const QRect&);
     void addFrame(const AnimationFrame&);
@@ -46,9 +46,15 @@ inline QPixmap AnimationDocument::getSpritesheet() const
     return m_animation.getSpritesheetName();
 }
 
-inline const AnimationFrame& AnimationDocument::getFrame(int index) const
+inline const AnimationFrame& AnimationDocument::getFrame(std::size_t index) const
 {
-    return m_animation.getFrames()[index];
+    if(index < m_animation.getFrames().size())
+        return m_animation.getFrames()[index];
+    else
+    {
+        static AnimationFrame nullFrame;
+        return nullFrame;
+    }
 }
 
 inline const std::vector<AnimationFrame>& AnimationDocument::getFrames() const

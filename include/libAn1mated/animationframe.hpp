@@ -9,6 +9,7 @@ class AnimationFrame
 {
 public:
     AnimationFrame(const QString&, const QRect& = QRect(), float = 0.5f);
+    AnimationFrame();
 
     const QString& getName() const;
     const QRect& getRect() const;

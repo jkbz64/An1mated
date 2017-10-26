@@ -22,7 +22,10 @@ AnimationEditor::AnimationEditor(QWidget *parent)
 
     connect(m_ui->framesGallery, &FramesGallery::frameSelected, [this](int index)
     {
-       m_ui->frameSlider->setValue(index);
+        if(index == m_ui->frameSlider->value())
+            emit m_ui->frameSlider->valueChanged(index);
+        else
+            m_ui->frameSlider->setValue(index);
     });
 
     connect(m_ui->frameSlider, &QSlider::valueChanged, [this](int index)
@@ -36,7 +39,6 @@ AnimationEditor::AnimationEditor(QWidget *parent)
     {
        m_ui->framesGallery->selectFrame(index);
     });
-
 
     connect(m_ui->playAnimationButton, &QPushButton::released, [this]()
     {
@@ -118,7 +120,6 @@ void AnimationEditor::setDocument(std::shared_ptr<Document> doc)
         {
             const int selectedFrameIndex = m_ui->framesGallery->getSelectedFrameIndex();
             m_ui->framesGallery->setFrames(frames);
-            m_ui->framesGallery->selectFrame(selectedFrameIndex);
             m_ui->frameSlider->setValue(selectedFrameIndex);
             m_ui->frameSlider->setMinimum(0);
             if(!frames.empty())
@@ -132,8 +133,6 @@ void AnimationEditor::setDocument(std::shared_ptr<Document> doc)
         m_ui->animationPreview->setSpritesheet(currentDocument->getSpritesheet());
         m_ui->framesGallery->setSpritesheet(currentDocument->getSpritesheet());
         emit currentDocument->framesModified(currentDocument->getFrames());
-        m_ui->framesGallery->selectFrame(0);
-        m_ui->frameSlider->setValue(0);
     }
     else
     {

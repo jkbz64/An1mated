@@ -1,5 +1,13 @@
 #include <animationframe.hpp>
 
+AnimationFrame::AnimationFrame()
+    : m_name(""),
+      m_rect(QRect()),
+      m_delay(0.5)
+{
+
+}
+
 AnimationFrame::AnimationFrame(const QString &frameName, const QRect &rect, float delay)
     :
       m_name(frameName),

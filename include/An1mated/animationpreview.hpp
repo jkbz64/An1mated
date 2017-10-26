@@ -15,7 +15,7 @@ public:
     void reset();
     void setBackground(const QPixmap& = QPixmap());
     void setSpritesheet(const QPixmap& = QPixmap());
-    void setFrame(const AnimationFrame&);
+    void setFrame(const AnimationFrame& = AnimationFrame());
 protected:
     virtual void resizeEvent(QResizeEvent*) override;
     QGraphicsScene m_animationScene;

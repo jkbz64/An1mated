@@ -42,10 +42,15 @@ void AnimationPreview::setFrame(const AnimationFrame& frame)
 {
     if(m_frame)
         m_animationScene.removeItem(m_frame);
-    m_frame = m_animationScene.addPixmap(m_spritesheet.copy(frame.getRect()));
-    if(!m_background)
-        m_framePosition = QPoint(size().width() / 2, size().height() / 2);
-    m_frame->setPos(m_framePosition);
+
+
+    if(!frame.getName().isEmpty())
+    {
+        m_frame = m_animationScene.addPixmap(m_spritesheet.copy(frame.getRect()));
+        if(!m_background)
+            m_framePosition = QPoint(size().width() / 2, size().height() / 2);
+        m_frame->setPos(m_framePosition);
+    }
 }
 
 void AnimationPreview::setBackground(const QPixmap &pixmap)
