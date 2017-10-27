@@ -19,7 +19,6 @@ AnimationEditor::AnimationEditor(QWidget *parent)
       m_stopAnimation(false)
 {
     m_ui->setupUi(this);
-
     connect(m_ui->framesGallery, &FramesGallery::frameSelected, [this](int index)
     {
         if(index == m_ui->frameSlider->value())
@@ -128,6 +127,7 @@ void AnimationEditor::setDocument(std::shared_ptr<Document> doc)
                 m_ui->frameSlider->setMaximum(0);
             m_ui->maxFramesLabel->setText(QString::number(m_ui->frameSlider->maximum()));
         });
+
         connect(m_ui->framesGallery, &FramesGallery::frameMoved, currentDocument, &AnimationDocument::moveFrame);
 
         m_ui->animationPreview->setSpritesheet(currentDocument->getSpritesheet());

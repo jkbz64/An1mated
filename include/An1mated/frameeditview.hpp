@@ -21,6 +21,9 @@ private slots:
     void scalingTime(qreal);
     void animFinished();
 protected:
+    virtual void mousePressEvent(QMouseEvent*) override;
+    virtual void mouseMoveEvent(QMouseEvent*) override;
+    virtual void mouseReleaseEvent(QMouseEvent*) override;
     virtual void resizeEvent(QResizeEvent*) override;
     virtual void wheelEvent(QWheelEvent*) override;
     QGraphicsScene m_scene;

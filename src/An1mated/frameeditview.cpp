@@ -16,6 +16,7 @@ FrameEditView::FrameEditView(QWidget* parent)
 {
     setScene(&m_scene);
     setRenderHint(QPainter::Antialiasing, true);
+    centerOn(viewport()->rect().center());
 }
 
 FrameEditView::~FrameEditView()
@@ -43,6 +44,7 @@ void FrameEditView::setRect(const QRect &rect)
             {
                 emit rectModified(rect);
             });
+            connect(m_frame, &MovableRect::rectPressed, this, [this]{ m_isDragging = false;});
             m_scene.addItem(m_frame);
         }
         else
@@ -55,6 +57,41 @@ MovableRect* FrameEditView::getRect()
 {
     return m_frame;
 }
+
+void FrameEditView::mousePressEvent(QMouseEvent *event)
+{
+    if(!m_frame->isUnderMouse() && event->button() == Qt::LeftButton)
+    {
+        m_isDragging = true;
+        m_startDragPosition = event->pos();
+    }
+    QGraphicsView::mousePressEvent(event);
+}
+
+void FrameEditView::mouseMoveEvent(QMouseEvent *event)
+{
+    if(m_isDragging)
+    {
+        QPointF center = mapToScene(viewport()->rect().center());
+
+        QPointF oldP = mapToScene(m_startDragPosition);
+        QPointF newP = mapToScene(event->pos());
+        QPointF tr = newP - oldP;
+
+        centerOn(center.x() - tr.x(), center.y() - tr.y());
+
+        m_startDragPosition = event->pos();
+    }
+    QGraphicsView::mouseMoveEvent(event);
+}
+
+void FrameEditView::mouseReleaseEvent(QMouseEvent *event)
+{
+    if(event->button() == Qt::MiddleButton)
+        m_isDragging = false;
+    QGraphicsView::mouseReleaseEvent(event);
+}
+
 
 void FrameEditView::resizeEvent(QResizeEvent* event)
 {

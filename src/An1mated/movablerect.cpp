@@ -7,7 +7,7 @@ MovableRect::MovableRect(const QRectF& size, QGraphicsItem *parent) :
     QGraphicsRectItem(size, parent)
 {
     setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemSendsScenePositionChanges);
-    QPen pen(Qt::white, 1, Qt::DotLine);
+    QPen pen(Qt::magenta, 1, Qt::DotLine);
     setPen(pen);
 }
 
@@ -20,7 +20,12 @@ QVariant MovableRect::itemChange(GraphicsItemChange change, const QVariant &valu
             emit rectModified(QRect(value.toPoint(), rect().toRect().size()));
         else
             return pos();
-        return value.toPointF();
+        return value.toPoint();
     }
     return QGraphicsRectItem::itemChange(change, value);
+}
+
+void MovableRect::mousePressEvent(QGraphicsSceneMouseEvent *event)
+{
+    return rectPressed();
 }
