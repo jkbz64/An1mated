@@ -11,8 +11,7 @@ FrameEditView::FrameEditView(QWidget* parent)
       m_frame(nullptr),
       m_isDragging(false),
       m_startDragPosition(0, 0),
-      factor(1.0),
-      _numScheduledScalings(0)
+      m_numScheduledScalings(0)
 {
     setScene(&m_scene);
     setRenderHint(QPainter::Antialiasing, true);
@@ -97,11 +96,11 @@ void FrameEditView::resizeEvent(QResizeEvent* event)
 
 void FrameEditView::wheelEvent(QWheelEvent *event)
 {
-    int numDegrees = event->delta() / 8;
-    int numSteps = numDegrees / 15;
-    _numScheduledScalings += numSteps;
-    if (_numScheduledScalings * numSteps < 0)
-        _numScheduledScalings = numSteps;
+    const int numDegrees = event->delta() / 8;
+    const int numSteps = numDegrees / 15;
+    m_numScheduledScalings += numSteps;
+    if (m_numScheduledScalings * numSteps < 0)
+        m_numScheduledScalings = numSteps;
 
     QTimeLine *anim = new QTimeLine(350, this);
     anim->setUpdateInterval(20);
@@ -113,15 +112,15 @@ void FrameEditView::wheelEvent(QWheelEvent *event)
 
 void FrameEditView::scalingTime(qreal x)
 {
-    factor = 1.0 + qreal(_numScheduledScalings) / 300.0;
+    const auto factor = 1.0 + qreal(m_numScheduledScalings) / 300.0;
     scale(factor, factor);
 }
 
 void FrameEditView::animFinished()
 {
-    if (_numScheduledScalings > 0)
-        _numScheduledScalings--;
+    if (m_numScheduledScalings > 0)
+        m_numScheduledScalings--;
     else
-        _numScheduledScalings++;
+        m_numScheduledScalings++;
     sender()->deleteLater();
 }

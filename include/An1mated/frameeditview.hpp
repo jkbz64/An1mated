@@ -32,8 +32,7 @@ protected:
     MovableRect* m_frame;
     bool m_isDragging;
     QPoint m_startDragPosition;
-    qreal factor;
-    int _numScheduledScalings;
+    int m_numScheduledScalings;
 };
 
 #endif // FRAMEEDITVIEW_H
