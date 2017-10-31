@@ -6,9 +6,14 @@ set(CMAKE_BUILD_TYPE Debug CACHE STRING "Choose the type of build(Release or Deb
 set(LIB_AN1MATED_BUILD_TYPE Shared CACHE STRING "Choose the type of libAn1mated build(Static OR Shared)")
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake_modules/")
 
+
 # Enable some flags when not using msvc compiler
 if (NOT MSVC)
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wpedantic -pedantic -pedantic-errors")
+	if (CMAKE_BUILD_TYPE MATCHES "Debug")
+		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wpedantic -pedantic -pedantic-errors -g")
+	elseif (CMAKE_BUILD_TYPE MATCHES "Release")
+		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3")
+	endif()
 endif()
 
 
@@ -97,7 +102,7 @@ target_link_libraries(An1mated
 )
 
 ### Unit testing
-if(TESTS)
+if (TESTS)
 	enable_testing()
 	# Take all test files
 	file(GLOB TEST_SRC tests/test*.cpp)

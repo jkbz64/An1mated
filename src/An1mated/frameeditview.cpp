@@ -32,25 +32,20 @@ void FrameEditView::setSpritesheet(const QPixmap &spritesheet)
     m_background->setZValue(-1);
 }
 
-void FrameEditView::setRect(const QRect &rect)
+void FrameEditView::setRect(const QRect& rect)
 {
-    m_frameRect = rect;
-    if(m_background)
+    if(m_frame)
+        m_frame->deleteLater();
+
+    m_frame = new MovableRect(rect);
+    connect(m_frame, &MovableRect::rectModified, this, [this](const QRect &rect)
     {
-        if(!m_frame)
-        {
-            m_frame = new MovableRect(rect);
-            connect(m_frame, &MovableRect::rectModified, this, [this](const QRect &rect)
-            {
-                emit rectModified(rect);
-            });
-            connect(m_frame, &MovableRect::rectPressed, this, [this]{ m_isDragging = false;});
-            m_scene.addItem(m_frame);
-        }
-        else
-            m_frame->setRect(QRectF(m_frameRect));
-    }
-    emit rectModified(m_frameRect);
+        emit rectModified(rect);
+    });
+    connect(m_frame, &MovableRect::rectPressed, this, [this]{ m_isDragging = false;});
+    m_scene.addItem(m_frame);
+
+    emit rectModified(rect);
 }
 
 MovableRect* FrameEditView::getRect()

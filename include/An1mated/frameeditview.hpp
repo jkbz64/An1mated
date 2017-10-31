@@ -11,6 +11,7 @@ class FrameEditView : public QGraphicsView
 public:
     FrameEditView(QWidget* parent = nullptr);
     virtual ~FrameEditView();
+
     void setSpritesheet(const QPixmap&);
     void setRect(const QRect&);
     MovableRect* getRect();
@@ -27,7 +28,6 @@ protected:
     virtual void resizeEvent(QResizeEvent*) override;
     virtual void wheelEvent(QWheelEvent*) override;
     QGraphicsScene m_scene;
-    QRect m_frameRect;
     QGraphicsItem* m_background;
     MovableRect* m_frame;
     bool m_isDragging;

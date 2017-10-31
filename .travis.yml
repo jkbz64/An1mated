@@ -39,5 +39,5 @@ addons:
 script:
  - mkdir build
  - cd build
- - cmake .. -DCMAKE_CXX_STANDARD_LIBRARIES="-ldl -lreadline" && make -j 2
+ - cmake -DCMAKE_CXX_STANDARD_LIBRARIES="-ldl -lreadline" -DCMAKE_BUILD_TYPE="Debug"  .. && make -j 2
  - make test

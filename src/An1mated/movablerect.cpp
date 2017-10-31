@@ -25,7 +25,7 @@ QVariant MovableRect::itemChange(GraphicsItemChange change, const QVariant &valu
     return QGraphicsRectItem::itemChange(change, value);
 }
 
-void MovableRect::mousePressEvent(QGraphicsSceneMouseEvent *event)
+void MovableRect::mousePressEvent(QGraphicsSceneMouseEvent*)
 {
     return rectPressed();
 }
