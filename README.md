@@ -1,5 +1,5 @@
 # An1mated
-WIP Animation Editor
+Animation Editor
 
 [![Build Status](https://travis-ci.org/jkbz64/An1mated.svg?branch=master)](https://travis-ci.org/jkbz64/An1mated)
 [![Build status](https://ci.appveyor.com/api/projects/status/tmfb4njhb4p51498/branch/master?svg=true)](https://ci.appveyor.com/project/jkbz64/an1mated/branch/master)
