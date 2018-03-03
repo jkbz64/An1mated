@@ -3,12 +3,7 @@ sudo: required
 dist: trusty
 compiler: gcc
 
-env:
- global:
- - secure: "DvzsBC0mZT7rc9vSmW1vEacunNo2UxGUYaxVtixHASuM5J7jsX7NaPYd2XcDG4OdCryWRq2VkiFzTNA7IRUz3I4Kz+S3mQz+ZYSMUH36S/syJykepTVm29S7TX8WPpH8sPEVIaiiJ+l7cW18G7uXoBKC3vMNZwKOruE5ecu3KdQKlpGkcvE9RpTJANm7DwJs0eKK4VolO1/CvAvbY7rzvjfE4g2VPUzDkQZXJnkKg57TgL6eauB3H07BqbTDyC2kAKAV6NgDGw1mAwKpEAOq6ohlS2xF1AXa9ANPJkApM5rE2kU97V401zG52scQik0DKA4XMitO54maqrTpXqDEtmuyBRVCvOtugdgejKH1T6ipcExXHNkREJVaekDCj+T3zqzKLNZkU7y0xx6pO/Avu2XOrvEomuMAoAsAJdrOV1uMsIV5s5FajFA+XQ+pMSaQoiaGAAbmmmRhifrIPmtQn+0Evj3YeIhz2cGhL4WtghzGDv5SHeo2K1MHsGGC4A5A+qRZE0bswwKduQDuylbEuKeGt1IyCkUv9cqGLEWO93xop5DZP48VOzkmlqastF3KQ2nJUwZIYO9tyerfeKNMM5AkNs1IOmvY4jklUy04RiCpufq7ly/eI8OyCA8eF0/awz+HbZxTIpZCBK9EEndnK6XXKt6LS+jakv/2UUTy7Sw="
-
 before_install:
- - echo -n | openssl s_client -connect scan.coverity.com:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | sudo tee -a /etc/ssl/certs/ca-
  - export DISPLAY=:99.0
  - sh -e /etc/init.d/xvfb start
  - sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
@@ -20,21 +15,6 @@ install:
  - sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-6 90
  - sudo apt-get -y install qt59base
  - source /opt/qt59/bin/qt59-env.sh
- - curl -R -O http://www.lua.org/ftp/lua-5.3.4.tar.gz
- - tar zxf lua-5.3.4.tar.gz
- - cd lua-5.3.4
- - sudo make linux install
- - cd ..
-
-addons:
-  coverity_scan:
-    project:
-      name: "jkbz64/An1mated"
-      description: "Build submitted via Travis CI"
-    notification_email: kamiljkbz@gmail.com
-    build_command_prepend: "cd build; cmake .. -DCMAKE_CXX_STANDARD_LIBRARIES=\"-ldl -lreadline\"; make clean;"
-    build_command:   "make -j 2"
-    branch_pattern: coverity_scan
 
 script:
  - mkdir build

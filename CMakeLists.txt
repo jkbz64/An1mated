@@ -132,23 +132,3 @@ if (TESTS)
 	endforeach()
 endif()
 
-
-# Copy default writers / readers into binary dir
-file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/readers)
-file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/writers)
-
-if(DEFAULTS)
-	file(GLOB READERS_SRC default/readers/*.lua)
-	source_group(READERS FILES ${READERS_SRC})
-	foreach(READER ${READERS_SRC})
-		get_filename_component(READER_NAME ${READER} NAME)
-		configure_file(default/readers/${READER_NAME} ${CMAKE_BINARY_DIR}/readers/${READER_NAME} @ONLY)
-	endforeach()
-
-	file(GLOB WRITERS_SRC default/writers/*.lua)
-	source_group(WRITERS FILES ${WRITERS_SRC})
-	foreach(WRITER ${WRITERS_SRC})
-		get_filename_component(WRITER_NAME ${WRITER} NAME)
-		configure_file(default/writers/${WRITER_NAME} ${CMAKE_BINARY_DIR}/writers/${WRITER_NAME} @ONLY)
-	endforeach()
-endif()
