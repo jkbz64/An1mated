@@ -16,8 +16,8 @@ public:
     virtual bool writeToFile(const QString& = QString()) override;
 
     const Animation& getAnimation() const;
-    const AnimationFrame& getFrame(std::size_t) const;
-    const std::vector<AnimationFrame>& getFrames() const;
+    const AnimationFrame& getFrame(int) const;
+    const QVector<AnimationFrame>& getFrames() const;
     void addFrame(const QString&, const QRect&);
     void addFrame(const AnimationFrame&);
     void replaceFrame(int, const AnimationFrame&);
@@ -29,7 +29,7 @@ public:
     QPixmap getSpritesheet() const;
 signals:
     void animationChanged();
-    void framesModified(const std::vector<AnimationFrame>&);
+    void framesModified(const QVector<AnimationFrame>&);
     void spritesheetChanged(const QPixmap&);
     void animationNameChanged(const QString&);
 public:
@@ -46,7 +46,7 @@ inline QPixmap AnimationDocument::getSpritesheet() const
     return m_animation.getSpritesheetName();
 }
 
-inline const AnimationFrame& AnimationDocument::getFrame(std::size_t index) const
+inline const AnimationFrame& AnimationDocument::getFrame(int index) const
 {
     if(index < m_animation.getFrames().size())
         return m_animation.getFrames()[index];
@@ -57,7 +57,7 @@ inline const AnimationFrame& AnimationDocument::getFrame(std::size_t index) cons
     }
 }
 
-inline const std::vector<AnimationFrame>& AnimationDocument::getFrames() const
+inline const QVector<AnimationFrame>& AnimationDocument::getFrames() const
 {
     return m_animation.getFrames();
 }

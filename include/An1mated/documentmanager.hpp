@@ -3,8 +3,8 @@
 
 #include <QObject>
 #include <document.hpp>
-#include <list>
-#include <memory>
+#include <QVector>
+#include <QSharedPointer>
 
 class QTabBar;
 
@@ -21,19 +21,18 @@ public:
     template<class T, typename... Args>
     void addDocument(Args&&... arguments);
 signals:
-    void documentAdded(std::shared_ptr<Document>);
-    void documentRemoved(std::shared_ptr<Document>);
-    void currentDocumentChanged(std::shared_ptr<Document>);
+    void documentAdded(QSharedPointer<Document>);
+    void documentRemoved(QSharedPointer<Document>);
+    void currentDocumentChanged(QSharedPointer<Document>);
 private slots:
     void updateCurrentDocument(int);
     void closeDocumentAt(int);
     void moveDocument(int, int);
 private:
     //Documents
-    std::vector<std::shared_ptr<Document>> m_documents;
+    QVector<QSharedPointer<Document>> m_documents;
     //Document tab bar
     QTabBar* m_documentTabBar;
-    static DocumentManager* m_instance;
 };
 
 
@@ -51,7 +50,7 @@ inline int DocumentManager::getDocumentCount() const
 template<class T, typename... Args>
 inline void DocumentManager::addDocument(Args&&... arguments)
 {
-    m_documents.emplace_back(std::make_shared<T>(std::forward<Args>(arguments)...));
+    m_documents.push_back(QSharedPointer<T>(new T(std::forward<Args>(arguments)...)));
     emit documentAdded(m_documents.back());
 }
 

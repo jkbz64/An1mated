@@ -15,8 +15,25 @@
 #include <QMessageBox>
 #include <QFileInfo>
 
-#include <animationwriter.hpp>
-#include <animationreader.hpp>
+// Writers and readers
+#include <jsoncast.hpp>
+#include <QJsonDocument>
+
+namespace
+{
+    QString getFilter(const QStringList& types)
+    {
+        QString filter;
+        filter.append("All Animation files (");
+        for(const auto& type : types)
+            filter.append("*." + type + " ");
+        filter.append(");; ");
+        for(const auto& type : types)
+            filter.append(type + " (*." + type + ");; ");
+        filter.chop(2);
+        return filter;
+    }
+}
 
 MainWindow::MainWindow(QWidget *parent, Qt::WindowFlags flags)
     :
@@ -41,7 +58,7 @@ MainWindow::MainWindow(QWidget *parent, Qt::WindowFlags flags)
 
 
     //Main layout
-    QVBoxLayout* layout = new QVBoxLayout(centralWidget());
+    auto* layout = new QVBoxLayout(centralWidget());
     //Line under Toolbar
     QWidget* hLine = new QWidget(this);
     hLine->setFixedHeight(2);
@@ -59,7 +76,7 @@ MainWindow::MainWindow(QWidget *parent, Qt::WindowFlags flags)
     noEditorLabel->setAlignment(Qt::AlignCenter);
     m_editorStack->addWidget(noEditorLabel);
     //1 - Editor layer
-    AnimationEditor* animationEditor = new AnimationEditor(this);
+    auto* animationEditor = new AnimationEditor(this);
     m_editorStack->addWidget(animationEditor);
 
     layout->addLayout(m_editorStack);
@@ -85,88 +102,49 @@ void MainWindow::newAnimationDocument()
 
 void MainWindow::openFile()
 {
-    QStringList types;
-    types = AnimationReader::getReadTypes();
-    if(types.isEmpty())
-    {
-        QMessageBox::warning(this, "No readers available", "No availabe readers, check reader directory", QMessageBox::Ok);
-        return;
-    }
-
-    QString filter;
-    filter.append("All Animation files (");
-    for(const auto& type : types)
-        filter.append("*." + type + " ");
-    filter.append(");; ");
-    for(const auto& type : types)
-        filter.append(type.toUpper() + " (*." + type + ");; ");
-    filter.chop(2);
-
+    auto filter = getFilter({"json"});
     QFileInfo fileinfo(QFileDialog::getOpenFileName(this,
                                                     tr("Open file"),
                                                     QDir::currentPath(),
-                                                    filter));
+                                                    filter)
+    );
     if(fileinfo.exists())
     {
         QFile openfile(fileinfo.absoluteFilePath());
         if(openfile.open(QIODevice::ReadOnly))
         {
-            try {
-                auto&& animation = AnimationReader::deserialize(fileinfo.suffix(), openfile.readAll().toStdString());
-                m_documentManager->addDocument<AnimationDocument>(std::move(animation), fileinfo.absoluteFilePath());
-            }
-            catch(sol::error& e)
-            {
-                QMessageBox::warning(this, "Deserialization error", QString(e.what()), QMessageBox::Ok);
-            }
-            catch(std::bad_alloc& e)
-            {
-                QMessageBox::warning(this, "Couldn't allocate document", QString(e.what()), QMessageBox::Ok);
-            }
+            QJsonDocument document;
+            document.fromJson(openfile.readAll());
+            Animation animation;
+            auto object = document.object();
+            from_json(object.value("Animation"), animation);
+            m_documentManager->addDocument<AnimationDocument>(std::move(animation));
         }
     }
 }
 
 void MainWindow::saveFile()
 {
-    QStringList types;
-    types = AnimationWriter::getWriteTypes();
-    if(types.isEmpty())
-    {
-        QMessageBox::warning(this, "No writers available", "No availabe writers, check writers directory", QMessageBox::Ok);
-        return;
-    }
-
-    QString filter;
-    filter.append("All Animation files (");
-    for(const auto& type : types)
-        filter.append("*." + type + " ");
-    filter.append(");; ");
-    for(const auto& type : types)
-        filter.append(type.toUpper() + " (*." + type + ");; ");
-    filter.chop(2);
-
-    QString filename = QFileDialog::getSaveFileName(this,
-                                                    tr("Save file"),
-                                                    QDir::currentPath(),
-                                                    filter);
-    QFile openfile(filename);
+    auto filter = getFilter({"json"});
+    QFileInfo fileinfo(QFileDialog::getSaveFileName(this,
+                                           tr("Save file"),
+                                           QDir::currentPath(),
+                                           filter)
+    );
+    
+    QFile openfile(fileinfo.absoluteFilePath());
     if(openfile.open(QIODevice::WriteOnly))
     {
-        try{
-            auto content = AnimationWriter::serialize("lua", qobject_cast<AnimationDocument*>(m_currentDocument.get())->getAnimation());
-            openfile.write(content);
-        }catch(sol::error& e)
-        {
-            QMessageBox::warning(this, "Serialization error", QString(e.what()), QMessageBox::Ok);
-        }catch(std::exception& e)
-        {
-
-        }
+        json exported;
+        to_json(exported, qobject_cast<AnimationDocument*>(m_currentDocument.data())->getAnimation());
+        QJsonObject obj;
+        obj.insert("Animation", exported);
+        QJsonDocument document(obj);
+        openfile.write(document.toJson());
     }
 }
 
-void MainWindow::setDocument(std::shared_ptr<Document> document)
+void MainWindow::setDocument(QSharedPointer<Document> document)
 {
     m_currentDocument = document;
     m_ui->actionSave->setEnabled(false);

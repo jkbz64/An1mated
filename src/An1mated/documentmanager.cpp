@@ -4,9 +4,6 @@
 #include <QStackedLayout>
 #include <QSpacerItem>
 
-
-DocumentManager* DocumentManager::m_instance = nullptr;
-
 DocumentManager::DocumentManager(QObject* parent)
     :
       QObject(parent),
@@ -20,7 +17,7 @@ DocumentManager::DocumentManager(QObject* parent)
 
 
     connect(m_documentTabBar, &QTabBar::currentChanged, this, &DocumentManager::updateCurrentDocument);
-    connect(this, &DocumentManager::documentAdded, [this](std::shared_ptr<Document> document)
+    connect(this, &DocumentManager::documentAdded, [this](QSharedPointer<Document> document)
     {
         m_documentTabBar->addTab(document->getFileName());
         m_documentTabBar->setCurrentIndex(m_documents.size() - 1);
@@ -41,7 +38,7 @@ void DocumentManager::updateCurrentDocument(int index)
     if(index != -1)
         emit currentDocumentChanged(*(m_documents.begin() + index));
     else
-        emit currentDocumentChanged(std::shared_ptr<Document>());
+        emit currentDocumentChanged(QSharedPointer<Document>());
 }
 
 void DocumentManager::closeDocumentAt(int index)

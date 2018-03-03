@@ -71,12 +71,12 @@ int Animation::getIndexOf(const AnimationFrame &ofFrame)
 
 void Animation::addFrame(const AnimationFrame &frame)
 {
-    m_frames.emplace_back(frame);
+    m_frames.push_back(frame);
 }
 
 void Animation::addFrame(const QString &name, const QRect &rect)
 {
-    m_frames.emplace_back(name, rect);
+    m_frames.push_back(AnimationFrame(name, rect));
 }
 
 void Animation::replaceFrame(int index, const AnimationFrame &frame)
@@ -86,7 +86,7 @@ void Animation::replaceFrame(int index, const AnimationFrame &frame)
 
 void Animation::removeFrame(int index)
 {
-    if(index >= 0 && static_cast<unsigned>(index) < m_frames.size())
+    if(index >= 0 && index < m_frames.size())
         m_frames.erase(m_frames.begin() + index);
 }
 
@@ -112,4 +112,9 @@ void Animation::moveFrameTo(int from, int to)
         while(fromIt != toIt)
             std::iter_swap(fromIt, fromIt--);
     }
+}
+
+void Animation::setFrames(const QVector<AnimationFrame> &frames)
+{
+    m_frames = frames;
 }

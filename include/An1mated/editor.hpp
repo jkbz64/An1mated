@@ -12,13 +12,13 @@ public:
     Editor(QWidget* parent = nullptr) : QWidget(parent) { }
     virtual ~Editor() = default;
 
-    virtual void setDocument(std::shared_ptr<Document>) = 0;
-    std::shared_ptr<Document> getCurrentDocument() const;
+    virtual void setDocument(QSharedPointer<Document>) = 0;
+    QSharedPointer<Document> getCurrentDocument() const;
 protected:
-    std::shared_ptr<Document> m_currentDocument;
+    QSharedPointer<Document> m_currentDocument;
 };
 
-inline std::shared_ptr<Document> Editor::getCurrentDocument() const
+inline QSharedPointer<Document> Editor::getCurrentDocument() const
 {
     return m_currentDocument;
 }

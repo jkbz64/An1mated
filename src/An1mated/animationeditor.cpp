@@ -31,7 +31,7 @@ AnimationEditor::AnimationEditor(QWidget *parent)
     {
         m_ui->currentFrameLabel->setText(QString::number(m_ui->frameSlider->value()));
         if(m_currentDocument)
-            m_ui->animationPreview->setFrame(qobject_cast<AnimationDocument*>(m_currentDocument.get())->getFrame(index));
+            m_ui->animationPreview->setFrame(qobject_cast<AnimationDocument*>(m_currentDocument.data())->getFrame(index));
     });
 
     connect(m_ui->frameSlider, &QSlider::sliderMoved, [this](int index)
@@ -44,7 +44,7 @@ AnimationEditor::AnimationEditor(QWidget *parent)
         if(m_currentDocument)
         {
             m_stopAnimation = false;
-            const auto&& document = qobject_cast<AnimationDocument*>(m_currentDocument.get());
+            const auto&& document = qobject_cast<AnimationDocument*>(m_currentDocument.data());
             if(document->getFrames().size() > 0)
             {
                 QTimer::singleShot(document->getFrame(m_ui->frameSlider->value()).getDelay() * 1000, this, [this, document]()
@@ -93,20 +93,20 @@ AnimationEditor::~AnimationEditor()
     delete m_ui;
 }
 
-void AnimationEditor::setDocument(std::shared_ptr<Document> doc)
+void AnimationEditor::setDocument(QSharedPointer<Document> doc)
 {
     if(m_currentDocument) // Disconnect old document from this editor
     {
         m_currentDocument->disconnect();
         //TODO fix it
-        disconnect(m_ui->framesGallery, &FramesGallery::frameMoved, m_currentDocument.get(), 0);
+        disconnect(m_ui->framesGallery, &FramesGallery::frameMoved, m_currentDocument.data(), 0);
     }
 
     m_currentDocument = std::move(doc);
 
     if(m_currentDocument)
     {
-        const auto&& currentDocument = qobject_cast<AnimationDocument*>(m_currentDocument.get());
+        const auto&& currentDocument = qobject_cast<AnimationDocument*>(m_currentDocument.data());
         //From document
         //Spritesheet changed handler
         connect(currentDocument, &AnimationDocument::spritesheetChanged, [this](const QPixmap& spritesheet)
@@ -115,7 +115,7 @@ void AnimationEditor::setDocument(std::shared_ptr<Document> doc)
            m_ui->framesGallery->setSpritesheet(spritesheet);
         });
         //Frames modified handler
-        connect(currentDocument, &AnimationDocument::framesModified, [this](const std::vector<AnimationFrame>& frames)
+        connect(currentDocument, &AnimationDocument::framesModified, [this](const QVector<AnimationFrame>& frames)
         {
             const int selectedFrameIndex = m_ui->framesGallery->getSelectedFrameIndex();
             m_ui->framesGallery->setFrames(frames);
@@ -145,7 +145,7 @@ void AnimationEditor::newFrame()
 {
     if(m_currentDocument)
     {
-        auto&& currentDocument = qobject_cast<AnimationDocument*>(m_currentDocument.get());
+        auto&& currentDocument = qobject_cast<AnimationDocument*>(m_currentDocument.data());
         AnimationFrame frame("");
         FrameEditDialog dialog(currentDocument->getSpritesheet(), frame, this);
         if(dialog.exec() == QDialog::Accepted)
@@ -157,7 +157,7 @@ void AnimationEditor::editFrame(int index)
 {
     if(m_currentDocument)
     {
-        auto&& currentDocument = qobject_cast<AnimationDocument*>(m_currentDocument.get());
+        auto&& currentDocument = qobject_cast<AnimationDocument*>(m_currentDocument.data());
         AnimationFrame editedFrame = currentDocument->getFrame(index);
         FrameEditDialog dialog(currentDocument->getSpritesheet(), editedFrame, this);
         if(dialog.exec() == QDialog::Accepted)
@@ -168,6 +168,6 @@ void AnimationEditor::editFrame(int index)
 void AnimationEditor::deleteFrame(int index)
 {
     if(m_currentDocument)
-        qobject_cast<AnimationDocument*>(m_currentDocument.get())->removeFrame(index);
+        qobject_cast<AnimationDocument*>(m_currentDocument.data())->removeFrame(index);
 }
 

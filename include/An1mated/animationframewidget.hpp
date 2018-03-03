@@ -1,6 +1,7 @@
 #ifndef ANIMATIONFRAMEWIDGET_HPP
 #define ANIMATIONFRAMEWIDGET_HPP
 
+#include <QPointer>
 #include <QFrame>
 #include <animationframe.hpp>
 
@@ -23,8 +24,8 @@ protected:
     virtual void mouseDoubleClickEvent(QMouseEvent*) override;
     virtual void mouseReleaseEvent(QMouseEvent*) override;
 private:
-    QLabel* m_frameNameLabel;
-    QLabel* m_framePreview;
+    QPointer<QLabel> m_frameNameLabel;
+    QPointer<QLabel> m_framePreview;
 };
 
 

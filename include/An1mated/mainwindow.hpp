@@ -4,7 +4,7 @@
 #include <QMainWindow>
 #include <document.hpp>
 #include <memory>
-
+#include <QPointer>
 
 namespace Ui
 {
@@ -25,12 +25,12 @@ public slots:
     void newAnimationDocument();
     void openFile();
     void saveFile();
-    void setDocument(std::shared_ptr<Document>);
+    void setDocument(QSharedPointer<Document>);
 private:
     Ui::MainWindow* m_ui;
-    DocumentManager* m_documentManager;
-    std::shared_ptr<Document> m_currentDocument;
-    QStackedLayout* m_editorStack;
+    QPointer<DocumentManager> m_documentManager;
+    QSharedPointer<Document> m_currentDocument;
+    QPointer<QStackedLayout> m_editorStack;
 };
 
 

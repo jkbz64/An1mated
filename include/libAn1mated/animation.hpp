@@ -4,7 +4,7 @@
 #include <QObject>
 #include <QString>
 #include <animationframe.hpp>
-#include <vector>
+#include <QVector>
 
 class Animation : public QObject
 {
@@ -18,10 +18,11 @@ public:
 
     void setName(const QString&);
     void setSpritesheetName(const QString&);
-
+    void setFrames(const QVector<AnimationFrame>& frames);
+    
     const QString& getName() const;
     const QString& getSpritesheetName() const;
-    const std::vector<AnimationFrame>& getFrames() const;
+    const QVector<AnimationFrame>& getFrames() const;
 
     int getIndexOf(const QString&);
     int getIndexOf(const AnimationFrame&);
@@ -36,7 +37,7 @@ public:
 private:
     QString m_name;
     QString m_spritesheet;
-    std::vector<AnimationFrame> m_frames;
+    QVector<AnimationFrame> m_frames;
 };
 
 inline const QString& Animation::getName() const
@@ -49,9 +50,24 @@ inline const QString& Animation::getSpritesheetName() const
     return m_spritesheet;
 }
 
-inline const std::vector<AnimationFrame>& Animation::getFrames() const
+inline const QVector<AnimationFrame>& Animation::getFrames() const
 {
     return m_frames;
+}
+
+#include <Meta.h>
+
+namespace meta
+{
+    template<>
+    inline auto registerMembers<Animation>()
+    {
+        return members(
+                member("name", &Animation::getName, &Animation::setName),
+                member("spritesheet", &Animation::getSpritesheetName, &Animation::setSpritesheetName),
+                member("frames", &Animation::getFrames, &Animation::setFrames)
+        );
+    }
 }
 
 #endif

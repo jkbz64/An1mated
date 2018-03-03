@@ -3,7 +3,7 @@
 
 #include <QWidget>
 #include <animation.hpp>
-#include <memory>
+#include <QPointer>
 
 class AnimationFrameWidget;
 class QHBoxLayout;
@@ -17,7 +17,7 @@ public:
     virtual ~FramesGallery();
     void reset();
 
-    void setFrames(const std::vector<AnimationFrame>& = std::vector<AnimationFrame>());
+    void setFrames(const QVector<AnimationFrame>& = QVector<AnimationFrame>());
     void setSpritesheet(const QPixmap& = QPixmap());
     void selectFrame(int);
     int getSelectedFrameIndex() const;
@@ -35,8 +35,8 @@ protected:
 
     void clearGallery();
     QPixmap m_spritesheet;
-    std::vector<AnimationFrameWidget*> m_frameWidgets;
-    unsigned int m_selectedFrameIndex;
+    QVector<QPointer<AnimationFrameWidget>> m_frameWidgets;
+    int m_selectedFrameIndex;
     QHBoxLayout* m_layout;
 
     QPoint m_startDragPos;

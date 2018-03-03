@@ -34,9 +34,8 @@ option(DEFAULTS "Copy default writers and readers" ON)
 
 # Detect Qt5 package with Core and Widgets components
 find_package(Qt5 REQUIRED Core Widgets OPTIONAL_COMPONENTS Test)
-find_package(Lua53 REQUIRED)
 
-set(SOL2_ROOT ${CMAKE_SOURCE_DIR}/lib/sol2)
+set(METASTUFF_ROOT ${CMAKE_SOURCE_DIR}/lib/MetaStuff/include/)
 
 ## Setup libAn1mated library
 # Get include dir and headers
@@ -64,7 +63,7 @@ target_include_directories(libAn1mated PUBLIC
  ${LIB_AN1MATED_INCLUDE_DIR}
  ${Qt5Core_INCLUDE_DIRS}
  ${LUA53_INCLUDE_DIR}
- ${SOL2_ROOT}
+ ${METASTUFF_ROOT}
 )
 
 target_link_libraries(libAn1mated
@@ -93,7 +92,7 @@ target_include_directories(An1mated PUBLIC
 	${AN1MATED_INCLUDE_DIR}
 	${Qt5Core_INCLUDE_DIRS}
 	${Qt5Widgets_INCLUDE_DIRS}
-	${SOL2_ROOT}
+	${METASTUFF_ROOT}
 	${LUA53_INCLUDE_DIR}
 )
 
@@ -120,7 +119,7 @@ if (TESTS)
 			${LIB_AN1MATED_INCLUDE_DIR}
 			${QT5Core_INCLUDE_DIRS}
 			${QT5Test_INCLUDE_DIRS}
-			${SOL2_ROOT}
+			${METASTUFF_ROOT}
 			${LUA53_INCLUDE_DIR}
 		)
 		target_link_libraries(${test_name}

@@ -32,19 +32,19 @@ void FramesGallery::reset()
     setFrames();
 }
 
-void FramesGallery::setFrames(const std::vector<AnimationFrame>& frames)
+void FramesGallery::setFrames(const QVector<AnimationFrame>& frames)
 {
     clearGallery();
     for(const AnimationFrame& frame : frames)
     {
-        m_frameWidgets.push_back(createFrameWidget(frame));
+        m_frameWidgets.push_back(QPointer<AnimationFrameWidget>(createFrameWidget(frame)));
         m_layout->addWidget(m_frameWidgets.back());
     }
 }
 
 void FramesGallery::selectFrame(int at)
 {
-    if(at >= 0 && static_cast<unsigned>(at) < m_frameWidgets.size())
+    if(at >= 0 && at < m_frameWidgets.size())
     {
         emit m_frameWidgets[at]->framePressed();
         emit m_frameWidgets[at]->frameReleased();
@@ -52,7 +52,7 @@ void FramesGallery::selectFrame(int at)
     }
 }
 
-AnimationFrameWidget *FramesGallery::createFrameWidget(const AnimationFrame &frame)
+AnimationFrameWidget* FramesGallery::createFrameWidget(const AnimationFrame &frame)
 {
     AnimationFrameWidget* frameWidget = new AnimationFrameWidget(frame.getName(),
                                                                  m_spritesheet.copy(frame.getRect()),

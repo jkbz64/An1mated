@@ -9,7 +9,7 @@ WIP Animation Editor
 ```
 C++14
 Qt5 - Core, Widgets and optionally Test
-Lua 5.3
+MetaStuff - Custom exports / imports
 ```
 
 ### Building

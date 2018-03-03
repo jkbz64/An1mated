@@ -18,7 +18,7 @@ public:
     AnimationEditor(QWidget* parent = nullptr);
     virtual ~AnimationEditor();
 
-    virtual void setDocument(std::shared_ptr<Document>) override;
+    virtual void setDocument(QSharedPointer<Document>) override;
 signals:
 
 public slots:
