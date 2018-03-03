@@ -5,12 +5,13 @@ os: unstable
 
 environment:
  QTDIR: 'C:\Qt\5.10.0\mingw53_32'
- LUA_DIR: 'C:\lua-5.3.4\src\'
 
 clone_folder: c:\projects\source
 
 install:
 - git submodule update --init --recursive
+- cmd: >-
+   set PATH=%PATH%;C:\MinGW\bin
 
 build_script:
 - cmd: set PATH=%PATH:C:\Program Files\Git\usr\bin;=% 
