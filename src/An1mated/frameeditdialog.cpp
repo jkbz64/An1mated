@@ -61,7 +61,12 @@ void FrameEditDialog::updateRectValues(const QRect& rect)
 void FrameEditDialog::accept()
 {
     if(!m_ui->frameNameEdit->text().isEmpty())
+    {
+        m_frame.setName(m_ui->frameNameEdit->text());
+        //m_frame.setDelay(m_ui->delaySpin->value());
+        m_frame.setRect(QRect(m_ui->xSpin->value(), m_ui->ySpin->value(), m_ui->wSpin->value(), m_ui->hSpin->value()));
         QDialog::accept();
+    }
     else
         QMessageBox::warning(this, tr("Empty frame name"), tr("Frame name is not specified, cannot create/modify frame"), QMessageBox::Ok);
 }

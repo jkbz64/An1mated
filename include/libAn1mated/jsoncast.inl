@@ -114,14 +114,14 @@ namespace meta
     }
     
     template<typename T>
-    QVector<T> create(const QJsonValue& value, val<QVector<T>>)
+    auto create(const QJsonValue& value, val<QVector<T>>)
     {
         QVector<T> vec;
-        vec.reserve(value.toObject().size()); // vector.resize() works only for default constructible types
+        vec.reserve(value.toObject().size());
         for (const auto& elem : value.toObject()) {
             T element;
             from_json(elem, element);
-            vec.push_back(element); // push rvalue
+            vec.push_back(element);
         }
         return vec;
     }
@@ -166,26 +166,4 @@ namespace meta
     {
         obj = create<Class>(object);
     }
-
-    // specialization for QVector
-    template <typename T>
-    void deserialize_basic(QVector<T>& obj, const json& object)
-    {
-        obj.reserve(object.toObject().size()); // vector.resize() works only for default constructible types
-        for (const auto& elem : object.toObject()) {
-            T element;
-            from_json(elem, element);
-            obj.push_back(element); // push rvalue
-        }
-    }
-    
-    template <>
-    void deserialize(QRect& obj, const json& object)
-    {
-        obj.setX(object.toObject()["x"].toInt());
-        obj.setY(object.toObject()["y"].toInt());
-        obj.setWidth(object.toObject()["width"].toInt());
-        obj.setHeight(object.toObject()["height"].toInt());
-    }
-    
 }
