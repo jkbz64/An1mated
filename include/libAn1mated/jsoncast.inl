@@ -12,6 +12,8 @@ void from_json(const json& j, T& obj)
     meta::deserialize(obj, j);
 }
 
+#include <iostream>
+
 namespace meta
 {
 /////////////////// SERIALIZATION
@@ -84,40 +86,54 @@ namespace meta
         return c;
     }
     
-    template<typename T>
-    auto getValueByType(const QJsonValue& value)
+    template <typename T>
+    struct val{};
+    
+    template <typename T>
+    T create(const QJsonValue&, val<T>)
     {
-        T t;
-        from_json(value, t);
-        return t;
+        return T();
     }
     
     template<>
-    auto getValueByType<QString>(const QJsonValue& value)
-    {
-        return value.toString();
-    }
-    
-    template<>
-    auto getValueByType<int>(const QJsonValue& value)
+    auto create(const QJsonValue& value, val<int>) -> int
     {
         return value.toInt();
     }
     
     template<>
-    auto getValueByType<bool>(const QJsonValue& value)
-    {
-        return value.toBool();
-    }
-    
-    template<>
-    auto getValueByType<std::string>(const QJsonValue& value)
+    auto create(const QJsonValue& value, val<QString>) -> QString
     {
         return value.toString();
     }
     
+    template<>
+    auto create(const QJsonValue& value, val<bool>) -> bool
+    {
+        return value.toBool();
+    }
+    
+    template<typename T>
+    QVector<T> create(const QJsonValue& value, val<QVector<T>>)
+    {
+        QVector<T> vec;
+        vec.reserve(value.toObject().size()); // vector.resize() works only for default constructible types
+        for (const auto& elem : value.toObject()) {
+            T element;
+            from_json(elem, element);
+            vec.push_back(element); // push rvalue
+        }
+        return vec;
+    }
+    
+    template <typename T>
+    T create(const QJsonValue& value)
+    {
+        return create(value, val<T>{});
+    }
+    
     template <typename Class,
-            typename>
+                typename>
     void deserialize(Class& obj, const json& object)
     {
         meta::doForAllMembers<Class>(
@@ -129,11 +145,11 @@ namespace meta
                         using MemberT = meta::get_member_type<decltype(member)>;
                         if(member.hasSetter())
                         {
-                            member.set(obj, getValueByType<MemberT>(objName));
+                            member.set(obj, create<MemberT>(objName));
                         }
                         else if(member.canGetRef())
                         {
-                            member.getRef(obj) = getValueByType<MemberT>(objName);
+                            member.getRef(obj) = create<MemberT>(objName);
                         }
                         else
                         {
@@ -148,12 +164,12 @@ namespace meta
             typename, typename>
     void deserialize(Class& obj, const json& object)
     {
-        obj = getValueByType<Class>(object);
+        obj = create<Class>(object);
     }
 
     // specialization for QVector
     template <typename T>
-    void deserialize(QVector<T>& obj, const json& object)
+    void deserialize_basic(QVector<T>& obj, const json& object)
     {
         obj.reserve(object.toObject().size()); // vector.resize() works only for default constructible types
         for (const auto& elem : object.toObject()) {

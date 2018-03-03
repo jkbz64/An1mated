@@ -100,6 +100,8 @@ void MainWindow::newAnimationDocument()
         m_documentManager->addDocument<AnimationDocument>(Animation(animationName, spritesheetName));
 }
 
+#include <iostream>
+
 void MainWindow::openFile()
 {
     auto filter = getFilter({"json"});
@@ -113,8 +115,7 @@ void MainWindow::openFile()
         QFile openfile(fileinfo.absoluteFilePath());
         if(openfile.open(QIODevice::ReadOnly))
         {
-            QJsonDocument document;
-            document.fromJson(openfile.readAll());
+            QJsonDocument document = QJsonDocument::fromJson(openfile.readAll());
             Animation animation;
             auto object = document.object();
             from_json(object.value("Animation"), animation);

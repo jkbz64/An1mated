@@ -45,7 +45,7 @@ namespace meta
 
     // specialization for std::vector
     template <typename T>
-    void deserialize(QVector<T>& obj, const json& object);
+    void deserialize_basic(QVector<T>& obj, const json& object);
     
 }
 
