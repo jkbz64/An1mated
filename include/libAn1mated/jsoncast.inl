@@ -1,5 +1,4 @@
 #include <jsoncast.hpp>
-#include <stringcast.hpp>
 
 template <typename T>
 void to_json(json& j, const T& obj)
