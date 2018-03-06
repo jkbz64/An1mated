@@ -9,6 +9,9 @@ Animation Editor
 C++14
 Qt5 - Core, Widgets and optionally Test
 MetaStuff - Exports / Imports
+ - JSON: QJson
+ - XML: QXml
+ - Other incoming
 ```
 
 ### Building
