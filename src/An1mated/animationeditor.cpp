@@ -19,26 +19,15 @@ AnimationEditor::AnimationEditor(QWidget *parent)
       m_stopAnimation(false)
 {
     m_ui->setupUi(this);
-    connect(m_ui->framesGallery, &FramesGallery::frameSelected, [this](int index)
-    {
-        if(index == m_ui->frameSlider->value())
-            emit m_ui->frameSlider->valueChanged(index);
-        else
-            m_ui->frameSlider->setValue(index);
-    });
-
+    
+    connect(m_ui->framesGallery, &FramesGallery::frameSelected, this, &AnimationEditor::updateCurrentFrame);
     connect(m_ui->frameSlider, &QSlider::valueChanged, [this](int index)
     {
-        m_ui->currentFrameLabel->setText(QString::number(m_ui->frameSlider->value()));
-        if(m_currentDocument)
-            m_ui->animationPreview->setFrame(qobject_cast<AnimationDocument*>(m_currentDocument.data())->getFrame(index));
+        m_ui->currentFrameLabel->setText(QString::number(index));
     });
+    connect(m_ui->frameSlider, &QSlider::sliderMoved, m_ui->framesGallery, &FramesGallery::selectFrame);
 
-    connect(m_ui->frameSlider, &QSlider::sliderMoved, [this](int index)
-    {
-       m_ui->framesGallery->selectFrame(index);
-    });
-
+    //TODO Refactor
     connect(m_ui->playAnimationButton, &QPushButton::released, [this]()
     {
         if(m_currentDocument)
@@ -107,14 +96,11 @@ void AnimationEditor::setDocument(QSharedPointer<Document> doc)
     if(m_currentDocument)
     {
         const auto&& currentDocument = qobject_cast<AnimationDocument*>(m_currentDocument.data());
-        //From document
-        //Spritesheet changed handler
         connect(currentDocument, &AnimationDocument::spritesheetChanged, [this](const QPixmap& spritesheet)
         {
            m_ui->animationPreview->setSpritesheet(spritesheet);
            m_ui->framesGallery->setSpritesheet(spritesheet);
         });
-        //Frames modified handler
         connect(currentDocument, &AnimationDocument::framesModified, [this](const QVector<AnimationFrame>& frames)
         {
             const int selectedFrameIndex = m_ui->framesGallery->getSelectedFrameIndex();
@@ -175,5 +161,16 @@ void AnimationEditor::deleteFrame(int index)
 {
     if(m_currentDocument)
         qobject_cast<AnimationDocument*>(m_currentDocument.data())->removeFrame(index);
+}
+
+void AnimationEditor::updateCurrentFrame(int index)
+{
+    if(index == m_ui->frameSlider->value())
+        emit m_ui->frameSlider->valueChanged(index);
+    else
+        m_ui->frameSlider->setValue(index);
+
+    if(m_currentDocument)
+        m_ui->animationPreview->setFrame(qobject_cast<AnimationDocument*>(m_currentDocument.data())->getFrame(index));
 }
 

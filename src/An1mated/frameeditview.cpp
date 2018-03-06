@@ -33,11 +33,13 @@ void FrameEditView::setSpritesheet(const QPixmap &spritesheet)
     m_background->setZValue(-1);
 }
 
-// Add rect to scene
 void FrameEditView::setRect(const QRect& rect)
 {
     if(m_frame)
+    {
+        m_scene.removeItem(m_frame);
         delete m_frame;
+    }
     
     m_frame = new MovableRect(rect);
     connect(m_frame, &MovableRect::rectModified, this, [this](const QRect &rect)
@@ -112,7 +114,7 @@ void FrameEditView::wheelEvent(QWheelEvent *event)
     anim->start();
 }
 
-void FrameEditView::scalingTime(qreal x)
+void FrameEditView::scalingTime(qreal)
 {
     const auto factor = 1.0 + qreal(m_numScheduledScalings) / 300.0;
     scale(factor, factor);

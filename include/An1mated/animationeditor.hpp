@@ -25,6 +25,7 @@ public slots:
     void newFrame();
     void editFrame(int);
     void deleteFrame(int);
+    void updateCurrentFrame(int);
 private slots:
 
 protected:

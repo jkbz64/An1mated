@@ -32,6 +32,7 @@ protected:
     AnimationFrameWidget* createFrameWidget(const AnimationFrame&);
     virtual void mouseMoveEvent(QMouseEvent*) override;
     virtual void mouseReleaseEvent(QMouseEvent*) override;
+    virtual void wheelEvent(QWheelEvent* event) override;
 
     void clearGallery();
     QPixmap m_spritesheet;

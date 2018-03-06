@@ -102,7 +102,10 @@ void Animation::moveFrameTo(int from, int to)
         auto fromIt = m_frames.begin() + from;
         auto toIt = m_frames.begin() + to;
         while(fromIt != toIt)
-            std::iter_swap(fromIt, fromIt++);
+        {
+            std::iter_swap(fromIt, fromIt + 1);
+            ++fromIt;
+        }
     }
 
     if(to < from)
@@ -110,7 +113,10 @@ void Animation::moveFrameTo(int from, int to)
         auto fromIt = m_frames.begin() + from;
         auto toIt = m_frames.begin() + to;
         while(fromIt != toIt)
-            std::iter_swap(fromIt, fromIt--);
+        {
+            std::iter_swap(fromIt, fromIt - 1);
+            --fromIt;
+        }
     }
 }
 

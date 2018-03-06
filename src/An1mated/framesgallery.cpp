@@ -64,17 +64,13 @@ AnimationFrameWidget* FramesGallery::createFrameWidget(const AnimationFrame &fra
         std::for_each(m_frameWidgets.begin(), m_frameWidgets.end(), [](QWidget* w) { w->setStyleSheet(""); });
         frameWidget->setStyleSheet("background: #ADD8E6;");
         emit frameSelected(m_layout->indexOf(frameWidget));
-        //Handle dragging
         m_draggedFrame = frameWidget;
-        //Get start drag position
         m_startDragPos = mapFromGlobal(QCursor::pos());
         //Get index of frame in layout so we can replace it with spacer item
         m_startDragIndex = m_spacerIndex = m_layout->indexOf(m_draggedFrame);
-        //Remove widget from layout
         m_layout->removeWidget(m_draggedFrame);
         //Make spacer width and height same as dragged frame
         m_dragSpacer->changeSize(m_draggedFrame->size().width() + 5, m_draggedFrame->size().height());
-        //And insert spacer at position
         m_layout->insertSpacerItem(m_spacerIndex, m_dragSpacer);
     });
 
@@ -139,7 +135,7 @@ void FramesGallery::clearGallery()
 }
 
 void FramesGallery::mouseReleaseEvent(QMouseEvent *event)
-{
+{   
     if(event->button() == Qt::MouseButton::RightButton)
     {
         QMenu contextMenu(tr("New frame context"), this);
@@ -150,6 +146,15 @@ void FramesGallery::mouseReleaseEvent(QMouseEvent *event)
     }
 }
 
+void FramesGallery::wheelEvent(QWheelEvent *event)
+{
+    // Move to the next frame
+    if(event->delta() > 0)
+        selectFrame(m_selectedFrameIndex + 1);
+    else
+       selectFrame(m_selectedFrameIndex - 1);
+    event->accept();
+}
 
 void FramesGallery::mouseMoveEvent(QMouseEvent *event)
 {
@@ -159,7 +164,9 @@ void FramesGallery::mouseMoveEvent(QMouseEvent *event)
         if(m_draggedFrame->pos().x() + subPos.x() >= pos().x() - (m_draggedFrame->size().width() / 2) &&
            m_draggedFrame->pos().x() + m_draggedFrame->size().width() + subPos.x() < pos().x() + size().width() + (m_draggedFrame->size().width() / 2))
             m_draggedFrame->move(m_draggedFrame->pos().x() + subPos.x(), m_draggedFrame->pos().y());
-        m_startDragPos = event->pos();
+        {
+            m_startDragPos = event->pos();
+        }
 
 
         //TODO I believe this can look better

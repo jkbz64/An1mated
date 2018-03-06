@@ -41,8 +41,10 @@ void AnimationPreview::setSpritesheet(const QPixmap& spritesheet)
 void AnimationPreview::setFrame(const AnimationFrame& frame)
 {
     if(m_frame)
+    {
         m_animationScene.removeItem(m_frame);
-
+        m_frame = nullptr;
+    }
 
     if(!frame.getName().isEmpty())
     {
