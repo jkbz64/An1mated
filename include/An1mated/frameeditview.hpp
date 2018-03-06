@@ -27,6 +27,7 @@ protected:
     virtual void mouseReleaseEvent(QMouseEvent*) override;
     virtual void resizeEvent(QResizeEvent*) override;
     virtual void wheelEvent(QWheelEvent*) override;
+    
     QGraphicsScene m_scene;
     QGraphicsItem* m_background;
     MovableRect* m_frame;

@@ -4,7 +4,7 @@
 
 MovableRect::MovableRect(const QRectF& size, QGraphicsItem *parent) :
     QObject(nullptr),
-    QGraphicsRectItem(size, parent)
+    QGraphicsRectItem(QRectF(0, 0, size.width(), size.height()), parent)
 {
     setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemSendsScenePositionChanges);
     QPen pen(Qt::magenta, 1, Qt::DotLine);

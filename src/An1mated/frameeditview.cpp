@@ -27,15 +27,18 @@ FrameEditView::~FrameEditView()
 
 void FrameEditView::setSpritesheet(const QPixmap &spritesheet)
 {
+    if(m_background)
+        m_scene.removeItem(m_background);
     m_background = m_scene.addPixmap(spritesheet);
     m_background->setZValue(-1);
 }
 
+// Add rect to scene
 void FrameEditView::setRect(const QRect& rect)
 {
     if(m_frame)
-        m_frame->deleteLater();
-
+        delete m_frame;
+    
     m_frame = new MovableRect(rect);
     connect(m_frame, &MovableRect::rectModified, this, [this](const QRect &rect)
     {
@@ -43,8 +46,7 @@ void FrameEditView::setRect(const QRect& rect)
     });
     connect(m_frame, &MovableRect::rectPressed, this, [this]{ m_isDragging = false;});
     m_scene.addItem(m_frame);
-
-    emit rectModified(rect);
+    m_frame->moveBy(rect.x(), rect.y());
 }
 
 MovableRect* FrameEditView::getRect()
@@ -86,7 +88,6 @@ void FrameEditView::mouseReleaseEvent(QMouseEvent *event)
     QGraphicsView::mouseReleaseEvent(event);
 }
 
-
 void FrameEditView::resizeEvent(QResizeEvent* event)
 {
     if(m_background)
@@ -94,6 +95,7 @@ void FrameEditView::resizeEvent(QResizeEvent* event)
     QGraphicsView::resizeEvent(event);
 }
 
+// Scrolling stuff
 void FrameEditView::wheelEvent(QWheelEvent *event)
 {
     const int numDegrees = event->delta() / 8;

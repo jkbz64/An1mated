@@ -145,11 +145,14 @@ void AnimationEditor::newFrame()
 {
     if(m_currentDocument)
     {
-        auto&& currentDocument = qobject_cast<AnimationDocument*>(m_currentDocument.data());
+        AnimationDocument* currentDocument = qobject_cast<AnimationDocument*>(m_currentDocument.data());
         AnimationFrame frame("");
         FrameEditDialog dialog(currentDocument->getSpritesheet(), frame, this);
         if(dialog.exec() == QDialog::Accepted)
+        {
             currentDocument->addFrame(frame);
+            m_ui->framesGallery->selectFrame(currentDocument->getFrames().size() - 1);
+        }
     }
 }
 
@@ -161,7 +164,10 @@ void AnimationEditor::editFrame(int index)
         AnimationFrame editedFrame = currentDocument->getFrame(index);
         FrameEditDialog dialog(currentDocument->getSpritesheet(), editedFrame, this);
         if(dialog.exec() == QDialog::Accepted)
+        {
             currentDocument->replaceFrame(index, editedFrame);
+            emit m_ui->framesGallery->frameSelected(index);
+        }
     }
 }
 
