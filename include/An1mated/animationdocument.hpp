@@ -13,8 +13,6 @@ public:
     AnimationDocument(Animation&&, const QString& = QString());
     virtual ~AnimationDocument();
 
-    virtual bool writeToFile(const QString& = QString()) override;
-
     const Animation& getAnimation() const;
     const AnimationFrame& getFrame(int) const;
     const QVector<AnimationFrame>& getFrames() const;

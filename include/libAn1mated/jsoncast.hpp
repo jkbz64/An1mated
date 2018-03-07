@@ -1,7 +1,6 @@
 #ifndef AN1MATED_JSONCAST_HPP
 #define AN1MATED_JSONCAST_HPP
 
-
 #include <Meta.h>
 #include <QJsonObject>
 

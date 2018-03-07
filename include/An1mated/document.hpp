@@ -22,8 +22,6 @@ public:
     const QString& getFileName() const;
     void setFilename(const QString&);
     QObject* getObject() const;
-
-    virtual bool writeToFile(const QString& fileName) = 0;
 signals:
     void documentSaved();
     void documentNameChanged(QObject*, const QString&);

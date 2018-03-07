@@ -12,8 +12,6 @@ void from_json(const json& j, T& obj)
     meta::deserialize(obj, j);
 }
 
-#include <iostream>
-
 namespace meta
 {
 /////////////////// SERIALIZATION

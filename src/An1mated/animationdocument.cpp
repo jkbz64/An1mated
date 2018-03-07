@@ -32,11 +32,6 @@ AnimationDocument::~AnimationDocument()
 
 }
 
-bool AnimationDocument::writeToFile(const QString&)
-{
-    return true;
-}
-
 void AnimationDocument::addFrame(const QString &frame, const QRect &rect)
 {
     m_animation.addFrame(frame, rect);
